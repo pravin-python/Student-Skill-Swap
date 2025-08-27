@@ -2,7 +2,7 @@ from .base import *
 import os
 
 DEBUG = False
-ALLOWED_HOSTS = ["example.com", "www.example.com"]
+ALLOWED_HOSTS = ["10.0.101.117"]
 
 # Production database - env variables se le
 DATABASES = {
