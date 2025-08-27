@@ -17,9 +17,9 @@ from django.core.asgi import get_asgi_application
 # Base directory path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# .env file load karo
-load_dotenv(BASE_DIR / ".env")
+# .environment file load karo
+load_dotenv(BASE_DIR / ".environment")
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', os.getenv('DJANGO_SETTINGS_MODULE', 'config.settings.dev'))
+os.environmentiron.setdefault('DJANGO_SETTINGS_MODULE', os.getenv('DJANGO_SETTINGS_MODULE', 'config.settings.dev'))
 
 application = get_asgi_application()
