@@ -86,7 +86,7 @@
                 </div>
               </div>
 
-              <div class="filter-group">
+              <!-- <div class="filter-group">
                 <h5>Duration</h5>
                 <div class="filter-options">
                   <label class="filter-checkbox">
@@ -105,7 +105,7 @@
                     20+ hours
                   </label>
                 </div>
-              </div>
+              </div> -->
 
               <div class="filter-group">
                 <h5>Price</h5>
@@ -180,7 +180,7 @@
                         <img src="{% static 'assets/img/person/person-m-3.webp' %}" alt="Instructor" class="instructor-avatar">
                         <span class="instructor-name">Dr. Marcus Thompson</span>
                       </div>
-                      <a href="enroll.html" class="btn-course">Enroll Now</a>
+                      <a href="{% url 'core:enroll' %} " class="btn-course">Enroll Now</a>
                     </div>
                   </div><!-- End Course Card -->
                 </div>
@@ -200,10 +200,6 @@
                       <p>Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet.</p>
                       <div class="course-stats">
                         <div class="stat">
-                          <i class="bi bi-clock"></i>
-                          <span>8 hours</span>
-                        </div>
-                        <div class="stat">
                           <i class="bi bi-people"></i>
                           <span>2,891 students</span>
                         </div>
@@ -220,7 +216,7 @@
                         <img src="{% static 'assets/img/person/person-f-7.webp' %}" alt="Instructor" class="instructor-avatar">
                         <span class="instructor-name">Sarah Johnson</span>
                       </div>
-                      <a href="enroll.html" class="btn-course">Start Free Course</a>
+                      <a href="{% url 'core:enroll' %} " class="btn-course">Enroll</a>
                     </div>
                   </div><!-- End Course Card -->
                 </div>
@@ -241,10 +237,6 @@
                       <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas vestibulum tortor.</p>
                       <div class="course-stats">
                         <div class="stat">
-                          <i class="bi bi-clock"></i>
-                          <span>22 hours</span>
-                        </div>
-                        <div class="stat">
                           <i class="bi bi-people"></i>
                           <span>678 students</span>
                         </div>
@@ -261,7 +253,7 @@
                         <img src="{% static 'assets/img/person/person-m-8.webp' %}" alt="Instructor" class="instructor-avatar">
                         <span class="instructor-name">David Rodriguez</span>
                       </div>
-                      <a href="enroll.html" class="btn-course">Enroll Now</a>
+                      <a href="{% url 'core:enroll' %} " class="btn-course">Enroll Now</a>
                     </div>
                   </div><!-- End Course Card -->
                 </div>
@@ -281,10 +273,6 @@
                       <p>Donec rutrum congue leo eget malesuada. Cras ultricies ligula sed magna dictum porta nulla facilisi morbi tempus.</p>
                       <div class="course-stats">
                         <div class="stat">
-                          <i class="bi bi-clock"></i>
-                          <span>35 hours</span>
-                        </div>
-                        <div class="stat">
                           <i class="bi bi-people"></i>
                           <span>534 students</span>
                         </div>
@@ -301,7 +289,7 @@
                         <img src="{% static 'assets/img/person/person-f-12.webp' %}" alt="Instructor" class="instructor-avatar">
                         <span class="instructor-name">Prof. Anna Chen</span>
                       </div>
-                      <a href="enroll.html" class="btn-course">Enroll Now</a>
+                      <a href="{% url 'core:enroll' %} " class="btn-course">Enroll Now</a>
                     </div>
                   </div><!-- End Course Card -->
                 </div>
@@ -322,10 +310,6 @@
                       <p>Sed porttitor lectus nibh vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.</p>
                       <div class="course-stats">
                         <div class="stat">
-                          <i class="bi bi-clock"></i>
-                          <span>12 hours</span>
-                        </div>
-                        <div class="stat">
                           <i class="bi bi-people"></i>
                           <span>3,457 students</span>
                         </div>
@@ -342,7 +326,7 @@
                         <img src="{% static 'assets/img/person/person-m-5.webp' %}" alt="Instructor" class="instructor-avatar">
                         <span class="instructor-name">Michael Davis</span>
                       </div>
-                      <a href="enroll.html" class="btn-course">Enroll Now</a>
+                      <a href="{% url 'core:enroll' %} " class="btn-course">Enroll Now</a>
                     </div>
                   </div><!-- End Course Card -->
                 </div>
@@ -363,10 +347,6 @@
                       <p>Curabitur aliquet quam id dui posuere blandit mauris blandit aliquet elit eget tincidunt nibh pulvinar.</p>
                       <div class="course-stats">
                         <div class="stat">
-                          <i class="bi bi-clock"></i>
-                          <span>18 hours</span>
-                        </div>
-                        <div class="stat">
                           <i class="bi bi-people"></i>
                           <span>1,892 students</span>
                         </div>
@@ -383,7 +363,7 @@
                         <img src="{% static 'assets/img/person/person-f-9.webp' %}" alt="Instructor" class="instructor-avatar">
                         <span class="instructor-name">Lisa Martinez</span>
                       </div>
-                      <a href="enroll.html" class="btn-course">Enroll Now</a>
+                      <a href="{% url 'core:enroll' %}" class="btn-course">Enroll Now</a>
                     </div>
                   </div><!-- End Course Card -->
                 </div>

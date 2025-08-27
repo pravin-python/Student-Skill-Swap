@@ -8,6 +8,7 @@ urlpatterns = [
     path('about/',views.AboutView,name="about"),
     path('contact/',views.ContactView,name="contact"),
     path('terms/',views.TermsView,name="terms"),
-    path('privacy/',views.PrivacyView,name="privacy")
+    path('privacy/',views.PrivacyView,name="privacy"),
+    path('enroll/',views.EnrollView,name="enroll")
 ]
 

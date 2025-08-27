@@ -14,3 +14,6 @@ def TermsView(request):
 
 def PrivacyView(request):
     return render(request , "core/privacy.html")
+
+def EnrollView(request):
+    return render(request , "core/enroll.html")

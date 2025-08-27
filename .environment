@@ -1,0 +1,10 @@
+# DB_ENGINE=django.db.backends.postgresql
+# DB_PORT=5432
+DB_ENGINE=django.db.backends.mysql
+DB_PORT=3306
+DB_NAME=student_skill_swap
+DB_USER=root
+DB_PASSWORD=Admin@123
+DB_HOST=localhost
+DJANGO_SECRET_KEY=mysecretkey
+DJANGO_SETTINGS_MODULE=config.settings.dev
