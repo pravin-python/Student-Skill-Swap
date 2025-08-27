@@ -9,7 +9,6 @@ def main():
     """Run administrative tasks."""
     # .environment file load karo
     load_dotenv(".environment")
-    print("Manage.py settings modulesss:", os.getenv('DJANGO_SETTINGS_MODULE'))
     
     # Correct environment set
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', os.getenv('DJANGO_SETTINGS_MODULE'))

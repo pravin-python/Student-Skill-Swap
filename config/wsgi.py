@@ -19,6 +19,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # .environment file load karo
 load_dotenv(BASE_DIR / ".environment")
 
-os.environmentiron.setdefault('DJANGO_SETTINGS_MODULE', os.getenv('DJANGO_SETTINGS_MODULE', 'config.settings.dev'))
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', os.getenv('DJANGO_SETTINGS_MODULE'))
 
 application = get_wsgi_application()
