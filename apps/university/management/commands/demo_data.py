@@ -3,6 +3,7 @@ from django.conf import settings
 from django.core.files import File
 from django.core.management.base import BaseCommand
 from apps.university.models import Country, State, City, University, UniversityImages, Department, Branch
+from apps.category_skills.models import SkillsCategory, Skills
 
 class Command(BaseCommand):
     help = 'Populate initial data for countries, states, cities, universities, departments, and branches'
@@ -76,5 +77,40 @@ class Command(BaseCommand):
                     defaults={'description': f"Description for Branch {i} of {dept.name}"}
                 )
         self.stdout.write("Branches added.")
+
+        # ----- Categories -----
+        category_data = {
+            "Technology": ["Python", "Java", "Fullstack", "Django", "React"],
+            "Design": ["Photoshop", "Figma", "Illustrator", "UI/UX", "Animation"],
+            "Business": ["Marketing", "Finance", "Management", "Sales", "Analytics"],
+        }
+
+        # static images for categories
+        image_folder = os.path.join(settings.BASE_DIR, 'static', 'assets', 'img', 'person')
+        image_files = [f for f in os.listdir(image_folder) if f.lower().endswith(('.png','.jpg','.jpeg'))]
+
+        categories = []
+        for idx, (cat_name, skills_list) in enumerate(category_data.items()):
+            image_path = os.path.join(image_folder, image_files[idx % len(image_files)])
+            with open(image_path, 'rb') as f:
+                django_file = File(f, name=image_files[idx % len(image_files)])
+                category, created = SkillsCategory.objects.get_or_create(
+                    name=cat_name,
+                    defaults={
+                        "description": f"{cat_name} related courses",
+                        "image": django_file
+                    }
+                )
+            categories.append(category)
+
+            # ----- Skills for this category -----
+            for skill_name in skills_list:
+                Skills.objects.get_or_create(
+                    name=skill_name,
+                    category=category,
+                    defaults={
+                        "description": f"{skill_name} skill in {cat_name}"
+                    }
+                )
 
         self.stdout.write(self.style.SUCCESS("Data population completed successfully!"))
