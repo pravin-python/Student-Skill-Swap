@@ -1,7 +1,10 @@
 from django.shortcuts import render
+from django.db.models import Count
+from apps.category_skills.models import SkillsCategory
 
 def HomeView(request):
-    return render (request , "core/index.html")
+    categories = SkillsCategory.objects.annotate(course_count = Count("skills"))
+    return render (request , "core/index.html" , {"categories" : categories})
 
 def AboutView(request):
     return render (request , "core/about.html")

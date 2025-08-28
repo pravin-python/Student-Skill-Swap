@@ -1,4 +1,5 @@
 from django.db import models
+from apps.accounts.models import User
 import os
 
 class SkillsCategory(models.Model):
@@ -10,6 +11,7 @@ class SkillsCategory(models.Model):
 
     name = models.CharField(max_length=25,unique=True)
     description = models.TextField(max_length=999,help_text="Enter Description For Particular Course")
+    icon_class = models.CharField(max_length=50,blank=True,null=True)
     image = models.ImageField(upload_to='category/' , blank=True , null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -33,6 +35,7 @@ class Skills(models.Model):
     category = models.ForeignKey(SkillsCategory,on_delete=models.CASCADE,related_name='skills')
     image = models.ImageField(upload_to=category_skills,blank=True,null=True)
     description = models.TextField(max_length=999,help_text="Enter Description for Specific Skill") 
+    # teacher = models.ForeignKey(User, on_delete=models.CASCADE,related_name="skills")
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

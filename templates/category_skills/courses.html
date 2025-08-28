@@ -33,30 +33,17 @@
                 <h5>Category</h5>
                 <div class="filter-options">
                   <label class="filter-checkbox">
-                    <input type="checkbox" checked="">
+                    <input type="checkbox" checked="" data-category="all" value="all" name="category">
                     <span class="checkmark"></span>
                     All Categories
                   </label>
+                  {% for category in categories %}
                   <label class="filter-checkbox">
-                    <input type="checkbox">
+                    <input type="checkbox" data-category="{{ category.id }}" value="{{ category.id }}" name="category">
                     <span class="checkmark"></span>
-                    Programming
+                    {{ category.name }}
                   </label>
-                  <label class="filter-checkbox">
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                    Design
-                  </label>
-                  <label class="filter-checkbox">
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                    Business
-                  </label>
-                  <label class="filter-checkbox">
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                    Marketing
-                  </label>
+                  {% endfor %}
                 </div>
               </div>
 
@@ -129,273 +116,13 @@
             <div class="courses-header" data-aos="fade-left" data-aos-delay="100">
               <div class="search-box">
                 <i class="bi bi-search"></i>
-                <input type="text" placeholder="Search courses...">
-              </div>
-              <div class="sort-dropdown">
-                <select>
-                  <option>Sort by: Most Popular</option>
-                  <option>Newest First</option>
-                  <option>Price: Low to High</option>
-                  <option>Price: High to Low</option>
-                  <option>Duration: Short to Long</option>
-                </select>
+                <input type="text" id="searchInput" placeholder="Search categories or skills...">
               </div>
             </div>
 
-            <div class="courses-grid" data-aos="fade-up" data-aos-delay="200">
-              <div class="row">
-                <div class="col-lg-6 col-md-6">
-                  <div class="course-card">
-                    <div class="course-image">
-                      <img src="{% static 'assets/img/education/courses-3.webp' %}" alt="Course" class="img-fluid">
-                      <div class="course-badge">Best Seller</div>
-                      <div class="course-price">$89</div>
-                    </div>
-                    <div class="course-content">
-                      <div class="course-meta">
-                        <span class="category">Programming</span>
-                        <span class="level">Intermediate</span>
-                      </div>
-                      <h3>Advanced JavaScript Development</h3>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                      <div class="course-stats">
-                        <div class="stat">
-                          <i class="bi bi-clock"></i>
-                          <span>15 hours</span>
-                        </div>
-                        <div class="stat">
-                          <i class="bi bi-people"></i>
-                          <span>1,245 students</span>
-                        </div>
-                        <div class="rating">
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-half"></i>
-                          <span>4.8 (89 reviews)</span>
-                        </div>
-                      </div>
-                      <div class="instructor-info">
-                        <img src="{% static 'assets/img/person/person-m-3.webp' %}" alt="Instructor" class="instructor-avatar">
-                        <span class="instructor-name">Dr. Marcus Thompson</span>
-                      </div>
-                      <a href="{% url 'core:enroll' %} " class="btn-course">Enroll Now</a>
-                    </div>
-                  </div><!-- End Course Card -->
-                </div>
-
-                <div class="col-lg-6 col-md-6">
-                  <div class="course-card">
-                    <div class="course-image">
-                      <img src="{% static 'assets/img/education/courses-7.webp' %}" alt="Course" class="img-fluid">
-                      <div class="course-badge badge-free">Free</div>
-                    </div>
-                    <div class="course-content">
-                      <div class="course-meta">
-                        <span class="category">Design</span>
-                        <span class="level">Beginner</span>
-                      </div>
-                      <h3>UI/UX Design Fundamentals</h3>
-                      <p>Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet.</p>
-                      <div class="course-stats">
-                        <div class="stat">
-                          <i class="bi bi-people"></i>
-                          <span>2,891 students</span>
-                        </div>
-                        <div class="rating">
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star"></i>
-                          <span>4.6 (156 reviews)</span>
-                        </div>
-                      </div>
-                      <div class="instructor-info">
-                        <img src="{% static 'assets/img/person/person-f-7.webp' %}" alt="Instructor" class="instructor-avatar">
-                        <span class="instructor-name">Sarah Johnson</span>
-                      </div>
-                      <a href="{% url 'core:enroll' %} " class="btn-course">Enroll</a>
-                    </div>
-                  </div><!-- End Course Card -->
-                </div>
-
-                <div class="col-lg-6 col-md-6">
-                  <div class="course-card">
-                    <div class="course-image">
-                      <img src="{% static 'assets/img/education/courses-12.webp' %}" alt="Course" class="img-fluid">
-                      <div class="course-badge badge-new">New</div>
-                      <div class="course-price">$149</div>
-                    </div>
-                    <div class="course-content">
-                      <div class="course-meta">
-                        <span class="category">Business</span>
-                        <span class="level">Beginner</span>
-                      </div>
-                      <h3>Digital Marketing Strategies</h3>
-                      <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas vestibulum tortor.</p>
-                      <div class="course-stats">
-                        <div class="stat">
-                          <i class="bi bi-people"></i>
-                          <span>678 students</span>
-                        </div>
-                        <div class="rating">
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <span>5.0 (42 reviews)</span>
-                        </div>
-                      </div>
-                      <div class="instructor-info">
-                        <img src="{% static 'assets/img/person/person-m-8.webp' %}" alt="Instructor" class="instructor-avatar">
-                        <span class="instructor-name">David Rodriguez</span>
-                      </div>
-                      <a href="{% url 'core:enroll' %} " class="btn-course">Enroll Now</a>
-                    </div>
-                  </div><!-- End Course Card -->
-                </div>
-
-                <div class="col-lg-6 col-md-6">
-                  <div class="course-card">
-                    <div class="course-image">
-                      <img src="{% static 'assets/img/education/courses-5.webp' %}" alt="Course" class="img-fluid">
-                      <div class="course-price">$199</div>
-                    </div>
-                    <div class="course-content">
-                      <div class="course-meta">
-                        <span class="category">Programming</span>
-                        <span class="level">Advanced</span>
-                      </div>
-                      <h3>Machine Learning with Python</h3>
-                      <p>Donec rutrum congue leo eget malesuada. Cras ultricies ligula sed magna dictum porta nulla facilisi morbi tempus.</p>
-                      <div class="course-stats">
-                        <div class="stat">
-                          <i class="bi bi-people"></i>
-                          <span>534 students</span>
-                        </div>
-                        <div class="rating">
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-half"></i>
-                          <span>4.7 (73 reviews)</span>
-                        </div>
-                      </div>
-                      <div class="instructor-info">
-                        <img src="{% static 'assets/img/person/person-f-12.webp' %}" alt="Instructor" class="instructor-avatar">
-                        <span class="instructor-name">Prof. Anna Chen</span>
-                      </div>
-                      <a href="{% url 'core:enroll' %} " class="btn-course">Enroll Now</a>
-                    </div>
-                  </div><!-- End Course Card -->
-                </div>
-
-                <div class="col-lg-6 col-md-6">
-                  <div class="course-card">
-                    <div class="course-image">
-                      <img src="{% static 'assets/img/education/courses-9.webp' %}" alt="Course" class="img-fluid">
-                      <div class="course-badge">Popular</div>
-                      <div class="course-price">$59</div>
-                    </div>
-                    <div class="course-content">
-                      <div class="course-meta">
-                        <span class="category">Marketing</span>
-                        <span class="level">Intermediate</span>
-                      </div>
-                      <h3>Social Media Marketing</h3>
-                      <p>Sed porttitor lectus nibh vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.</p>
-                      <div class="course-stats">
-                        <div class="stat">
-                          <i class="bi bi-people"></i>
-                          <span>3,457 students</span>
-                        </div>
-                        <div class="rating">
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star"></i>
-                          <span>4.5 (234 reviews)</span>
-                        </div>
-                      </div>
-                      <div class="instructor-info">
-                        <img src="{% static 'assets/img/person/person-m-5.webp' %}" alt="Instructor" class="instructor-avatar">
-                        <span class="instructor-name">Michael Davis</span>
-                      </div>
-                      <a href="{% url 'core:enroll' %} " class="btn-course">Enroll Now</a>
-                    </div>
-                  </div><!-- End Course Card -->
-                </div>
-
-                <div class="col-lg-6 col-md-6">
-                  <div class="course-card">
-                    <div class="course-image">
-                      <img src="{% static 'assets/img/education/courses-14.webp' %}" alt="Course" class="img-fluid">
-                      <div class="course-badge badge-certificate">Certificate</div>
-                      <div class="course-price">$99</div>
-                    </div>
-                    <div class="course-content">
-                      <div class="course-meta">
-                        <span class="category">Design</span>
-                        <span class="level">Intermediate</span>
-                      </div>
-                      <h3>Graphic Design Mastery</h3>
-                      <p>Curabitur aliquet quam id dui posuere blandit mauris blandit aliquet elit eget tincidunt nibh pulvinar.</p>
-                      <div class="course-stats">
-                        <div class="stat">
-                          <i class="bi bi-people"></i>
-                          <span>1,892 students</span>
-                        </div>
-                        <div class="rating">
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-half"></i>
-                          <span>4.9 (127 reviews)</span>
-                        </div>
-                      </div>
-                      <div class="instructor-info">
-                        <img src="{% static 'assets/img/person/person-f-9.webp' %}" alt="Instructor" class="instructor-avatar">
-                        <span class="instructor-name">Lisa Martinez</span>
-                      </div>
-                      <a href="{% url 'core:enroll' %}" class="btn-course">Enroll Now</a>
-                    </div>
-                  </div><!-- End Course Card -->
-                </div>
-
-              </div>
-            </div><!-- End Courses Grid -->
-
-            <div class="pagination-wrapper" data-aos="fade-up" data-aos-delay="300">
-              <nav aria-label="Courses pagination">
-                <ul class="pagination justify-content-center">
-                  <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                      <i class="bi bi-chevron-left"></i>
-                    </a>
-                  </li>
-                  <li class="page-item active">
-                    <a class="page-link" href="#">1</a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">2</a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">3</a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">
-                      <i class="bi bi-chevron-right"></i>
-                    </a>
-                  </li>
-                </ul>
-              </nav>
-            </div><!-- End Pagination -->
+            <div id="coursesWrapper">
+              {% include "category_skills/courses_grid.html" %}
+            </div>
 
           </div>
         </div>
@@ -404,4 +131,8 @@
 
     </section><!-- /Courses 2 Section -->
 
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'assets/js/category_skills/courses.js' %}"></script>
 {% endblock %}

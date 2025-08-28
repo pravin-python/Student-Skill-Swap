@@ -3,7 +3,7 @@ from .models import SkillsCategory , Skills
 
 @admin.register(SkillsCategory)
 class SkillsCategoryAdmin(admin.ModelAdmin):
-    list_display = ['name' , 'description' , 'image']
+    list_display = ['name' , 'description' , 'icon_class','image']
     
 
 @admin.register(Skills)

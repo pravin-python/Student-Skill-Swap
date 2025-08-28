@@ -87,7 +87,7 @@ class Command(BaseCommand):
 
         # static images for categories
         image_folder = os.path.join(settings.BASE_DIR, 'static', 'assets', 'img', 'person')
-        image_files = [f for f in os.listdir(image_folder) if f.lower().endswith(('.png','.jpg','.jpeg'))]
+        image_files = [f for f in os.listdir(image_folder) if f.lower().endswith(('.png','.jpg','.jpeg','webp'))]
 
         categories = []
         for idx, (cat_name, skills_list) in enumerate(category_data.items()):
