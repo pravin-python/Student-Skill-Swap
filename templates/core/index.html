@@ -385,7 +385,7 @@
 
             {% for category in categories %}
               <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0|add:100 }}">
-                <a href="{% url 'category_skills:courses'%}" class="category-card">
+                <a href="{% url 'category_skills:courses'%}?categories[]={{category.id}}" class="category-card">
                   <div class="category-icon">
                     <i class="{{ category.icon_class }}"></i>
                   </div>
