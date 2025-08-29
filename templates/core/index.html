@@ -33,8 +33,13 @@
                 </div>
 
                 <div class="hero-buttons">
+                  {% if custom_user %}
+                  <a href="{% url 'category_skills:courses' %}" class="btn btn-primary">Browse Courses</a>
+                  <a href="{% url 'core:about' %}" class="btn btn-outline">Learn More</a>
+                  {% else %}
                   <a href="" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#openregisterModal">Register</a>
-                  <a href="#about" class="btn btn-outline">Learn More</a>
+                  <a href="{% url 'core:about' %}" class="btn btn-outline">Learn More</a>
+                  {% endif %}
                 </div>
 
                 <div class="hero-features">
@@ -364,7 +369,7 @@
         </div>
 
         <div class="more-courses text-center" data-aos="fade-up" data-aos-delay="500">
-          <a href="courses.html" class="btn-more">View All Courses</a>
+          <a href="{% url 'category_skills:courses' %}" class="btn-more">View All Courses</a>
         </div>
 
       </div>
@@ -377,7 +382,7 @@
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
         <h2>Course Categories</h2>
-        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+        <p>Here you will see all the course categories available in the platform</p>
       </div><!-- End Section Title -->
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -394,7 +399,6 @@
                 </a>
               </div>
             {% endfor %}
-
           </div>
         </div>
 

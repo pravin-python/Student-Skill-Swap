@@ -8,4 +8,4 @@ class SkillsCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Skills)
 class SkillsAdmin(admin.ModelAdmin):
-    list_display = ['name', 'category' , 'image' , 'description']
+    list_display = ['name', 'category' , 'image' , 'description' , 'level']

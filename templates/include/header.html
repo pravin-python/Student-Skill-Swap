@@ -17,50 +17,14 @@
     <nav id="navmenu" class="navmenu">
       <ul>
         <li><a href="{% url 'core:home' %}" class="{% if request.resolver_match.url_name == 'home' %} active {% endif %}">Home</a></li>
-        <li><a href="{% url 'core:about' %}" class="{% if request.resolver_match.url_name == 'about' %} active {% endif %}">About</a></li>
         <li><a href="{% url 'category_skills:courses' %}" class="{% if request.resolver_match.url_name == 'courses' %} active {% endif %}">Courses</a></li>
         <li>
           <a href="{% url 'category_skills:instructors' %}" class="{% if request.resolver_match.url_name == 'instructors' %} active {% endif %}">Instructors</a>
-        </li>
-        <!-- <li class="dropdown">
-          <a href="#"
-            ><span>More Pages</span>
-            <i class="bi bi-chevron-down toggle-dropdown"></i
-          ></a>
-          <ul> -->
             <li>
               <a href="{% url 'category_skills:course_details' %}" class="{% if request.resolver_match.url_name == 'course_details' %} active {% endif %}">Course Details</a>
             </li>
-            <!-- <li><a href="404.html">404</a></li>
-          </ul> -->
-        </li>
-
-        <!-- <li class="dropdown">
-          <a href="#"
-            ><span>Dropdown</span>
-            <i class="bi bi-chevron-down toggle-dropdown"></i
-          ></a>
-          <ul>
-            <li><a href="#">Dropdown 1</a></li>
-            <li class="dropdown">
-              <a href="#"
-                ><span>Deep Dropdown</span>
-                <i class="bi bi-chevron-down toggle-dropdown"></i
-              ></a>
-              <ul>
-                <li><a href="#">Deep Dropdown 1</a></li>
-                <li><a href="#">Deep Dropdown 2</a></li>
-                <li><a href="#">Deep Dropdown 3</a></li>
-                <li><a href="#">Deep Dropdown 4</a></li>
-                <li><a href="#">Deep Dropdown 5</a></li>
-              </ul>
-            </li>
-            <li><a href="#">Dropdown 2</a></li>
-            <li><a href="#">Dropdown 3</a></li>
-            <li><a href="#">Dropdown 4</a></li>
-          </ul>
-        </li> -->
         <li><a href="{% url 'core:contact' %}" class="{% if request.resolver_match.url_name == 'contact' %} active {% endif %}">Contact</a></li>
+        <li><a href="{% url 'core:about' %}" class="{% if request.resolver_match.url_name == 'about' %} active {% endif %}">About</a></li>
       </ul>
       <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
     </nav>
@@ -88,8 +52,8 @@
   </a>
 
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-    <li><a class="dropdown-item" href="{% url 'accounts:profile' %}"><i class="bi bi-person me-2"></i>My Profile</a></li>
     <li><a class="dropdown-item" href="{% url 'accounts:dashboard' %}"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+    <li><a class="dropdown-item" href="{% url 'accounts:profile' %}"><i class="bi bi-person me-2"></i>My Profile</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item text-danger" href="{% url 'accounts:logout' %}"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
   </ul>

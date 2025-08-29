@@ -51,64 +51,20 @@
                 <h5>Level</h5>
                 <div class="filter-options">
                   <label class="filter-checkbox">
-                    <input type="checkbox" checked="">
+                    <input type="checkbox" data-level="all" checked>
                     <span class="checkmark"></span>
                     All Levels
                   </label>
+                  {% for value, label  in level_choices %}
                   <label class="filter-checkbox">
-                    <input type="checkbox">
+                    <input type="checkbox" data-level="{{value}}" value="{{value}}" name="level">
                     <span class="checkmark"></span>
-                    Beginner
+                    {{ label }}
                   </label>
-                  <label class="filter-checkbox">
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                    Intermediate
-                  </label>
-                  <label class="filter-checkbox">
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                    Advanced
-                  </label>
+                  {% endfor %}
                 </div>
               </div>
 
-              <!-- <div class="filter-group">
-                <h5>Duration</h5>
-                <div class="filter-options">
-                  <label class="filter-checkbox">
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                    Under 5 hours
-                  </label>
-                  <label class="filter-checkbox">
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                    5-20 hours
-                  </label>
-                  <label class="filter-checkbox">
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                    20+ hours
-                  </label>
-                </div>
-              </div> -->
-
-              <div class="filter-group">
-                <h5>Price</h5>
-                <div class="filter-options">
-                  <label class="filter-checkbox">
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                    Free
-                  </label>
-                  <label class="filter-checkbox">
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                    Paid
-                  </label>
-                </div>
-              </div>
             </div><!-- End Course Filters -->
           </div>
 

@@ -19,7 +19,7 @@
           <div class="course-content">
             <div class="course-meta">
               <span class="category">{{ skill.category.name }}</span>
-              <span class="level">All Levels</span>
+              <span class="level">{{ skill.get_level_display }}</span>
             </div>
             <h3>{{ skill.name }}</h3>
             <p>{{ skill.description|truncatewords:20 }}</p>
@@ -35,7 +35,7 @@
               <i class="bi bi-person text-primary"></i>
               <strong>Student:</strong> {{ skill.teacher.first_name }} {{ skill.teacher.last_name }}
             </p>
-            <a href="{% url 'core:enroll' %}" class="btn-course">Start Learning</a>
+            <a href="{% url 'category_skills:course_details' %}" class="btn-course">Course Details -> </a>
           </div>
         </div>
       </div>

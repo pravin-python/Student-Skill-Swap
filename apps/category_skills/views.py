@@ -20,6 +20,11 @@ def CourseView(request):
     if category_ids and "all" not in category_ids:
         skills_qs = skills_qs.filter(category_id__in=category_ids)
 
+    #Level Filter
+    level_filters = request.GET.getlist("levels[]") #expects for levels[]
+    if level_filters and "all" not in level_filters:
+        skills_qs = skills_qs.filter(level__in=level_filters)
+
     paginator = Paginator(skills_qs, 6)
     page_number = request.GET.get("page")
     skills = paginator.get_page(page_number)
@@ -31,10 +36,8 @@ def CourseView(request):
     return render(
         request,
         "category_skills/courses.html",
-        {"categories": categories, "skills": skills},
+        {"categories": categories, "skills": skills , "level_choices" : Skills.LEVEL_CHOICES},
     )
-
-
 
 def CourseDetailView(request):
     return render(request, "category_skills/course-details.html")
