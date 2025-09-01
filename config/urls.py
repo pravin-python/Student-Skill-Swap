@@ -8,6 +8,7 @@ urlpatterns = [
     path('',include('apps.core.urls')),
     path('courses/',include('apps.category_skills.urls')),
     path('',include('apps.accounts.urls')),
+    path('notifications/',include('apps.notifications.urls')),
 ]
 
 if settings.DEBUG:

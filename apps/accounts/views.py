@@ -7,7 +7,7 @@ from django.contrib.auth.hashers import check_password, make_password
 from .models import User, University, Department, Branch
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
-from apps.category_skills.models import SkillsCategory, Skills
+from apps.category_skills.models import SkillsCategory, Skills, UserSkills
 
 def register(request):
     if request.method == "POST":
@@ -163,7 +163,6 @@ def login_view(request):
 def logout_view(request):
     # Clear only your custom session keys
     request.session.flush()  # clears entire session safely
-    
     messages.success(request, "You have been logged out successfully.")
     return redirect("core:home")
 
@@ -209,6 +208,13 @@ def profile(request):
     departments = Department.objects.all()
     branches = Branch.objects.all()
     
+    # Get user's skills
+    user_skills = UserSkills.objects.filter(user=user).select_related('skill__category')
+    user_skill_ids = [us.skill.id for us in user_skills]
+    
+    # Get available skills (skills not added by user)
+    available_skills = Skills.objects.exclude(id__in=user_skill_ids).select_related('category')
+    
     context = {
         'custom_user': user,
         'universities': universities,
@@ -216,6 +222,8 @@ def profile(request):
         'branches': branches,
         'gender_choices': User.GENDER_CHOICES,
         'year_choices': User.YEAR_CHOICES,
+        'user_skills': user_skills,
+        'available_skills': available_skills,
     }
     
     return render(request, 'accounts/profile.html', context)

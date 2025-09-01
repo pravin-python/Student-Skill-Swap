@@ -31,11 +31,13 @@
                 <span>Learn this skill</span>
               </div>
             </div>
+            {% if skill.user_skills.first %}
             <p class="teacher-name mt-3 p-2 bg-light rounded d-inline-block shadow-sm">
               <i class="bi bi-person text-primary"></i>
-              <strong>Student:</strong> {{ skill.teacher.first_name }} {{ skill.teacher.last_name }}
+              <strong>Student:</strong> {{ skill.user_skills.first.user.first_name }} {{ skill.user_skills.first.user.last_name }}
             </p>
-            <a href="{% url 'category_skills:course_details' %}" class="btn-course">Course Details -> </a>
+            {% endif %}
+            <a href="{% url 'category_skills:course_details' skill.id %}" class="btn-course">Course Details -> </a>
           </div>
         </div>
       </div>

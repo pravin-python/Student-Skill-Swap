@@ -2,17 +2,18 @@
 
 {% load static %}
 
-{% block title %}Courses Details | Skill Swap {% endblock %}
+{% block title %}{{ skill.name }} | Skill Swap {% endblock %}
 
 {% block mainsection %}
     <!-- Page Title -->
     <div class="page-title light-background">
       <div class="container d-lg-flex justify-content-between align-items-center">
-        <h1 class="mb-2 mb-lg-0">Course Details</h1>
+        <h1 class="mb-2 mb-lg-0">{{ skill.name }}</h1>
         <nav class="breadcrumbs">
           <ol>
             <li><a href="{% url 'core:home' %}">Home</a></li>
-            <li class="current">Course Details</li>
+            <li><a href="{% url 'category_skills:courses' %}">Courses</a></li>
+            <li class="current">{{ skill.name }}</li>
           </ol>
         </nav>
       </div>
@@ -30,35 +31,41 @@
             <div class="course-hero" data-aos="fade-up" data-aos-delay="200">
               <div class="hero-content">
                 <div class="course-badge">
-                  <span class="category">Web Development</span>
-                  <span class="level">Advanced</span>
+                  <span class="category">{{ skill.category.name }}</span>
+                  <span class="level">{{ skill.get_level_display }}</span>
                 </div>
-                <h1>Full Stack JavaScript Mastery</h1>
-                <p class="course-subtitle">Master modern web development with React, Node.js, and MongoDB in this comprehensive hands-on course</p>
+                <h1>{{ skill.name }}</h1>
+                <p class="course-subtitle">{{ skill.description }}</p>
 
+                {% if user_skill %}
                 <div class="instructor-card">
-                  <img src="{% static 'assets/img/person/person-m-8.webp' %}" alt="Instructor" class="instructor-image">
+                  {% if user_skill.user.profile_pic %}
+                    <img src="{{ user_skill.user.profile_pic.url }}" alt="Student" class="instructor-image">
+                  {% else %}
+                    <img src="{% static 'assets/img/default-avatar.webp' %}" alt="Student" class="instructor-image">
+                  {% endif %}
                   <div class="instructor-details">
-                    <h5>Prof. Michael Rodriguez</h5>
-                    <span>Senior Full Stack Developer</span>
+                    <h5>{{ user_skill.user.first_name }} {{ user_skill.user.last_name }}</h5>
+                    <span>{{ user_skill.user.department.name|default:"Student" }} - Year {{ user_skill.user.year }}</span>
                     <div class="instructor-rating">
-                      <i class="bi bi-star-fill"></i>
-                      <i class="bi bi-star-fill"></i>
-                      <i class="bi bi-star-fill"></i>
-                      <i class="bi bi-star-fill"></i>
-                      <i class="bi bi-star-half"></i>
-                      <span>4.8 (1,247 reviews)</span>
+                      <i class="bi bi-person"></i>
+                      <span>Student offering this skill</span>
                     </div>
                   </div>
                 </div>
+                {% endif %}
               </div>
               <div class="hero-image">
-                <img src="{% static 'assets/img/education/courses-8.webp' %}" alt="Course Preview" class="img-fluid">
+                {% if skill.image %}
+                  <img src="{{ skill.image.url }}" alt="{{ skill.name }}" class="img-fluid">
+                {% else %}
+                  <img src="{% static 'assets/img/education/courses-8.webp' %}" alt="{{ skill.name }}" class="img-fluid">
+                {% endif %}
                 <div class="play-overlay">
                   <button class="play-btn">
-                    <i class="bi bi-play-fill"></i>
+                    <i class="bi bi-award"></i>
                   </button>
-                  <span>Watch Preview</span>
+                  <span>Skill Preview</span>
                 </div>
               </div>
             </div><!-- End Course Hero -->
@@ -92,55 +99,55 @@
                 <div class="tab-pane fade show active" id="course-detailsoverview" role="tabpanel">
 
                   <div class="overview-section">
-                    <h3>Course Description</h3>
-                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-                    <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+                    <h3>Skill Description</h3>
+                    <p>{{ skill.description }}</p>
+                    <p>This skill is offered by a student who has mastered this particular area and is willing to share their knowledge with others.</p>
                   </div>
 
                   <div class="skills-grid">
-                    <h3>Skills You'll Gain</h3>
+                    <h3>Skill Details</h3>
                     <div class="row">
                       <div class="col-md-6">
                         <div class="skill-item">
                           <div class="skill-icon">
-                            <i class="bi bi-code-slash"></i>
+                            <i class="bi bi-award"></i>
                           </div>
                           <div class="skill-content">
-                            <h5>Frontend Development</h5>
-                            <p>React, JavaScript ES6+, HTML5 &amp; CSS3</p>
+                            <h5>Skill Name</h5>
+                            <p>{{ skill.name }}</p>
                           </div>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="skill-item">
                           <div class="skill-icon">
-                            <i class="bi bi-server"></i>
+                            <i class="bi bi-tag"></i>
                           </div>
                           <div class="skill-content">
-                            <h5>Backend Development</h5>
-                            <p>Node.js, Express.js, RESTful APIs</p>
+                            <h5>Category</h5>
+                            <p>{{ skill.category.name }}</p>
                           </div>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="skill-item">
                           <div class="skill-icon">
-                            <i class="bi bi-database"></i>
+                            <i class="bi bi-bar-chart"></i>
                           </div>
                           <div class="skill-content">
-                            <h5>Database Management</h5>
-                            <p>MongoDB, Mongoose, Data Modeling</p>
+                            <h5>Level</h5>
+                            <p>{{ skill.get_level_display }}</p>
                           </div>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="skill-item">
                           <div class="skill-icon">
-                            <i class="bi bi-shield-check"></i>
+                            <i class="bi bi-calendar"></i>
                           </div>
                           <div class="skill-content">
-                            <h5>Security &amp; Testing</h5>
-                            <p>Authentication, JWT, Unit Testing</p>
+                            <h5>Added Date</h5>
+                            <p>{{ skill.created_at|date:"F d, Y" }}</p>
                           </div>
                         </div>
                       </div>
@@ -148,13 +155,17 @@
                   </div>
 
                   <div class="requirements-section">
-                    <h3>Requirements</h3>
+                    <h3>About the Student</h3>
+                    {% if user_skill %}
                     <ul class="requirements-list">
-                      <li><i class="bi bi-check2"></i>Basic understanding of HTML and CSS</li>
-                      <li><i class="bi bi-check2"></i>Familiarity with JavaScript fundamentals</li>
-                      <li><i class="bi bi-check2"></i>Computer with internet connection</li>
-                      <li><i class="bi bi-check2"></i>Text editor or IDE installed</li>
+                      <li><i class="bi bi-person"></i>{{ user_skill.user.first_name }} {{ user_skill.user.last_name }}</li>
+                      <li><i class="bi bi-building"></i>{{ user_skill.user.university_name.name|default:"University" }}</li>
+                      <li><i class="bi bi-mortarboard"></i>{{ user_skill.user.department.name|default:"Department" }} - Year {{ user_skill.user.year }}</li>
+                      <li><i class="bi bi-calendar"></i>Added on {{ user_skill.added_at|date:"F d, Y" }}</li>
                     </ul>
+                    {% else %}
+                    <p>This skill is available for learning but no specific student information is available.</p>
+                    {% endif %}
                   </div>
 
                 </div><!-- End Overview Tab -->
@@ -343,48 +354,56 @@
 
               <div class="card-header">
                 <div class="price-display">
-                  <span class="current-price">$149</span>
-                  <span class="original-price">$249</span>
-                  <span class="discount">40% OFF</span>
+                  <span class="current-price">Free</span>
+                  <span class="original-price">Student Exchange</span>
+                  <span class="discount">Skill Sharing</span>
                 </div>
                 <div class="enrollment-count">
-                  <i class="bi bi-people"></i>
-                  <span>3,892 students enrolled</span>
+                  <i class="bi bi-award"></i>
+                  <span>Skill available for learning</span>
                 </div>
               </div>
 
               <div class="card-body">
                 <div class="course-highlights">
                   <div class="highlight-item">
-                    <i class="bi bi-trophy"></i>
-                    <span>Certificate included</span>
+                    <i class="bi bi-award"></i>
+                    <span>Skill sharing</span>
                   </div>
                   <div class="highlight-item">
-                    <i class="bi bi-clock-history"></i>
-                    <span>45 hours content</span>
+                    <i class="bi bi-person"></i>
+                    <span>Student instructor</span>
                   </div>
                   <div class="highlight-item">
-                    <i class="bi bi-download"></i>
-                    <span>Downloadable resources</span>
+                    <i class="bi bi-chat"></i>
+                    <span>Direct communication</span>
                   </div>
                   <div class="highlight-item">
                     <i class="bi bi-infinity"></i>
-                    <span>Lifetime access</span>
+                    <span>Always available</span>
                   </div>
                   <div class="highlight-item">
-                    <i class="bi bi-phone"></i>
-                    <span>Mobile access</span>
+                    <i class="bi bi-people"></i>
+                    <span>Peer learning</span>
                   </div>
                 </div>
 
                 <div class="action-buttons">
-                  <button class="btn-primary">Enroll Now</button>
-                  <button class="btn-secondary">Add to Wishlist</button>
+                  {% if user_skill and user_skill.user.id != request.session.user_id %}
+                  <button class="btn-primary" onclick="openRequestModal({{ skill.id }}, '{{ skill.name }}', '{{ skill.get_level_display }}', '{{ user_skill.user.first_name }} {{ user_skill.user.last_name }}', {{ user_skill.user.id }})">Send Request</button>
+                  {% elif user_skill and user_skill.user.id == request.session.user_id %}
+                  <button class="btn-secondary disabled" disabled>Your Skill</button>
+                  {% else %}
+                  <button class="btn-secondary disabled" disabled>No Student Available</button>
+                  {% endif %}
+                  {% if request.session.user_id %}
+                  <button class="btn-secondary" onclick="addSkillToProfile({{ skill.id }})">Add to Profile</button>
+                  {% endif %}
                 </div>
 
                 <div class="guarantee">
                   <i class="bi bi-shield-check"></i>
-                  <span>30-day money-back guarantee</span>
+                  <span>Student-to-student learning</span>
                 </div>
               </div>
 
@@ -392,33 +411,35 @@
 
             <!-- Course Details -->
             <div class="course-details-card" data-aos="fade-up" data-aos-delay="300">
-              <h4>Course Details</h4>
+              <h4>Skill Details</h4>
 
               <div class="detail-grid">
                 <div class="detail-row">
-                  <span class="detail-label">Duration</span>
-                  <span class="detail-value">16 weeks</span>
+                  <span class="detail-label">Category</span>
+                  <span class="detail-value">{{ skill.category.name }}</span>
                 </div>
                 <div class="detail-row">
-                  <span class="detail-label">Skill Level</span>
-                  <span class="detail-value">Intermediate</span>
+                  <span class="detail-label">Level</span>
+                  <span class="detail-value">{{ skill.get_level_display }}</span>
                 </div>
                 <div class="detail-row">
-                  <span class="detail-label">Language</span>
-                  <span class="detail-value">English</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">Quizzes</span>
-                  <span class="detail-value">24</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">Assignments</span>
-                  <span class="detail-value">8 projects</span>
+                  <span class="detail-label">Added</span>
+                  <span class="detail-value">{{ skill.created_at|date:"M d, Y" }}</span>
                 </div>
                 <div class="detail-row">
                   <span class="detail-label">Updated</span>
-                  <span class="detail-value">December 2024</span>
+                  <span class="detail-value">{{ skill.updated_at|date:"M d, Y" }}</span>
                 </div>
+                {% if user_skill %}
+                <div class="detail-row">
+                  <span class="detail-label">Student</span>
+                  <span class="detail-value">{{ user_skill.user.first_name }} {{ user_skill.user.last_name }}</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Year</span>
+                  <span class="detail-value">{{ user_skill.user.year }}</span>
+                </div>
+                {% endif %}
               </div>
             </div><!-- End Course Details -->
 
@@ -449,4 +470,251 @@
 
     </section><!-- /Course Details Section -->
 
+    <!-- Request Modal -->
+    <div class="modal fade" id="requestModal" tabindex="-1" aria-labelledby="requestModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="requestModalLabel">
+                        <i class="bi bi-send"></i> Send Learning Request
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="requestForm" method="POST">
+                        {% csrf_token %}
+                        
+                        <!-- Request Details -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card border-primary">
+                                    <div class="card-header bg-primary text-white">
+                                        <h6 class="mb-0"><i class="bi bi-person"></i> From (You)</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="mb-1"><strong>Name:</strong> {% if request.session.user_id %}{{ custom_user.first_name }} {{ custom_user.last_name }}{% else %}Please login{% endif %}</p>
+                                        <p class="mb-1"><strong>Department:</strong> {% if request.session.user_id %}{{ custom_user.department.name }}{% endif %}</p>
+                                        <p class="mb-0"><strong>Year:</strong> {% if request.session.user_id %}{{ custom_user.year }}{% endif %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card border-success">
+                                    <div class="card-header bg-success text-white">
+                                        <h6 class="mb-0"><i class="bi bi-person-check"></i> To (Teacher)</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="mb-1"><strong>Name:</strong> <span id="teacherName">-</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Skill Details -->
+                        <div class="card border-info mb-4">
+                            <div class="card-header bg-info text-white">
+                                <h6 class="mb-0"><i class="bi bi-award"></i> Skill Details</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <p class="mb-1"><strong>Skill:</strong> <span id="skillName">-</span></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="mb-1"><strong>Category:</strong> {{ skill.category.name }}</p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p class="mb-1"><strong>Level:</strong> <span id="skillLevel">-</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Message -->
+                        <div class="mb-3">
+                            <label for="requestDescription" class="form-label">
+                                <i class="bi bi-chat-text"></i> Your Message <span class="text-danger">*</span>
+                            </label>
+                            <textarea name="description" id="requestDescription" class="form-control" rows="4" 
+                                      placeholder="Please introduce yourself and explain why you'd like to learn this skill..." 
+                                      required maxlength="500"></textarea>
+                            <div class="form-text">Describe your learning goals and what you hope to achieve. (Max 500 characters)</div>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        <!-- Hidden fields -->
+                        <input type="hidden" id="requestSkillId" name="skill_id" value="">
+                        <input type="hidden" id="requestReceiverId" name="receiver_id" value="">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg"></i> Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="submitRequest()">
+                        <i class="bi bi-send"></i> Send Request
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Global variables for request modal
+let currentSkillId = null;
+let currentReceiverId = null;
+
+function openRequestModal(skillId, skillName, skillLevel, teacherName, receiverId) {
+    // Check if user is logged in
+    {% if not request.session.user_id %}
+        alert('Please login to send a request.');
+        return;
+    {% endif %}
+    
+    // Set global variables
+    currentSkillId = skillId;
+    currentReceiverId = receiverId;
+    
+    // Update modal content
+    document.getElementById('skillName').textContent = skillName;
+    document.getElementById('skillLevel').textContent = skillLevel;
+    document.getElementById('teacherName').textContent = teacherName;
+    document.getElementById('requestSkillId').value = skillId;
+    document.getElementById('requestReceiverId').value = receiverId;
+    
+    // Clear previous form data
+    document.getElementById('requestDescription').value = '';
+    document.getElementById('requestDescription').classList.remove('is-invalid');
+    
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('requestModal'));
+    modal.show();
+}
+
+function submitRequest() {
+    const form = document.getElementById('requestForm');
+    const description = document.getElementById('requestDescription');
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+    // Clear previous validation errors
+    clearRequestValidationErrors();
+    
+    // Validate description
+    if (!description.value.trim()) {
+        showRequestFieldError('requestDescription', 'Please enter a message describing what you want to learn.');
+        return;
+    }
+    
+    if (description.value.trim().length < 10) {
+        showRequestFieldError('requestDescription', 'Message must be at least 10 characters long.');
+        return;
+    }
+    
+    if (description.value.length > 500) {
+        showRequestFieldError('requestDescription', 'Message must be 500 characters or less.');
+        return;
+    }
+    
+    // Prepare form data
+    const formData = new FormData();
+    formData.append('skill_id', currentSkillId);
+    formData.append('receiver_id', currentReceiverId);
+    formData.append('description', description.value.trim());
+    formData.append('csrfmiddlewaretoken', csrfToken);
+    
+    // Send request
+    fetch('/courses/send_request/', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('requestModal'));
+            modal.hide();
+            
+            // Show success message
+            alert(data.message);
+        } else {
+            if (data.errors) {
+                displayRequestValidationErrors(data.errors);
+            } else {
+                alert(data.message);
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while sending the request. Please try again.');
+    });
+}
+
+function showRequestFieldError(fieldId, message) {
+    const field = document.getElementById(fieldId);
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'invalid-feedback d-block';
+    errorDiv.textContent = message;
+    
+    field.classList.add('is-invalid');
+    field.parentNode.appendChild(errorDiv);
+}
+
+function clearRequestValidationErrors() {
+    // Remove all validation error messages
+    document.querySelectorAll('#requestModal .invalid-feedback').forEach(el => el.remove());
+    document.querySelectorAll('#requestModal .is-invalid').forEach(el => el.classList.remove('is-invalid'));
+}
+
+function displayRequestValidationErrors(errors) {
+    clearRequestValidationErrors();
+    
+    Object.keys(errors).forEach(fieldName => {
+        const fieldId = `request${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}`;
+        const field = document.getElementById(fieldId);
+        if (field) {
+            showRequestFieldError(fieldId, errors[fieldName].join(', '));
+        }
+    });
+}
+
+function addSkillToProfile(skillId) {
+    // Get CSRF token from the form
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+    if (!csrfToken) {
+        alert('CSRF token not found. Please refresh the page and try again.');
+        return;
+    }
+    
+    fetch(`/courses/add_skill/${skillId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken,
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            location.reload();
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while adding the skill. Please try again.');
+    });
+}
+</script>
 {% endblock %}

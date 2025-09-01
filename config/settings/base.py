@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'apps.core',
     'apps.category_skills',
     'apps.university',
+    'apps.notifications',
 ]
 
 MIDDLEWARE = [

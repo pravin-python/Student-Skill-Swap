@@ -198,6 +198,69 @@
                                        value="{{ custom_user.updated_at|date:'F d, Y' }}" readonly>
                             </div>
                         </div>
+                        
+                        <!-- CSRF Token for Skills -->
+                        {% csrf_token %}
+                        
+                        <!-- Skills Section -->
+                        <h6 class="text-primary mb-3 mt-4"><i class="bi bi-award"></i> My Skills</h6>
+                        <div class="mb-3">
+                            {% if user_skills %}
+                                <div class="row">
+                                    {% for user_skill in user_skills %}
+                                    <div class="col-md-6 mb-2">
+                                        <div class="card border-primary">
+                                            <div class="card-body p-2">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <h6 class="mb-0">{{ user_skill.skill.name }}</h6>
+                                                        <small class="text-muted">{{ user_skill.skill.category.name }} - {{ user_skill.skill.get_level_display }}</small>
+                                                    </div>
+                                                    <button class="btn btn-outline-danger btn-sm" onclick="removeSkill({{ user_skill.skill.id }})">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="alert alert-info">
+                                    <i class="bi bi-info-circle"></i> You haven't added any skills yet. Add skills from the available options below.
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Available Skills Section -->
+                        <h6 class="text-primary mb-3 mt-4"><i class="bi bi-plus-circle"></i> Available Skills</h6>
+                        <div class="mb-3">
+                            {% if available_skills %}
+                                <div class="row">
+                                    {% for skill in available_skills %}
+                                    <div class="col-md-6 mb-2">
+                                        <div class="card border-success">
+                                            <div class="card-body p-2">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <h6 class="mb-0">{{ skill.name }}</h6>
+                                                        <small class="text-muted">{{ skill.category.name }} - {{ skill.get_level_display }}</small>
+                                                    </div>
+                                                    <button class="btn btn-outline-success btn-sm" onclick="addSkill({{ skill.id }})">
+                                                        <i class="bi bi-plus"></i> Add
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="alert alert-success">
+                                    <i class="bi bi-check-circle"></i> Great! You've added all available skills to your profile.
+                                </div>
+                            {% endif %}
+                        </div>
                     </form>
                 </div>
             </div>
@@ -250,4 +313,104 @@
 {% block extra_js %}
 <script src="{% static 'assets/js/accounts/edit_profile.js' %}"></script>
 <script src="{% static 'assets/js/accounts/change_password.js' %}"></script>
+
+<script>
+function addSkill(skillId) {
+    console.log('Adding skill with ID:', skillId);
+    
+    // Get CSRF token from the form
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    console.log('CSRF Token found:', csrfToken ? 'Yes' : 'No');
+    
+    if (!csrfToken) {
+        alert('CSRF token not found. Please refresh the page and try again.');
+        return;
+    }
+    
+    const url = `/courses/add_skill/${skillId}/`;
+    console.log('Making request to:', url);
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken,
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => {
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Response data:', data);
+        if (data.success) {
+            // Show success message
+            alert(data.message);
+            // Reload the page to update the skills
+            location.reload();
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while adding the skill. Please try again.');
+    });
+}
+
+function removeSkill(skillId) {
+    if (confirm('Are you sure you want to remove this skill from your profile?')) {
+        console.log('Removing skill with ID:', skillId);
+        
+        // Get CSRF token from the form
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        console.log('CSRF Token found:', csrfToken ? 'Yes' : 'No');
+        
+        if (!csrfToken) {
+            alert('CSRF token not found. Please refresh the page and try again.');
+            return;
+        }
+        
+        const url = `/courses/remove_skill/${skillId}/`;
+        console.log('Making request to:', url);
+        
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => {
+            console.log('Response status:', response.status);
+            console.log('Response headers:', response.headers);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Response data:', data);
+            if (data.success) {
+                // Show success message
+                alert(data.message);
+                // Reload the page to update the skills
+                location.reload();
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while removing the skill. Please try again.');
+        });
+    }
+}
+</script>
 {% endblock %}
