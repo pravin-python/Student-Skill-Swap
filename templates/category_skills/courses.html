@@ -74,8 +74,18 @@
                 <i class="bi bi-search"></i>
                 <input type="text" id="searchInput" placeholder="Search categories or skills...">
               </div>
+              
+              <div class="sort-dropdown">
+                <select>
+                  <option>Sort by: Most Popular</option>
+                  <option>Newest First</option>
+                  <option>Price: Low to High</option>
+                  <option>Price: High to Low</option>
+                  <option>Duration: Short to Long</option>
+                </select>
+              </div>
             </div>
-
+          
             <div id="coursesWrapper">
               {% include "category_skills/courses_grid.html" %}
             </div>

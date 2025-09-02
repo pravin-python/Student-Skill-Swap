@@ -15,7 +15,7 @@ def CourseView(request):
     skills_qs = Skills.objects.select_related("category").filter(user_skills__isnull=False).distinct()
 
     # Search filter
-    search_query = request.GET.get("q")
+    search_query = request.GET.get("q") 
     if search_query:
         skills_qs = skills_qs.filter(name__icontains=search_query)
 
@@ -34,18 +34,18 @@ def CourseView(request):
         user_id = request.session.get('user_id')
         skills_qs = skills_qs.exclude(user_skills__user_id=user_id)
 
-    paginator = Paginator(skills_qs, 6)
+    paginator = Paginator(skills_qs, 1)
     page_number = request.GET.get("page")
-    skills = paginator.get_page(page_number)
+    page_obj = paginator.get_page(page_number)
 
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
-        html = render_to_string("category_skills/courses_grid.html", {"skills": skills})
+        html = render_to_string("category_skills/courses_grid.html", {"page_obj":page_obj})
         return JsonResponse({"html": html})
 
     return render(
         request,
         "category_skills/courses.html",
-        {"categories": categories, "skills": skills , "level_choices" : Skills.LEVEL_CHOICES},
+        {"categories": categories, "level_choices" : Skills.LEVEL_CHOICES , "page_obj":page_obj},
     )
 
 def CourseDetailView(request, skill_id):
@@ -71,9 +71,13 @@ def InstructorView(request):
             'skills': skills_list,
             'skills_count': len(skills_list)
         })
-    
+
+    paginator = Paginator(instructors_data, 8)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "category_skills/instructors.html", {
-        "instructors_data": instructors_data
+        "instructors_data": instructors_data , "page_obj":page_obj
     })
 
 @login_required_custom
@@ -240,10 +244,15 @@ def request_management(request):
     accepted_sent = sent_requests.filter(status='A').count()
     accepted_received = received_requests.filter(status='A').count()
     
+    paginator = Paginator(sent_requests, 4)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     context = {
         'custom_user': user,
         'sent_requests': sent_requests,
         'received_requests': received_requests,
+        'page_obj':page_obj,
         'stats': {
             'total_sent': total_sent,
             'total_received': total_received,

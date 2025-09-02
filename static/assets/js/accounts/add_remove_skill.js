@@ -13,7 +13,7 @@ function addSkill(skillId) {
     const url = `/courses/add_skill/${skillId}/`;
     console.log('Making request to:', url);
     
-    fetch(url, {    
+    fetch(url, {
         method: 'POST',
         headers: {
             'X-CSRFToken': csrfToken,
