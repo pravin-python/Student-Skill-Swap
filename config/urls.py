@@ -9,6 +9,7 @@ urlpatterns = [
     path('courses/',include('apps.category_skills.urls')),
     path('',include('apps.accounts.urls')),
     path('notifications/',include('apps.notifications.urls')),
+    path('university/',include('apps.university.urls')),
 ]
 
 if settings.DEBUG:

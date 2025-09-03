@@ -1,0 +1,45 @@
+{% load static %}
+<div class="courses-grid">
+  <div class="row">
+    {% for university in page_obj %}
+    <div class="col-lg-4 col-md-6 mb-4">
+        <div class="course-card">
+          <div class="course-image">
+            {% if skill.image %}
+              <img src="{{ university.image.url }}" alt="{{ university.name }}" class="img-fluid">
+            {% else %}
+              <img src="{% static 'assets/img/education/courses-3.webp' %}" alt="{{ university.name }}" class="img-fluid">
+            {% endif %}
+          </div>
+          <div class="course-content">
+            <!-- <div class="course-meta">
+              <span class="category">{{ skill.category.name }}</span>
+              <span class="level">{{ skill.get_level_display }}</span>
+            </div> -->
+            <h3>{{ university.name }}</h3>
+            <p>{{ university.description|truncatewords:20 }}</p>
+            <div class="course-stats">
+              <div class="stat"><i class="bi bi-calendar"></i>
+                <span>Added {{ university.created_at|date:"M d, Y" }}</span>
+              </div>
+              <div class="stat"><i class="bi bi-people"></i>
+                <span>Study in this university</span>
+              </div>
+            </div>
+            <a href="{% url 'category_skills:courses' %}" class="btn-course">University Details -> </a>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col-12">
+        <div class="text-center py-5">
+          <h4>No University listed at the moment</h4>
+          <p>Please check back later for new universities enrolled.</p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% include "include/pagination.html" %}
+

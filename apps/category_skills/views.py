@@ -80,6 +80,46 @@ def InstructorView(request):
         "instructors_data": instructors_data , "page_obj":page_obj
     })
 
+from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404, render
+from .models import Skills, Session
+from apps.accounts.models import User
+
+def InstructorDetailView(request, user_id):
+    user = get_object_or_404(
+        User.objects.prefetch_related("user_skills__skill__category"),
+        id=user_id
+    )
+
+    # Instructor’s skills
+    skills_qs = Skills.objects.filter(user_skills__user=user).select_related("category").distinct()
+
+    # Pagination (6 per page)
+    paginator = Paginator(skills_qs, 4)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    # Instructor’s sessions (for Experience tab)
+    sessions = Session.objects.filter(teacher=user).select_related("skill", "learner")
+
+    # AJAX request → return only courses grid + pagination HTML
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        html = render_to_string(
+            "category_skills/instructors_grid.html",
+            {"page_obj": page_obj},
+            request=request
+        )
+        return JsonResponse({"html": html})
+    
+    context = {
+        "instructor": user,
+        "skills": skills_qs,
+        "page_obj": page_obj,      # paginated skills
+        "skills_count": skills_qs.count(),
+        "sessions": sessions,
+    }
+    return render(request, "category_skills/instructor-profile.html", context)
+
 @login_required_custom
 def add_skill_to_profile(request, skill_id):
     """Add a skill to user's profile"""

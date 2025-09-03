@@ -18,9 +18,8 @@
       <ul>
         <li><a href="{% url 'core:home' %}" class="{% if request.resolver_match.url_name == 'home' %} active {% endif %}">Home</a></li>
         <li><a href="{% url 'category_skills:courses' %}" class="{% if request.resolver_match.url_name == 'courses' %} active {% endif %}">Courses</a></li>
-        <li>
-          <a href="{% url 'category_skills:instructors' %}" class="{% if request.resolver_match.url_name == 'instructors' %} active {% endif %}">Instructors</a>
-        </li>
+        <li><a href="{% url 'category_skills:instructors' %}" class="{% if request.resolver_match.url_name == 'instructors' %} active {% endif %}">Instructors</a></li>
+        <li><a href="{% url 'university:university' %}" class="{% if request.resolver_match.url_name == 'university' %} active {% endif %}">University</a></li>
         <li><a href="{% url 'core:contact' %}" class="{% if request.resolver_match.url_name == 'contact' %} active {% endif %}">Contact</a></li>
         <li><a href="{% url 'core:about' %}" class="{% if request.resolver_match.url_name == 'about' %} active {% endif %}">About</a></li>
         {% if custom_user %}

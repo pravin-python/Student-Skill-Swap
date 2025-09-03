@@ -8,6 +8,7 @@ urlpatterns = [
     path('' , views.CourseView , name="courses"),
     path('course_details/<int:skill_id>/' , views.CourseDetailView , name="course_details"),
     path('instructors/', views.InstructorView , name="instructors"),
+    path("instructor/<int:user_id>/", views.InstructorDetailView, name="instructor_profile"),
     path('add_skill/<int:skill_id>/', views.add_skill_to_profile, name="add_skill"),
     path('remove_skill/<int:skill_id>/', views.remove_skill_from_profile, name="remove_skill"),
     

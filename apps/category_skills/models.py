@@ -41,7 +41,7 @@ class Skills(models.Model):
     image = models.ImageField(upload_to=category_skills,blank=True,null=True)
     description = models.TextField(max_length=999,help_text="Enter Description for Specific Skill") 
     level = models.CharField(max_length=25 , choices=LEVEL_CHOICES , default='Beginner')
-    # teacher = models.ForeignKey(User, on_delete=models.CASCADE,related_name="skills")
+ 
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

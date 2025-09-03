@@ -18,7 +18,7 @@ def HomeView(request):
         user_id = request.session.get('user_id')
         skills_qs = skills_qs.exclude(user_skills__user_id=user_id)
 
-    skills = skills_qs.annotate(num_users=Count('user_skills')).distinct().order_by("?")[:6]
+    skills = skills_qs.order_by("?")[:6]
 
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
         html = render_to_string("core/index.html", {"skills": skills})
