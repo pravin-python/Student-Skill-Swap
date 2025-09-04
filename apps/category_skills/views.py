@@ -7,6 +7,7 @@ from django.template.loader import render_to_string
 from apps.accounts.views import login_required_custom
 from django.utils import timezone
 from django.db.models import Q
+from apps.university.models import Department
 
 def CourseView(request):
     categories = SkillsCategory.objects.all()
@@ -34,7 +35,7 @@ def CourseView(request):
         user_id = request.session.get('user_id')
         skills_qs = skills_qs.exclude(user_skills__user_id=user_id)
 
-    paginator = Paginator(skills_qs, 1)
+    paginator = Paginator(skills_qs, 4)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
@@ -58,10 +59,27 @@ def CourseDetailView(request, skill_id):
     })
 
 def InstructorView(request):
-    # Get all users who have added skills
-    users_with_skills = User.objects.filter(user_skills__isnull=False).distinct().prefetch_related('user_skills__skill__category')
-    
-    # Group skills by user
+    # --- Base queryset: only users with skills ---
+    users_with_skills = User.objects.filter(user_skills__isnull=False).distinct().prefetch_related(
+        'user_skills__skill__category', 'department'
+    )
+
+    # --- Search filter ---
+    q = request.GET.get("q")
+    if q:
+        users_with_skills = users_with_skills.filter(
+            Q(first_name__icontains=q) |
+            Q(last_name__icontains=q) |
+            Q(bio__icontains=q) |
+            Q(user_skills__skill__name__icontains=q)
+        ).distinct()
+
+    # --- Department filter ---
+    categories = request.GET.getlist("categories[]")
+    if categories and "all" not in categories:
+        users_with_skills = users_with_skills.filter(department__id__in=categories).distinct()
+
+    # --- Build instructor data ---
     instructors_data = []
     for user in users_with_skills:
         user_skills = user.user_skills.all()
@@ -69,21 +87,25 @@ def InstructorView(request):
         instructors_data.append({
             'user': user,
             'skills': skills_list,
-            'skills_count': len(skills_list)
+            'skills_count': len(skills_list),
         })
 
-    paginator = Paginator(instructors_data, 8)
+    # --- Pagination ---
+    paginator = Paginator(instructors_data, 1)  # show 6 instructors per page
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    return render(request, "category_skills/instructors.html", {
-        "instructors_data": instructors_data , "page_obj":page_obj
-    })
+    departments = Department.objects.all()
 
-from django.core.paginator import Paginator
-from django.shortcuts import get_object_or_404, render
-from .models import Skills, Session
-from apps.accounts.models import User
+    # --- AJAX response ---
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        html = render_to_string("category_skills/instructors_grid.html", {"page_obj": page_obj})
+        return JsonResponse({"html": html})
+
+    return render(request, "category_skills/instructors.html", {
+        "departments": departments,
+        "page_obj": page_obj,
+    })
 
 def InstructorDetailView(request, user_id):
     user = get_object_or_404(
@@ -105,7 +127,7 @@ def InstructorDetailView(request, user_id):
     # AJAX request → return only courses grid + pagination HTML
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
         html = render_to_string(
-            "category_skills/instructors_grid.html",
+            "category_skills/instructors_course_grid.html",
             {"page_obj": page_obj},
             request=request
         )
@@ -114,7 +136,7 @@ def InstructorDetailView(request, user_id):
     context = {
         "instructor": user,
         "skills": skills_qs,
-        "page_obj": page_obj,      # paginated skills
+        "page_obj": page_obj,      
         "skills_count": skills_qs.count(),
         "sessions": sessions,
     }

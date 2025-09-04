@@ -1,714 +1,191 @@
 {% extends "layout/base.html" %}
-
 {% load static %}
 
-{% block title %}{{ skill.name }} | Skill Swap {% endblock %}
+{% block title %} {{ university.name }} - Details {% endblock %}
 
 {% block mainsection %}
-    <!-- Page Title -->
-    <div class="page-title light-background">
-      <div class="container d-lg-flex justify-content-between align-items-center">
-        <h1 class="mb-2 mb-lg-0">{{ skill.name }}</h1>
-        <nav class="breadcrumbs">
-          <ol>
-            <li><a href="{% url 'core:home' %}">Home</a></li>
-            <li><a href="{% url 'category_skills:courses' %}">Courses</a></li>
-            <li class="current">{{ skill.name }}</li>
-          </ol>
-        </nav>
-      </div>
-    </div><!-- End Page Title -->
+<!-- Page Title -->
+<div class="page-title light-background">
+  <div class="container d-lg-flex justify-content-between align-items-center">
+    <h1 class="mb-2 mb-lg-0">{{ university.name }} Details</h1>
+    <nav class="breadcrumbs">
+      <ol>
+        <li><a href="{% url 'core:home' %}">Home</a></li>
+        <li class="current">{{ university.name }}</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+<!-- End Page Title -->
 
-    <!-- Course Details Section -->
-    <section id="course-details" class="course-details section">
+<!-- Program Profile Section -->
+<section id="program-profile" class="program-profile section">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
 
-      <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-        <div class="row">
-          <div class="col-lg-8">
-
-            <!-- Course Hero -->
-            <div class="course-hero" data-aos="fade-up" data-aos-delay="200">
-              <div class="hero-content">
-                <div class="course-badge">
-                  <span class="category">{{ skill.category.name }}</span>
-                  <span class="level">{{ skill.get_level_display }}</span>
-                </div>
-                <h1>{{ skill.name }}</h1>
-                <p class="course-subtitle">{{ skill.description }}</p>
-
-                {% if user_skill %}
-                <div class="instructor-card">
-                  {% if user_skill.user.profile_pic %}
-                    <img src="{{ user_skill.user.profile_pic.url }}" alt="Student" class="instructor-image">
-                  {% else %}
-                    <img src="{% static 'assets/img/default-avatar.webp' %}" alt="Student" class="instructor-image">
-                  {% endif %}
-                  <div class="instructor-details">
-                    <h5>{{ user_skill.user.first_name }} {{ user_skill.user.last_name }}</h5>
-                    <span>{{ user_skill.user.department.name|default:"Student" }} - Year {{ user_skill.user.year }}</span>
-                    <div class="instructor-rating">
-                      <i class="bi bi-person"></i>
-                      <span>Student offering this skill</span>
-                    </div>
-                  </div>
-                </div>
-                {% endif %}
-              </div>
-              <div class="hero-image">
-                {% if skill.image %}
-                  <img src="{{ skill.image.url }}" alt="{{ skill.name }}" class="img-fluid">
-                {% else %}
-                  <img src="{% static 'assets/img/education/courses-8.webp' %}" alt="{{ skill.name }}" class="img-fluid">
-                {% endif %}
-              </div>
-            </div><!-- End Course Hero -->
-
-            <!-- Course Navigation Tabs -->
-            <div class="course-nav-tabs" data-aos="fade-up" data-aos-delay="300">
-              <ul class="nav nav-tabs" id="course-detailsCourseTab" role="tablist">
-                <li class="nav-item">
-                  <button class="nav-link active" id="course-detailsoverview-tab" data-bs-toggle="tab" data-bs-target="#course-detailsoverview" type="button" role="tab">
-                    <i class="bi bi-layout-text-window-reverse"></i>
-                    Overview
-                  </button>
-                </li>
-                <li class="nav-item">
-                  <button class="nav-link" id="course-detailscurriculum-tab" data-bs-toggle="tab" data-bs-target="#course-detailscurriculum" type="button" role="tab">
-                    <i class="bi bi-list-ul"></i>
-                    Curriculum
-                  </button>
-                </li>
-                <li class="nav-item">
-                  <button class="nav-link" id="course-detailsreviews-tab" data-bs-toggle="tab" data-bs-target="#course-detailsreviews" type="button" role="tab">
-                    <i class="bi bi-star"></i>
-                    Reviews
-                  </button>
-                </li>
-              </ul>
-
-              <div class="tab-content" id="course-detailsCourseTabContent">
-
-                <!-- Overview Tab -->
-                <div class="tab-pane fade show active" id="course-detailsoverview" role="tabpanel">
-
-                  <div class="overview-section">
-                    <h3>Skill Description</h3>
-                    <p>{{ skill.description }}</p>
-                    <p>This skill is offered by a student who has mastered this particular area and is willing to share their knowledge with others.</p>
-                  </div>
-
-                  <div class="skills-grid">
-                    <h3>Skill Details</h3>
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="skill-item">
-                          <div class="skill-icon">
-                            <i class="bi bi-award"></i>
-                          </div>
-                          <div class="skill-content">
-                            <h5>Skill Name</h5>
-                            <p>{{ skill.name }}</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="skill-item">
-                          <div class="skill-icon">
-                            <i class="bi bi-tag"></i>
-                          </div>
-                          <div class="skill-content">
-                            <h5>Category</h5>
-                            <p>{{ skill.category.name }}</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="skill-item">
-                          <div class="skill-icon">
-                            <i class="bi bi-bar-chart"></i>
-                          </div>
-                          <div class="skill-content">
-                            <h5>Level</h5>
-                            <p>{{ skill.get_level_display }}</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="skill-item">
-                          <div class="skill-icon">
-                            <i class="bi bi-calendar"></i>
-                          </div>
-                          <div class="skill-content">
-                            <h5>Added Date</h5>
-                            <p>{{ skill.created_at|date:"F d, Y" }}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="requirements-section">
-                    <h3>About the Student</h3>
-                    {% if user_skill %}
-                    <ul class="requirements-list">
-                      <li><i class="bi bi-person"></i>{{ user_skill.user.first_name }} {{ user_skill.user.last_name }}</li>
-                      <li><i class="bi bi-building"></i>{{ user_skill.user.university_name.name|default:"University" }}</li>
-                      <li><i class="bi bi-mortarboard"></i>{{ user_skill.user.department.name|default:"Department" }} - Year {{ user_skill.user.year }}</li>
-                      <li><i class="bi bi-calendar"></i>Added on {{ user_skill.added_at|date:"F d, Y" }}</li>
-                    </ul>
-                    {% else %}
-                    <p>This skill is available for learning but no specific student information is available.</p>
-                    {% endif %}
-                  </div>
-
-                </div><!-- End Overview Tab -->
-
-                <!-- Curriculum Tab -->
-                <div class="tab-pane fade" id="course-detailscurriculum" role="tabpanel">
-
-                  <div class="curriculum-overview">
-                    <div class="curriculum-stats">
-                      <div class="stat">
-                        <i class="bi bi-collection-play"></i>
-                        <span>12 Sections</span>
-                      </div>
-                      <div class="stat">
-                        <i class="bi bi-play-circle"></i>
-                        <span>89 Lectures</span>
-                      </div>
-                      <div class="stat">
-                        <i class="bi bi-clock"></i>
-                        <span>45h 32m</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="accordion" id="curriculumAccordion">
-
-                    <div class="accordion-item curriculum-module">
-                      <h2 class="accordion-header">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#module1">
-                          <div class="module-info">
-                            <span class="module-title">JavaScript Fundamentals &amp; ES6+</span>
-                            <span class="module-meta">8 lessons • 4h 15m</span>
-                          </div>
-                        </button>
-                      </h2>
-                      <div id="module1" class="accordion-collapse collapse show" data-bs-parent="#curriculumAccordion">
-                        <div class="accordion-body">
-                          <div class="lessons-list">
-                            <div class="lesson">
-                              <i class="bi bi-play-circle"></i>
-                              <span class="lesson-title">Variables, Functions and Scope</span>
-                              <span class="lesson-time">28 min</span>
-                            </div>
-                            <div class="lesson">
-                              <i class="bi bi-play-circle"></i>
-                              <span class="lesson-title">Arrow Functions and Destructuring</span>
-                              <span class="lesson-time">35 min</span>
-                            </div>
-                            <div class="lesson">
-                              <i class="bi bi-file-earmark-text"></i>
-                              <span class="lesson-title">Promises and Async/Await</span>
-                              <span class="lesson-time">42 min</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="accordion-item curriculum-module">
-                      <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#module2">
-                          <div class="module-info">
-                            <span class="module-title">React Development Deep Dive</span>
-                            <span class="module-meta">12 lessons • 7h 45m</span>
-                          </div>
-                        </button>
-                      </h2>
-                      <div id="module2" class="accordion-collapse collapse" data-bs-parent="#curriculumAccordion">
-                        <div class="accordion-body">
-                          <div class="lessons-list">
-                            <div class="lesson">
-                              <i class="bi bi-play-circle"></i>
-                              <span class="lesson-title">Components and JSX Syntax</span>
-                              <span class="lesson-time">32 min</span>
-                            </div>
-                            <div class="lesson">
-                              <i class="bi bi-play-circle"></i>
-                              <span class="lesson-title">State Management with Hooks</span>
-                              <span class="lesson-time">48 min</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="accordion-item curriculum-module">
-                      <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#module3">
-                          <div class="module-info">
-                            <span class="module-title">Node.js &amp; Server Development</span>
-                            <span class="module-meta">15 lessons • 8h 20m</span>
-                          </div>
-                        </button>
-                      </h2>
-                      <div id="module3" class="accordion-collapse collapse" data-bs-parent="#curriculumAccordion">
-                        <div class="accordion-body">
-                          <div class="lessons-list">
-                            <div class="lesson">
-                              <i class="bi bi-play-circle"></i>
-                              <span class="lesson-title">Express.js Server Setup</span>
-                              <span class="lesson-time">25 min</span>
-                            </div>
-                            <div class="lesson">
-                              <i class="bi bi-file-earmark-text"></i>
-                              <span class="lesson-title">Building RESTful APIs</span>
-                              <span class="lesson-time">55 min</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-
-                </div><!-- End Curriculum Tab -->
-
-                <!-- Reviews Tab -->
-                <div class="tab-pane fade" id="course-detailsreviews" role="tabpanel">
-
-                  <div class="reviews-summary">
-                    <div class="rating-overview">
-                      <div class="overall-rating">
-                        <div class="rating-number">4.8</div>
-                        <div class="rating-stars">
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-half"></i>
-                        </div>
-                        <div class="rating-text">1,247 reviews</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="reviews-list">
-                    <div class="review-item">
-                      <div class="reviewer-info">
-                        <img src="{% static 'assets/img/person/person-f-12.webp' %}" alt="Reviewer" class="reviewer-avatar">
-                        <div class="reviewer-details">
-                          <h6>Jessica Chen</h6>
-                          <div class="review-rating">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                          </div>
-                        </div>
-                        <span class="review-date">2 weeks ago</span>
-                      </div>
-                      <p class="review-text">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. The instructor explains complex concepts very clearly.</p>
-                    </div>
-
-                    <div class="review-item">
-                      <div class="reviewer-info">
-                        <img src="{% static 'assets/img/person/person-m-5.webp' %}" alt="Reviewer" class="reviewer-avatar">
-                        <div class="reviewer-details">
-                          <h6>David Thompson</h6>
-                          <div class="review-rating">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star"></i>
-                          </div>
-                        </div>
-                        <span class="review-date">1 month ago</span>
-                      </div>
-                      <p class="review-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Great practical examples and real-world projects that helped me understand the concepts better.</p>
-                    </div>
-
-                  </div>
-
-                </div><!-- End Reviews Tab -->
-
-              </div>
-            </div><!-- End Course Navigation Tabs -->
-
+    <!-- Hero Banner (Image 1) -->
+    <div class="row mb-4">
+      <div class="col-lg-12">
+        <div class="program-hero-banner" data-aos="zoom-out" data-aos-delay="200">
+          <div class="hero-background">
+            {% if hero_image %}
+              <img src="{{ hero_image.image.url }}" alt="{{ university.name }} - Hero" class="img-fluid w-100">
+            {% else %}
+              <img src="{% static 'assets/img/education/default_university.jpg' %}" alt="Default" class="img-fluid w-100">
+            {% endif %}
           </div>
 
-          <div class="col-lg-4">
-
-            <!-- Enrollment Card -->
-            <div class="enrollment-card" data-aos="fade-up" data-aos-delay="200">
-
-              <div class="card-header">
-                <div class="price-display">
-                  <span class="current-price">Free</span>
-                  <span class="original-price">Student Exchange</span>
-                  <span class="discount">Skill Sharing</span>
-                </div>
-                <div class="enrollment-count">
-                  <i class="bi bi-award"></i>
-                  <span>Skill available for learning</span>
-                </div>
+          <div class="hero-content">
+            <div class="program-info">
+              <h2>{{ university.name }}</h2>
+              <p class="title">{{ university.description|truncatewords:25 }}</p>
+              <div class="credentials">
+                <span class="credential">{{ levels.count }} Levels Offered</span>
+                <span class="credential">{{ departments.count }} Departments</span>
               </div>
-
-              <div class="card-body">
-                <div class="course-highlights">
-                  <div class="highlight-item">
-                    <i class="bi bi-award"></i>
-                    <span>Skill sharing</span>
-                  </div>
-                  <div class="highlight-item">
-                    <i class="bi bi-person"></i>
-                    <span>Student instructor</span>
-                  </div>
-                  <div class="highlight-item">
-                    <i class="bi bi-chat"></i>
-                    <span>Direct communication</span>
-                  </div>
-                  <div class="highlight-item">
-                    <i class="bi bi-infinity"></i>
-                    <span>Always available</span>
-                  </div>
-                  <div class="highlight-item">
-                    <i class="bi bi-people"></i>
-                    <span>Peer learning</span>
-                  </div>
-                </div>
-
-                <div class="action-buttons">
-                  {% if user_skill and user_skill.user.id != request.session.user_id %}
-                  <button class="btn-primary" onclick="openRequestModal({{ skill.id }}, '{{ skill.name }}', '{{ skill.get_level_display }}', '{{ user_skill.user.first_name }} {{ user_skill.user.last_name }}', {{ user_skill.user.id }})">Send Request</button>
-                  {% elif user_skill and user_skill.user.id == request.session.user_id %}
-                  <button class="btn-secondary disabled" disabled>Your Skill</button>
-                  {% else %}
-                  <button class="btn-secondary disabled" disabled>No Student Available</button>
-                  {% endif %}
-                  {% if request.session.user_id %}
-                  <button class="btn-secondary" onclick="addSkillToProfile({{ skill.id }})">Add to Profile</button>
-                  {% endif %}
-                </div>
-
-                <div class="guarantee">
-                  <i class="bi bi-shield-check"></i>
-                  <span>Student-to-student learning</span>
-                </div>
-              </div>
-
-            </div><!-- End Enrollment Card -->
-
-            <!-- Course Details -->
-            <div class="course-details-card" data-aos="fade-up" data-aos-delay="300">
-              <h4>Skill Details</h4>
-
-              <div class="detail-grid">
-                <div class="detail-row">
-                  <span class="detail-label">Category</span>
-                  <span class="detail-value">{{ skill.category.name }}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">Level</span>
-                  <span class="detail-value">{{ skill.get_level_display }}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">Added</span>
-                  <span class="detail-value">{{ skill.created_at|date:"M d, Y" }}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">Updated</span>
-                  <span class="detail-value">{{ skill.updated_at|date:"M d, Y" }}</span>
-                </div>
-                {% if user_skill %}
-                <div class="detail-row">
-                  <span class="detail-label">Student</span>
-                  <span class="detail-value">{{ user_skill.user.first_name }} {{ user_skill.user.last_name }}</span>
-                </div>
-                <div class="detail-row">
-                  <span class="detail-label">Year</span>
-                  <span class="detail-value">{{ user_skill.user.year }}</span>
-                </div>
-                {% endif %}
-              </div>
-            </div><!-- End Course Details -->
-
-            <!-- Share Course -->
-            <div class="share-course-card" data-aos="fade-up" data-aos-delay="400">
-              <h4>Share This Course</h4>
-              <div class="social-links">
-                <a href="#" class="social-link facebook">
-                  <i class="bi bi-facebook"></i>
-                </a>
-                <a href="#" class="social-link twitter">
-                  <i class="bi bi-twitter"></i>
-                </a>
-                <a href="#" class="social-link linkedin">
-                  <i class="bi bi-linkedin"></i>
-                </a>
-                <a href="#" class="social-link email">
-                  <i class="bi bi-envelope"></i>
+              <div class="contact-actions">
+                <a href="#overview" class="btn-contact">
+                  <i class="fa-solid fa-user-graduate"></i>
+                  Explore More
                 </a>
               </div>
-            </div><!-- End Share Course -->
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section><!-- /Course Details Section -->
-
-    <!-- Request Modal -->
-    <div class="modal fade" id="requestModal" tabindex="-1" aria-labelledby="requestModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="requestModalLabel">
-                        <i class="bi bi-send"></i> Send Learning Request
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="requestForm" method="POST">
-                        {% csrf_token %}
-                        
-                        <!-- Request Details -->
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <div class="card border-primary">
-                                    <div class="card-header bg-primary text-white">
-                                        <h6 class="mb-0"><i class="bi bi-person"></i> From (You)</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <p class="mb-1"><strong>Name:</strong> {% if request.session.user_id %}{{ custom_user.first_name }} {{ custom_user.last_name }}{% else %}Please login{% endif %}</p>
-                                        <p class="mb-1"><strong>Department:</strong> {% if request.session.user_id %}{{ custom_user.department.name }}{% endif %}</p>
-                                        <p class="mb-0"><strong>Year:</strong> {% if request.session.user_id %}{{ custom_user.year }}{% endif %}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card border-success">
-                                    <div class="card-header bg-success text-white">
-                                        <h6 class="mb-0"><i class="bi bi-person-check"></i> To (Teacher)</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <p class="mb-1"><strong>Name:</strong> <span id="teacherName">-</span></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Skill Details -->
-                        <div class="card border-info mb-4">
-                            <div class="card-header bg-info text-white">
-                                <h6 class="mb-0"><i class="bi bi-award"></i> Skill Details</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <p class="mb-1"><strong>Skill:</strong> <span id="skillName">-</span></p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p class="mb-1"><strong>Category:</strong> {{ skill.category.name }}</p>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <p class="mb-1"><strong>Level:</strong> <span id="skillLevel">-</span></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Message -->
-                        <div class="mb-3">
-                            <label for="requestDescription" class="form-label">
-                                <i class="bi bi-chat-text"></i> Your Message <span class="text-danger">*</span>
-                            </label>
-                            <textarea name="description" id="requestDescription" class="form-control" rows="4" 
-                                      placeholder="Please introduce yourself and explain why you'd like to learn this skill..." 
-                                      required maxlength="500"></textarea>
-                            <div class="form-text">Describe your learning goals and what you hope to achieve. (Max 500 characters)</div>
-                            <div class="invalid-feedback"></div>
-                        </div>
-
-                        <!-- Hidden fields -->
-                        <input type="hidden" id="requestSkillId" name="skill_id" value="">
-                        <input type="hidden" id="requestReceiverId" name="receiver_id" value="">
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bi bi-x-lg"></i> Cancel
-                    </button>
-                    <button type="button" class="btn btn-primary" onclick="submitRequest()">
-                        <i class="bi bi-send"></i> Send Request
-                    </button>
-                </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
 
+    <!-- Tabs + Side Image -->
+    <div class="row gy-5">
+      <div class="col-lg-8">
+        <div class="content-tabs" data-aos="fade-right" data-aos-delay="300">
+
+          <ul class="nav nav-tabs custom-tabs" role="tablist">
+            <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#overview">Overview</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#curriculum">Departments</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#faculty">Levels</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#admissions">Admissions</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#students">Students</button></li>
+          </ul>
+
+          <div class="tab-content custom-tab-content">
+            <!-- Overview -->
+            <div class="tab-pane fade show active" id="overview">
+              <h4>About {{ university.name }}</h4>
+              <p>{{ university.description }}</p>
+
+              <h4>At a Glance</h4>
+              <ul>
+                <li><strong>Established:</strong> {{ university.established_year }}</li>
+                <li><strong>Country:</strong> {{ country.name }}</li>
+                <li><strong>State:</strong> {{ state.name }}</li>
+                <li><strong>City:</strong> {{ city.name }}</li>
+              </ul>
+            </div>
+
+            <!-- Departments -->
+            <div class="tab-pane fade" id="curriculum" role="tabpanel">
+              {% include "university/university_department.html" %}
+            </div>
+
+            <!-- Levels -->
+            <div class="tab-pane fade" id="faculty">
+              <h4>Levels Offered</h4>
+              <ul class="levels-list">
+                {% for level in levels %}
+                  <li>{{ level.name }}</li>
+                {% empty %}
+                  <p>No levels available.</p>
+                {% endfor %}
+              </ul>
+            </div>
+
+            <!-- Admissions -->
+            <div class="tab-pane fade" id="admissions">
+              <h4>Admission Requirements</h4>
+              <ul>
+                <li>High school diploma / bachelor’s degree (depending on level)</li>
+                <li>Strong academic record</li>
+                <li>English proficiency (TOEFL/IELTS if required)</li>
+              </ul>
+
+              <h4>Application Process</h4>
+              <ol>
+                <li>Submit online application</li>
+                <li>Provide transcripts & supporting documents</li>
+                <li>Attend interview (if applicable)</li>
+                <li>Receive admission decision</li>
+              </ol>
+
+              <h4>Contact Information</h4>
+              <p>Email: <a href="mailto:admissions@{{ university.name|lower }}.edu">admissions@{{ university.name|lower }}.edu</a></p>
+            </div>
+
+            <!-- Students Tab Section -->
+            <div class="tab-pane fade" id="students" role="tabpanel">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2nd Image beside Tabs -->
+      <div class="col-lg-4 d-flex align-items-center" data-aos="fade-left" data-aos-delay="300">
+        {% if tab_side_image %}
+          <img src="{{ tab_side_image.image.url }}" alt="{{ university.name }} - Side Image" class="img-fluid rounded shadow">
+        {% else %}
+        <img src="{% static 'assets/img/education/showcase-4.webp' %}" alt="Default" class="img-fluid w-100">
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Below Tabs (3rd Image + Sidebar) -->
+    <div class="row gy-5 mt-4">
+      <div class="col-lg-8" data-aos="fade-right" data-aos-delay="300">
+        {% if below_tab_image %}
+          <img src="{{ below_tab_image.image.url }}" alt="{{ university.name }} - Below Tab Image" class="img-fluid rounded shadow w-100">
+        {% else %}
+        <img src="{% static 'assets/img/education/default_canteen.jpg' %}" alt="Default" class="img-fluid w-100">
+        {% endif %}
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-lg-4">
+        <div class="sidebar-widgets" data-aos="fade-left" data-aos-delay="300">
+          <div class="stats-widget">
+            <h4>Quick Stats</h4>
+            <ul>
+              <li><strong>Departments:</strong> {{ departments.count }}</li>
+              <li><strong>Levels:</strong> {{ levels.count }}</li>
+              <li><strong>Established:</strong> {{ university.established_year }}</li>
+              <li><strong>Location:</strong> {{ city.name }}, {{ state.name }}, {{ country.name }}</li>
+            </ul>
+          </div>
+
+          <div class="contact-widget" id="apply">
+            <h4>Ready to Apply?</h4>
+            <p>Take the next step toward your future at {{ university.name }}.</p>
+            <a href="{% url 'university:university' %}" class="btn btn-primary w-100">Want to Explore -> </a>
+          </div>
+        </div>
+      </div>
+
+       <!-- Playground Section (4th Image) -->
+
+    <div class="row gy-5 mt-5">
+      <div class="col-lg-12 text-center" data-aos="fade-up" data-aos-delay="300">
+        <h4 class="mb-3">Campus Playground</h4>
+          {% if playground_image %}
+        <img src="{{ playground_image.image.url }}" alt="{{ university.name }} - Playground" class="img-fluid rounded shadow-lg w-100">
+        {% else %}
+        <img src="{% static 'assets/img/education/default_playground.jpg' %}" alt="Default" class="img-fluid w-100">
+        {% endif %}
+      </div>
+    </div>
+    </div>
+
+  </div>
+</section>
 {% endblock %}
 
 {% block extra_js %}
-<script>
-// Global variables for request modal
-let currentSkillId = null;
-let currentReceiverId = null;
-
-function openRequestModal(skillId, skillName, skillLevel, teacherName, receiverId) {
-    // Check if user is logged in
-    {% if not request.session.user_id %}
-        alert('Please login to send a request.');
-        return;
-    {% endif %}
-    
-    // Set global variables
-    currentSkillId = skillId;
-    currentReceiverId = receiverId;
-    
-    // Update modal content
-    document.getElementById('skillName').textContent = skillName;
-    document.getElementById('skillLevel').textContent = skillLevel;
-    document.getElementById('teacherName').textContent = teacherName;
-    document.getElementById('requestSkillId').value = skillId;
-    document.getElementById('requestReceiverId').value = receiverId;
-    
-    // Clear previous form data
-    document.getElementById('requestDescription').value = '';
-    document.getElementById('requestDescription').classList.remove('is-invalid');
-    
-    // Show modal
-    const modal = new bootstrap.Modal(document.getElementById('requestModal'));
-    modal.show();
-}
-
-function submitRequest() {
-    const form = document.getElementById('requestForm');
-    const description = document.getElementById('requestDescription');
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    
-    // Clear previous validation errors
-    clearRequestValidationErrors();
-    
-    // Validate description
-    if (!description.value.trim()) {
-        showRequestFieldError('requestDescription', 'Please enter a message describing what you want to learn.');
-        return;
-    }
-    
-    if (description.value.trim().length < 10) {
-        showRequestFieldError('requestDescription', 'Message must be at least 10 characters long.');
-        return;
-    }
-    
-    if (description.value.length > 500) {
-        showRequestFieldError('requestDescription', 'Message must be 500 characters or less.');
-        return;
-    }
-    
-    // Prepare form data
-    const formData = new FormData();
-    formData.append('skill_id', currentSkillId);
-    formData.append('receiver_id', currentReceiverId);
-    formData.append('description', description.value.trim());
-    formData.append('csrfmiddlewaretoken', csrfToken);
-    
-    // Send request
-    fetch('/courses/send_request/', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Close modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('requestModal'));
-            modal.hide();
-            
-            // Show success message
-            alert(data.message);
-        } else {
-            if (data.errors) {
-                displayRequestValidationErrors(data.errors);
-            } else {
-                alert(data.message);
-            }
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while sending the request. Please try again.');
-    });
-}
-
-function showRequestFieldError(fieldId, message) {
-    const field = document.getElementById(fieldId);
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'invalid-feedback d-block';
-    errorDiv.textContent = message;
-    
-    field.classList.add('is-invalid');
-    field.parentNode.appendChild(errorDiv);
-}
-
-function clearRequestValidationErrors() {
-    // Remove all validation error messages
-    document.querySelectorAll('#requestModal .invalid-feedback').forEach(el => el.remove());
-    document.querySelectorAll('#requestModal .is-invalid').forEach(el => el.classList.remove('is-invalid'));
-}
-
-function displayRequestValidationErrors(errors) {
-    clearRequestValidationErrors();
-    
-    Object.keys(errors).forEach(fieldName => {
-        const fieldId = `request${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}`;
-        const field = document.getElementById(fieldId);
-        if (field) {
-            showRequestFieldError(fieldId, errors[fieldName].join(', '));
-        }
-    });
-}
-
-function addSkillToProfile(skillId) {
-    // Get CSRF token from the form
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    
-    if (!csrfToken) {
-        alert('CSRF token not found. Please refresh the page and try again.');
-        return;
-    }
-    
-    fetch(`/courses/add_skill/${skillId}/`, {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': csrfToken,
-            'Content-Type': 'application/json',
-        },
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            alert(data.message);
-            location.reload();
-        } else {
-            alert(data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while adding the skill. Please try again.');
-    });
-}
-</script>
+<script src="{% static 'assets/js/university/university-detail.js' %}"></script>
 {% endblock %}

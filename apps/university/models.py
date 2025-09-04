@@ -82,6 +82,8 @@ class Level(models.Model):
         verbose_name_plural = 'Levels'
 
     name = models.CharField(max_length=100, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -122,6 +124,6 @@ class UniversityImages(models.Model):
 
     image = models.ImageField(upload_to=university_upload_to)
     description = models.TextField(max_length=999, help_text="Enter Description for the image")
-    university = models.ForeignKey(University, on_delete=models.CASCADE, related_name='university_id')
+    university = models.ForeignKey(University, on_delete=models.CASCADE, related_name='images')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

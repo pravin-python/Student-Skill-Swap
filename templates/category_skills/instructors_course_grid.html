@@ -1,0 +1,30 @@
+{% load static %}
+  <div id="courses-content">
+    <div class="courses-grid">
+      {% for skill in page_obj %}
+        <div class="course-item">
+          <div class="course-thumb">
+            {% if skill.image %}
+              <img src="{{ skill.image.url }}" alt="{{ skill.name }}" class="img-fluid">
+            {% else %}
+              <img src="{% static 'assets/img/default-course.webp' %}" alt="{{ skill.name }}" class="img-fluid">
+            {% endif %}
+            <div class="course-level">{{ skill.get_level_display }}</div>
+          </div>
+          <div class="course-info">
+            <h5>{{ skill.name }}</h5>
+            <p class="price">Free</p>
+            <a href="{% url 'category_skills:course_details' skill.id %}" 
+               class="btn btn-primary w-100 mt-2">
+              Course Details →
+            </a>
+          </div>
+        </div>
+      {% empty %}
+        <p>No courses available.</p>
+      {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% include "include/pagination.html" %}
+  </div>
