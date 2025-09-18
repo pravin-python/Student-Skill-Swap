@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Close register modal and open login modal
                 const registerModal = document.getElementById("openregisterModal");
                 const loginModal = document.getElementById("openloginModal");
-
+                const msgBox = loginModal.querySelector("#loginSuccessMessage");
                 if (registerModal) {
                     const bsModal = bootstrap.Modal.getInstance(registerModal);
                     bsModal.hide();
@@ -160,6 +160,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     const bsModal = new bootstrap.Modal(loginModal);
                     bsModal.show();
                 }
+                if (msgBox) {
+                    msgBox.textContent = "Registration successful! Please log in.";
+                    msgBox.classList.remove("d-none");
+            }
             } else {
                 // Show field errors
                 if (data.errors) {

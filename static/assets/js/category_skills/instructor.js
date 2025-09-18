@@ -3,22 +3,25 @@ document.addEventListener("click", function (e) {
   if (e.target.closest(".pagination a")) {
     e.preventDefault();
     let url = e.target.closest("a").getAttribute("href");
-    fetchCourses(url);
+    fetchInstructors(url);
   }
 });
 
-// Handle search input
-let searchtimeout;
-document.getElementById("searchInput").addEventListener("input", function (e) {
-  clearTimeout(searchtimeout);
-  let query = e.target.value;
-  let url = "?q=" + encodeURIComponent(query);
-  searchtimeout = setTimeout(() => {
-    fetchCourses(url);
-  }, 500);
-});
+// Handle search input with debounce
+let searchTimeout;
+let searchInput = document.getElementById("searchInput");
+if (searchInput) {
+  searchInput.addEventListener("input", function (e) {
+    clearTimeout(searchTimeout);
+    let query = e.target.value;
+    let url = "?q=" + encodeURIComponent(query);
+    searchTimeout = setTimeout(() => {
+      fetchInstructors(url);
+    }, 500);
+  });
+}
 
-// Handle category filter change
+// Handle category (department) filter change
 document.addEventListener("change", function (e) {
   if (e.target.matches("input[data-category]")) {
     let allCategoryCheckbox = document.querySelector("input[data-category='all']");
@@ -37,14 +40,13 @@ document.addEventListener("change", function (e) {
         specificCategoryCheckboxes.forEach(cb => cb.checked = false);
       }
     }
-
-    fetchCourses();
+    fetchInstructors();
   }
 });
 
-// Fetch instructors
-function fetchCourses(url = "?page=1") {
-  let query = document.getElementById("searchInput").value;
+// ✅ Core fetch function
+function fetchInstructors(url = "?page=1") {
+  let query = document.getElementById("searchInput")?.value || "";
 
   // Collect selected categories
   let selectedCategories = [...document.querySelectorAll("input[data-category]:checked")]
@@ -63,13 +65,42 @@ function fetchCourses(url = "?page=1") {
     params.set("page", new URL(url, window.location.origin).searchParams.get("page"));
   }
 
-  fetch("?" + params.toString(), {
-    headers: { "X-Requested-With": "XMLHttpRequest" }
-  })
+  // ✅ Force AJAX mode
+  params.set("ajax", "1");
+
+  fetch("?" + params.toString())
     .then(response => response.json())
     .then(data => {
       document.getElementById("instructorsWrapper").innerHTML = data.html;
+
+      // ✅ Clean URL (remove ajax=1 from history)
+      params.delete("ajax");
       window.history.pushState({}, "", "?" + params.toString());
+
       window.scrollTo({ top: 0, behavior: "smooth" });
-    });
+    })
+    .catch(err => console.error("Error fetching instructors:", err));
 }
+
+// ✅ Restore filter state on page load
+(function restoreFiltersFromURL() {
+  let params = new URLSearchParams(window.location.search);
+
+  // Restore search box
+  let q = params.get("q");
+  if (q && searchInput) {
+    searchInput.value = q;
+  }
+
+  // Restore department filters
+  let selectedCategories = params.getAll("categories[]");
+  if (selectedCategories.length > 0) {
+    document.querySelectorAll("input[data-category]").forEach(cb => {
+      if (selectedCategories.includes(cb.getAttribute("data-category"))) {
+        cb.checked = true;
+      } else {
+        cb.checked = false;
+      }
+    });
+  }
+})();

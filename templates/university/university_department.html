@@ -1,27 +1,27 @@
 <h4>Departments Offered</h4>
-              <div class="row">
-                {% if page_obj %}
-                {% for dept in page_obj %}
-                  <div class="col-md-6">
-                    <div class="faculty-card">
-                      <h5>{{ dept.name }}</h5>
-                      <p>{{ dept.description|truncatewords:20 }}</p>
-                      {% if dept.branches.all %}
-                        <p><strong>Branches:</strong></p>
-                        <ul>
-                          {% for branch in dept.branches.all %}
-                            <li>{{ branch.name }}</li>
-                          {% empty %}
-                            <li>No branches listed.</li>
-                          {% endfor %}
-                        </ul>
-                      {% endif %}
-                    </div>
-                  </div>
-                {% empty %}
-                  <p>No departments available.</p>
-                {% endfor %}
-                {% endif %}
-              </div>
+<div class="row">
+  {% if page_obj %}
+    {% for dept in page_obj %}
+      <div class="col-md-6">
+        <div class="faculty-card">
+          <h5>{{ dept.name }}</h5>
+          <p>{{ dept.description|truncatewords:20 }}</p>
+          {% if dept.branches.all %}
+            <p><strong>Branches:</strong></p>
+            <ul>
+              {% for branch in dept.branches.all %}
+                <li>{{ branch.name }}</li>
+              {% empty %}
+                <li>No branches listed.</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      </div>
+    {% empty %}
+      <p>No departments available.</p>
+    {% endfor %}
+  {% endif %}
+</div>
 
-{% include "include/pagination.html" %}
+{% include "include/pagination.html" with page_obj=page_obj page_param="page" section="departments" %}

@@ -44,6 +44,9 @@ INSTALLED_APPS = [
     'apps.category_skills',
     'apps.university',
     'apps.notifications',
+    'rest_framework',
+    'ckeditor',
+    'apps.blog',
 ]
 
 MIDDLEWARE = [
@@ -118,6 +121,9 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

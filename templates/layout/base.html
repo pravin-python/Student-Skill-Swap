@@ -6,7 +6,12 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>{% block title %} Index | Skill Swap {% endblock %}</title>
+
   {% include 'include/head.html' %}
+
+  {% block custom_css %}
+  {% endblock %}
+  
 </head>
 
 <body>
@@ -37,7 +42,6 @@
 
   <!-- Main JS File -->
   <script src="{% static 'assets/js/main.js' %}"></script>
-
   {% block extra_js %} {% endblock %}
 </body>
 

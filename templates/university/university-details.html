@@ -63,7 +63,6 @@
             <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#overview">Overview</button></li>
             <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#curriculum">Departments</button></li>
             <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#faculty">Levels</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#admissions">Admissions</button></li>
             <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#students">Students</button></li>
           </ul>
 
@@ -86,7 +85,7 @@
             <div class="tab-pane fade" id="curriculum" role="tabpanel">
               {% include "university/university_department.html" %}
             </div>
-
+            
             <!-- Levels -->
             <div class="tab-pane fade" id="faculty">
               <h4>Levels Offered</h4>
@@ -99,30 +98,14 @@
               </ul>
             </div>
 
-            <!-- Admissions -->
-            <div class="tab-pane fade" id="admissions">
-              <h4>Admission Requirements</h4>
-              <ul>
-                <li>High school diploma / bachelor’s degree (depending on level)</li>
-                <li>Strong academic record</li>
-                <li>English proficiency (TOEFL/IELTS if required)</li>
-              </ul>
-
-              <h4>Application Process</h4>
-              <ol>
-                <li>Submit online application</li>
-                <li>Provide transcripts & supporting documents</li>
-                <li>Attend interview (if applicable)</li>
-                <li>Receive admission decision</li>
-              </ol>
-
-              <h4>Contact Information</h4>
-              <p>Email: <a href="mailto:admissions@{{ university.name|lower }}.edu">admissions@{{ university.name|lower }}.edu</a></p>
-            </div>
-
             <!-- Students Tab Section -->
+            
             <div class="tab-pane fade" id="students" role="tabpanel">
+              <div id="instructorsWrapper">
+                {% include "university/university_instructors_grid.html" %}
+              </div>
             </div>
+            
           </div>
         </div>
       </div>
@@ -163,7 +146,7 @@
           <div class="contact-widget" id="apply">
             <h4>Ready to Apply?</h4>
             <p>Take the next step toward your future at {{ university.name }}.</p>
-            <a href="{% url 'university:university' %}" class="btn btn-primary w-100">Want to Explore -> </a>
+            <a href="https://www.uchicago.edu/en" class="btn btn-primary w-100">Want to Explore -> </a>
           </div>
         </div>
       </div>
@@ -189,3 +172,4 @@
 {% block extra_js %}
 <script src="{% static 'assets/js/university/university-detail.js' %}"></script>
 {% endblock %}
+

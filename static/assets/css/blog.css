@@ -1,0 +1,256 @@
+/* Category Tag */
+  .category {
+    background: linear-gradient(135deg, #ffcc00, #ff9900);
+    color: #000;
+    padding: 5px 12px;
+    border-radius: 25px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-left: 8px;
+    letter-spacing: 0.5px;
+  }
+.bi-person::before {
+  color: gold;
+}
+  /* Author Tag */
+  .featured-author {
+    font-weight: 600;
+    color: white;
+    transition: color 0.3s ease;
+    text-decoration: none;
+  }
+  .featured-author:hover {
+    color: greenyellow;
+    text-decoration: underline;
+  }
+/* Author Tag */
+  .author-name {
+    font-weight: 600;
+    color: #404040;
+    transition: color 0.3s ease;
+    text-decoration: none;
+  }
+  .author-name:hover {
+    color: #0a58ca;
+    text-decoration: underline;
+  }
+
+  /* Blog Item (Hero Section) */
+  .blog-item {
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .blog-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  }
+  .blog-item .img-fluid {
+    border-bottom: 3px solid #ffcc00;
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+  }
+  .blog-item .post-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    margin-top: 15px;
+  }
+  .blog-item .post-title a {
+    text-decoration: none;
+    color: #333;
+    transition: color 0.3s ease;
+  }
+  .blog-item .post-title a:hover {
+    color: #ffcc00;
+  }
+
+  /* Blog Hero Section Grid */
+  #blog-hero .blog-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  #blog-hero .blog-item {
+    flex: 1 1 calc(50% - 20px); /* Only 2 items: featured + other */
+  }
+
+  /* Blog Cards (Post Section) */
+  .blog-card {
+    border-radius: 12px;
+    background: #fff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .blog-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  }
+  .post-img img {
+    height: 220px;
+    object-fit: cover;
+    width: 100%;
+  }
+  .post-date-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: #0d6efd;
+    color: #fff;
+    text-align: center;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    line-height: 1.2;
+  }
+  .post-date-badge span {
+    display: block;
+    font-size: 18px;
+  }
+  .post-date-badge small {
+    font-size: 12px;
+  }
+  .post-meta {
+    font-size: 14px;
+    color: #666;
+  }
+  .post-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 10px 0;
+    color: #222;
+    transition: color 0.3s ease;
+  }
+  .post-title:hover {
+    color: #0d6efd;
+  }
+  .readmore {
+    font-weight: 500;
+    color: #0d6efd;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: color 0.3s ease;
+  }
+  .readmore i {
+    margin-left: 5px;
+  }
+  .readmore:hover {
+    color: #0a58ca;
+  }
+    /* Search + Sort row */
+  .courses-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+
+  .search-box {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    border-radius: 25px;
+    padding: 5px 15px;
+    background: #fff;
+  }
+  .search-box i {
+    margin-right: 8px;
+    margin-left: 20px;
+    color: #555;
+  }
+  .search-box input {
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 15px;
+  }
+
+  .sort-dropdown select {
+    border: 1px solid #ccc; /* lighter border */
+    border-radius: 5px;
+    padding: 6px 12px;
+    background: #fff;
+    font-size: 15px;
+  }
+
+  /* Sticky filter */
+  .course-filters {
+    position: sticky;
+    top: 100px; /* adjust according to your navbar height */
+  }
+
+  /* Remove unnecessary space between sections */
+  #blog-hero {
+    margin-bottom: 0 !important;
+  }
+  #courses-2 {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+
+  
+  /* Featured Blog Styles */
+  #blog-hero .blog-item {
+    position: relative;
+    overflow: hidden;
+  }
+
+  #blog-hero .blog-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  #blog-hero .blog-item::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+    pointer-events: none;
+  }
+
+  #blog-hero .blog-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 15px;
+    color: #fff;
+    z-index: 2;
+  }
+
+  #blog-hero .blog-content .post-title a {
+    color: #fff;
+    text-decoration: none;
+  }
+
+  #blog-hero .blog-content .post-title a:hover {
+    color: #f1f1f1;
+  }
+
+  #blog-hero .author-name {
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 500;
+  }
+
+  #blog-hero .post-meta span,
+  #blog-hero .post-meta i {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  /* Spinner Styles */
+  #infiniteSpinner {
+    text-align: center;
+    padding: 20px;
+    display: none;
+  }

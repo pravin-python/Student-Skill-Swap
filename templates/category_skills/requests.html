@@ -108,162 +108,22 @@
                 
                 <!-- Received Requests Tab -->
                 <div class="tab-pane fade show active" id="received" role="tabpanel">
-                    <div class="card mt-3">
-                        <div class="card-header">
-                            <h5 class="mb-0">
-                                <i class="bi bi-inbox"></i> Requests You've Received
-                                {% if stats.pending_received > 0 %}
-                                <span class="badge bg-warning ms-2">{{ stats.pending_received }} pending</span>
-                                {% endif %}
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            {% if received_requests %}
-                                <div class="row">
-                                    {% for request in page_obj %}
-                                    <div class="col-lg-6 mb-3">
-                                        <div class="card {% if request.status == 'P' %}border-warning{% elif request.status == 'A' %}border-success{% elif request.status == 'R' %}border-danger{% else %}border-secondary{% endif %}">
-                                            <div class="card-header d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <h6 class="mb-0">{{ request.skill.name }}</h6>
-                                                    <small class="text-muted">{{ request.skill.category.name }} - {{ request.skill.get_level_display }}</small>
-                                                </div>
-                                                <span class="badge {% if request.status == 'P' %}bg-warning{% elif request.status == 'A' %}bg-success{% elif request.status == 'R' %}bg-danger{% else %}bg-secondary{% endif %}">
-                                                    {{ request.status_display }}
-                                                </span>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="d-flex align-items-center mb-3">
-                                                    {% if request.requester.profile_pic %}
-                                                        <img src="{{ request.requester.profile_pic.url }}" alt="Profile" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
-                                                    {% else %}
-                                                        <img src="{% static 'assets/img/default-avatar.webp' %}" alt="Profile" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
-                                                    {% endif %}
-                                                    <div>
-                                                        <h6 class="mb-0">{{ request.requester.first_name }} {{ request.requester.last_name }}</h6>
-                                                        <small class="text-muted">{{ request.requester.department.name }} - Year {{ request.requester.year }}</small>
-                                                    </div>
-                                                </div>
-                                                <p class="text-muted mb-3">{{ request.description }}</p>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <small class="text-muted">{{ request.created_at|date:"M d, Y H:i" }}</small>
-                                                    <div class="btn-group">
-                                                        {% if request.status == 'P' %}
-                                                            <button class="btn btn-success btn-sm" onclick="acceptRequest({{ request.id }})">
-                                                                <i class="bi bi-check"></i> Accept
-                                                            </button>
-                                                            <button class="btn btn-danger btn-sm" onclick="rejectRequest({{ request.id }})">
-                                                                <i class="bi bi-x"></i> Reject
-                                                            </button>
-                                                        {% elif request.status == 'A' %}
-                                                            {% if request.receiver == custom_user %}
-                                                            <button class="btn btn-primary btn-sm" onclick="openSessionModal({{ request.id }})">
-                                                                <i class="bi bi-calendar-plus"></i> Create Session
-                                                            </button>
-                                                            {% endif %}
-                                                        {% endif %}
-                                                        <button class="btn btn-outline-danger btn-sm" onclick="deleteRequest({{ request.id }})">
-                                                            <i class="bi bi-trash"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                            {% else %}
-                                <div class="text-center py-5">
-                                    <i class="bi bi-inbox display-1 text-muted"></i>
-                                    <h4 class="mt-3">No requests received yet</h4>
-                                    <p class="text-muted">When other students request to learn your skills, they'll appear here.</p>
-                                </div>
-                            {% endif %}
-                        </div>
+                   <div id="received-container">
+                    {% include "category_skills/received_requests_grid.html" %}
                     </div>
                 </div>
 
                 <!-- Sent Requests Tab -->
                 <div class="tab-pane fade" id="sent" role="tabpanel">
-                    <div class="card mt-3">
-                        <div class="card-header">
-                            <h5 class="mb-0">
-                                <i class="bi bi-send"></i> Requests You've Sent
-                                {% if stats.pending_sent > 0 %}
-                                <span class="badge bg-info ms-2">{{ stats.pending_sent }} pending</span>
-                                {% endif %}
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            {% if sent_requests %}
-                                <div class="row">
-                                    {% for request in page_obj %}
-                                    <div class="col-lg-6 mb-3">
-                                        <div class="card {% if request.status == 'P' %}border-info{% elif request.status == 'A' %}border-success{% elif request.status == 'R' %}border-danger{% else %}border-secondary{% endif %}">
-                                            <div class="card-header d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <h6 class="mb-0">{{ request.skill.name }}</h6>
-                                                    <small class="text-muted">{{ request.skill.category.name }} - {{ request.skill.get_level_display }}</small>
-                                                </div>
-                                                <span class="badge {% if request.status == 'P' %}bg-info{% elif request.status == 'A' %}bg-success{% elif request.status == 'R' %}bg-danger{% else %}bg-secondary{% endif %}">
-                                                    {{ request.status_display }}
-                                                </span>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="d-flex align-items-center mb-3">
-                                                    {% if request.receiver.profile_pic %}
-                                                        <img src="{{ request.receiver.profile_pic.url }}" alt="Profile" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
-                                                    {% else %}
-                                                        <img src="{% static 'assets/img/default-avatar.webp' %}" alt="Profile" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
-                                                    {% endif %}
-                                                    <div>
-                                                        <h6 class="mb-0">{{ request.receiver.first_name }} {{ request.receiver.last_name }}</h6>
-                                                        <small class="text-muted">{{ request.receiver.department.name }} - Year {{ request.receiver.year }}</small>
-                                                    </div>
-                                                </div>
-                                                <p class="text-muted mb-3">{{ request.description }}</p>
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <small class="text-muted">{{ request.created_at|date:"M d, Y H:i" }}</small>
-                                                    <div class="btn-group">
-                                                        {% if request.status == 'P' %}
-                                                            <button class="btn btn-warning btn-sm" onclick="cancelRequest({{ request.id }})">
-                                                                <i class="bi bi-x-circle"></i> Cancel
-                                                            </button>
-                                                        {% elif request.status == 'A' %}
-                                                            {% if request.receiver == custom_user %}
-                                                            <button class="btn btn-primary btn-sm" onclick="openSessionModal({{ request.id }})">
-                                                                <i class="bi bi-calendar-plus"></i> Create Session
-                                                            </button>
-                                                            {% endif %}
-                                                        {% endif %}
-                                                        <button class="btn btn-outline-danger btn-sm" onclick="deleteRequest({{ request.id }})">
-                                                            <i class="bi bi-trash"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                            {% else %}
-                                <div class="text-center py-5">
-                                    <i class="bi bi-send display-1 text-muted"></i>
-                                    <h4 class="mt-3">No requests sent yet</h4>
-                                    <p class="text-muted">Start learning new skills by sending requests to other students.</p>
-                                    <a href="{% url 'category_skills:courses' %}" class="btn btn-primary">
-                                        <i class="bi bi-search"></i> Browse Skills
-                                    </a>
-                                </div>
-                            {% endif %}
-                        </div>
+                    <div id="sent-container">
+                        {% include "category_skills/sent_requests_grid.html" %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-{% include "include/pagination.html" %}
+
 
 <!-- Session Creation Modal -->
 <div class="modal fade" id="sessionModal" tabindex="-1" aria-labelledby="sessionModalLabel" aria-hidden="true">

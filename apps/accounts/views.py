@@ -152,9 +152,9 @@ def login_view(request):
                     request.session["user_id"] = user.id
                     return JsonResponse({"success": True})
                 else:
-                    errors["password"] = "Invalid password."
+                    errors["password"] = "Invalid Username or Password."
             except User.DoesNotExist:
-                errors["username"] = "No such user found with this username or email."
+                errors["username"] = "Invalid Username or Password"
 
         return JsonResponse({"success": False, "errors": errors})
 

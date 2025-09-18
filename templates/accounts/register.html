@@ -3,7 +3,10 @@
             <div class="col-12 col-lg-10">
               <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
                 <div class="card-body p-4">
-                  <h3 class="mb-4 text-center">Registration Form</h3>
+                    <div class="d-flex justify-content-center align-items-center mb-4 position-relative">
+                      <h3 class="mb-0 flex-grow-1 text-center">Register</h3>
+                      <button type="button" class="btn-close position-absolute end-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
                   <form id="registerForm" method="POST" enctype="multipart/form-data" data-url="{% url 'accounts:register' %}">
                     {% csrf_token %}
 

@@ -30,7 +30,6 @@ function submitSessionCancellation() {
     
     const sessionId = formData.get('session_id');
     
-    // Send cancellation request
     fetch(`/courses/cancel_session/${sessionId}/`, {
         method: 'POST',
         body: formData,
@@ -52,7 +51,6 @@ function submitSessionCancellation() {
         alert('An error occurred. Please try again.');
     });
     
-    // Close modal
     const modal = bootstrap.Modal.getInstance(document.getElementById('sessionCancellationModal'));
     modal.hide();
 }
@@ -63,7 +61,6 @@ function deleteSession(sessionId) {
     }
 }
 
-// Utility function for AJAX requests
 function makeRequest(method, url, data, successMessage) {
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     
@@ -75,9 +72,7 @@ function makeRequest(method, url, data, successMessage) {
         }
     };
     
-    if (data) {
-        options.body = JSON.stringify(data);
-    }
+    if (data) options.body = JSON.stringify(data);
     
     fetch(url, options)
     .then(response => response.json())
@@ -94,3 +89,93 @@ function makeRequest(method, url, data, successMessage) {
         alert('An error occurred. Please try again.');
     });
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    // ======= Feedback Modal Handling =======
+    const feedbackModal = document.getElementById('feedbackModal');
+    const feedbackForm = document.getElementById('feedbackForm');
+
+    if (feedbackModal) {
+        feedbackModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const sessionId = button.getAttribute('data-session-id');
+            document.getElementById('feedbackSessionId').value = sessionId;
+
+            // Set role label
+            const roleSpan = document.getElementById('feedbackRole');
+            if (button.closest('#teaching-container')) {
+                roleSpan.textContent = "Learner"; // Teacher is giving feedback
+            } else {
+                roleSpan.textContent = "Teacher"; // Learner is giving feedback
+            }
+        });
+
+        feedbackForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(feedbackForm);
+            const sessionId = formData.get('session_id');
+
+            fetch(`/sessions/`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+
+                    // Update the feedback button
+                    const buttonContainer = document.querySelector(`#teaching-container [data-session-id="${sessionId}"], #learning-container [data-session-id="${sessionId}"]`);
+                    if (buttonContainer) {
+                        const btnGroup = buttonContainer.closest('.btn-group');
+                        if (btnGroup) {
+                            btnGroup.innerHTML = data.button_html;
+                        }
+                    }
+
+                    // Close modal
+                    const modalInstance = bootstrap.Modal.getInstance(feedbackModal);
+                    modalInstance.hide();
+                } else {
+                    alert(data.error || data.message);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Error submitting feedback.');
+            });
+        });
+    }
+
+    // ======= Pagination Handling =======
+    function handlePagination(wrapperId, sectionName) {
+        const wrapper = document.querySelector(wrapperId);
+        if (!wrapper) return;
+
+        wrapper.addEventListener("click", function (e) {
+            const link = e.target.closest(".pagination a");
+            if (link) {
+                e.preventDefault();
+                let url = new URL(link.href, window.location.origin);
+                url.searchParams.set("section", sectionName);
+
+                fetch(url, {
+                    headers: { "x-requested-with": "XMLHttpRequest" }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    wrapper.innerHTML = data.html;
+                    window.scrollTo({ top: wrapper.offsetTop - 100, behavior: "smooth" });
+                });
+            }
+        });
+    }
+
+    handlePagination("#teaching-container", "teaching");
+    handlePagination("#learning-container", "learning");
+});

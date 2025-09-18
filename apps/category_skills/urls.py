@@ -27,4 +27,5 @@ urlpatterns = [
     path('complete_session/<int:session_id>/', views.complete_session, name="complete_session"),
     path('cancel_session/<int:session_id>/', views.cancel_session, name="cancel_session"),
     path('delete_session/<int:session_id>/', views.delete_session, name="delete_session"),
+    path("sessions/<int:session_id>/feedback/", views.leave_feedback, name="leave_feedback"),
 ]

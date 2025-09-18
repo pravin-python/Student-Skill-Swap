@@ -68,6 +68,8 @@
   scroll-behavior: smooth;
 }
 
+
+
 /*--------------------------------------------------------------
 # General Styling & Shared Classes
 --------------------------------------------------------------*/
@@ -1791,6 +1793,25 @@ section,
   font-size: 14px;
 }
 
+.featured-instructors .more-courses .btn-more {
+  display: inline-block;
+  background: transparent;
+  color: var(--accent-color);
+  padding: 15px 40px;
+  border: 2px solid var(--accent-color);
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-top: 50px;
+}
+
+.featured-instructors .more-courses .btn-more:hover {
+  background: var(--accent-color);
+  color: var(--contrast-color);
+  transform: translateY(-3px);
+}
+
 @media (max-width: 1399px) {
   .featured-instructors .col-xl-3 {
     flex: 0 0 auto;
@@ -2808,7 +2829,7 @@ section,
 .courses-2 .courses-grid .course-image .course-badge.badge-right.rating-stars{
   right: 15px;
   left: auto;
-  background-color: gold
+
 }
 
 .courses-2 .courses-grid .course-image .course-badge.badge-free, .universities .courses-grid .course-image .course-badge.badge-free {
@@ -8825,6 +8846,267 @@ textarea.form-control.is-valid {
   background: linear-gradient(135deg, #ff6ec4, #7873f5);
   transform: translateY(-3px) scale(1.05);
   box-shadow: 0px 12px 30px rgba(120, 115, 245, 0.4);
+}
+
+.course-image {
+  position: relative; /* Needed for absolute positioning */
+  overflow: hidden;
+}
+
+.course-badge {
+  position: absolute;
+  top: 10px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.badge-left {
+  left: 10px; /* Stick to left */
+}
+
+.badge-right {
+  right: 10px; /* Stick to right */
+}
+
+.rating-stars i {
+  color: #ffc107; /* Gold color for stars */
+}
+
+/* ===========================
+   Dark Theme Global Styles
+   =========================== */
+body.dark-theme {
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
+}
+
+/* General text override */
+body.dark-theme p,
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4,
+body.dark-theme h5,
+body.dark-theme h6,
+body.dark-theme span,
+body.dark-theme li {
+  color: #e0e0e0 !important;
+}
+
+/* Links */
+body.dark-theme a {
+  color: #66b2ff !important;
+}
+body.dark-theme a:hover {
+  color: #99ccff !important;
+}
+
+/* Header */
+body.dark-theme .header {
+  background-color: #1e1e1e !important;
+  border-bottom: 1px solid #333 !important;
+}
+body.dark-theme .header .sitename {
+  color: #ffffff !important;
+}
+body.dark-theme .navmenu ul li a {
+  color: #e0e0e0 !important;
+}
+body.dark-theme .navmenu ul li a.active,
+body.dark-theme .navmenu ul li a:hover {
+  color: #66b2ff !important;
+}
+
+/* Dropdown */
+body.dark-theme .dropdown-menu {
+  background-color: #1f1f1f !important;
+  border: 1px solid #333 !important;
+}
+body.dark-theme .dropdown-menu a {
+  color: #e0e0e0 !important;
+}
+body.dark-theme .dropdown-menu a:hover {
+  background-color: #2a2a2a !important;
+  color: #ffffff !important;
+}
+
+/* Cards */
+body.dark-theme .card,
+body.dark-theme .course-card,
+body.dark-theme .blog-card {
+  background-color: #1e1e1e !important;
+  color: #e0e0e0 !important;
+  border: 1px solid #333 !important;
+}
+
+/* Buttons */
+body.dark-theme .btn,
+body.dark-theme .btn-getstarted {
+  background-color: #333 !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+}
+body.dark-theme .btn:hover,
+body.dark-theme .btn-getstarted:hover {
+  background-color: #444 !important;
+  border-color: #555 !important;
+}
+
+/* Forms */
+body.dark-theme input,
+body.dark-theme select,
+body.dark-theme textarea {
+  background-color: #1e1e1e !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+}
+body.dark-theme input::placeholder,
+body.dark-theme textarea::placeholder {
+  color: #aaa !important;
+}
+
+/* Modals */
+body.dark-theme .modal-content {
+  background-color: #1e1e1e !important;
+  color: #e0e0e0 !important;
+}
+
+/* Notifications */
+body.dark-theme .notification-dropdown {
+  background-color: #1f1f1f !important;
+  border: 1px solid #333 !important;
+}
+
+/* Footer */
+body.dark-theme footer {
+  background-color: #1a1a1a !important;
+  color: #bbb !important;
+}
+
+/* CKEditor */
+body.dark-theme .cke_editable {
+  background: #1e1e1e !important;
+  color: #fff !important;
+}
+
+/* ===========================
+   Dark Theme - Full Page Fix
+   =========================== */
+body.dark-theme {
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
+}
+
+/* Apply dark bg to sections */
+body.dark-theme section,
+body.dark-theme .container,
+body.dark-theme .container-fluid,
+body.dark-theme .row {
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
+}
+
+/* Sidebar filters */
+body.dark-theme .filter-courses,
+body.dark-theme .filters,
+body.dark-theme .form-check,
+body.dark-theme .form-control {
+  background-color: #1e1e1e !important;
+  color: #e0e0e0 !important;
+  border: 1px solid #333 !important;
+}
+
+/* Blog cards */
+body.dark-theme .blog-card,
+body.dark-theme .course-card,
+body.dark-theme .card {
+  background-color: #1e1e1e !important;
+  color: #e0e0e0 !important;
+  border: 1px solid #333 !important;
+}
+
+/* Blog titles & meta */
+body.dark-theme .blog-card h3,
+body.dark-theme .blog-card h5,
+body.dark-theme .blog-card p,
+body.dark-theme .blog-card .meta {
+  color: #e0e0e0 !important;
+}
+
+/* Search bar */
+body.dark-theme input[type="text"],
+body.dark-theme input[type="search"] {
+  background-color: #1e1e1e !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+}
+
+/* Dropdown & sort */
+body.dark-theme .dropdown-menu,
+body.dark-theme .btn {
+  background-color: #1f1f1f !important;
+  color: #fff !important;
+  border: 1px solid #333 !important;
+}
+
+body.dark-theme .btn:hover {
+  background-color: #333 !important;
+}
+
+/* Fix "Recent Blogs" section */
+body.dark-theme .recent-blogs {
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
+}
+
+body.dark-theme .course-filters {
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
+}
+
+body.dark-theme .search-box {
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
+}
+
+body.dark-theme .category-card{
+  background-color: #121212 !important;
+}
+body.dark-theme .teacher-name{
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
+}
+body.dark-theme .instructor-card{
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
+}
+body.dark-theme .custom-tab-content{
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
+}
+body.dark-theme .instructor-profile .content-tabs .custom-tabs{
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
+}
+body.dark-theme .instructor-profile .content-tabs .custom-tab-content .courses-grid .course-item .course-info{
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
+}
+body.dark-theme .instructor-profile .content-tabs .custom-tab-content .about-content .expertise-grid .skills-grid .skill-item{
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
+}
+body.dark-theme .instructor-profile .sidebar-widgets .stats-widget, .instructor-profile .sidebar-widgets .achievements-widget, .instructor-profile .sidebar-widgets .contact-widget{
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
+}
+body.dark-theme .faculty-card{
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
 }
 
 /*--------------------------------------------------------------

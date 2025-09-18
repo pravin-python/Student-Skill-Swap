@@ -123,101 +123,9 @@
                 {% else %}
                 <div class="tab-pane fade" id="teaching" role="tabpanel">
                 {% endif %}
-                    <div class="card mt-3">
-                        <div class="card-header">
-                            <h5 class="mb-0">
-                                <i class="bi bi-person-video2"></i> Sessions You're Teaching
-                                {% if stats.scheduled_teaching > 0 %}
-                                <span class="badge bg-warning ms-2">{{ stats.scheduled_teaching }} scheduled</span>
-                                {% endif %}
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            {% if teaching_sessions %}
-                                <div class="row">
-                                    {% for session in teaching_sessions %}
-                                    <div class="col-lg-6 mb-3">
-                                        <div class="card {% if session.status == 'S' %}border-warning{% elif session.status == 'A' %}border-primary{% elif session.status == 'C' %}border-success{% elif session.status == 'CA' %}border-danger{% else %}border-info{% endif %}">
-                                            <div class="card-header d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <h6 class="mb-0">{{ session.title }}</h6>
-                                                    <small class="text-muted">{{ session.skill.name }} - {{ session.skill.category.name }}</small>
-                                                </div>
-                                                <span class="badge {% if session.status == 'S' %}bg-warning{% elif session.status == 'A' %}bg-primary{% elif session.status == 'C' %}bg-success{% elif session.status == 'CA' %}bg-danger{% else %}bg-info{% endif %}">
-                                                    {{ session.status_display }}
-                                                </span>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="d-flex align-items-center mb-3">
-                                                    {% if session.learner.profile_pic %}
-                                                        <img src="{{ session.learner.profile_pic.url }}" alt="Profile" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
-                                                    {% else %}
-                                                        <img src="{% static 'assets/img/default-avatar.webp' %}" alt="Profile" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
-                                                    {% endif %}
-                                                    <div>
-                                                        <h6 class="mb-0">{{ session.learner.first_name }} {{ session.learner.last_name }}</h6>
-                                                        <small class="text-muted">Learner - {{ session.learner.department.name }}</small>
-                                                    </div>
-                                                </div>
-                                                
-                                                {% if session.description %}
-                                                <p class="text-muted mb-2">{{ session.description|truncatewords:20 }}</p>
-                                                {% endif %}
-                                                
-                                                <div class="row text-center mb-3">
-                                                    <div class="col-6">
-                                                        <small class="text-muted d-block">Date & Time</small>
-                                                        <strong>{{ session.scheduled_date|date:"M d, Y" }}</strong><br>
-                                                        <small>{{ session.scheduled_date|date:"H:i" }}</small>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <small class="text-muted d-block">Duration</small>
-                                                        <strong>{{ session.duration_minutes }} min</strong><br>
-                                                        <small>{{ session.session_type_display }}</small>
-                                                    </div>
-                                                </div>
-                                                
-                                                {% if session.location %}
-                                                <p class="mb-2"><i class="bi bi-geo-alt"></i> {{ session.location }}</p>
-                                                {% endif %}
-                                                
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <small class="text-muted">Created: {{ session.created_at|date:"M d, Y" }}</small>
-                                                    <div class="btn-group">
-                                                        {% if session.status == 'S' %}
-                                                            <button class="btn btn-primary btn-sm" onclick="startSession({{ session.id }})">
-                                                                <i class="bi bi-play-circle"></i> Start Session
-                                                            </button>
-                                                            <button class="btn btn-warning btn-sm" onclick="openSessionCancellationModal({{ session.id }})">
-                                                                <i class="bi bi-x-circle"></i> Cancel
-                                                            </button>
-                                                        {% elif session.status == 'A' %}
-                                                            <button class="btn btn-success btn-sm" onclick="completeSession({{ session.id }})">
-                                                                <i class="bi bi-check"></i> End Session
-                                                            </button>
-                                                        {% endif %}
-                                                        <button class="btn btn-outline-danger btn-sm" onclick="deleteSession({{ session.id }})">
-                                                            <i class="bi bi-trash"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                            {% else %}
-                                <div class="text-center py-5">
-                                    <i class="bi bi-person-video2 display-1 text-muted"></i>
-                                    <h4 class="mt-3">No teaching sessions yet</h4>
-                                    <p class="text-muted">Accept learning requests to start teaching sessions.</p>
-                                    <a href="{% url 'category_skills:requests' %}" class="btn btn-primary">
-                                        <i class="bi bi-inbox"></i> Check Requests
-                                    </a>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
+                <div id="teaching-container">
+                    {% include "category_skills/teaching_sessions_grid.html" %}
+                </div>
                 </div>
 
                 <!-- Learning Sessions Tab -->
@@ -226,105 +134,16 @@
                 {% else %}
                 <div class="tab-pane fade show active" id="learning" role="tabpanel">
                 {% endif %}
-                    <div class="card mt-3">
-                        <div class="card-header">
-                            <h5 class="mb-0">
-                                <i class="bi bi-person-video3"></i> Sessions You're Learning
-                                {% if stats.scheduled_learning > 0 %}
-                                <span class="badge bg-info ms-2">{{ stats.scheduled_learning }} scheduled</span>
-                                {% endif %}
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            {% if learning_sessions %}
-                                <div class="row">
-                                    {% for session in learning_sessions %}
-                                    <div class="col-lg-6 mb-3">
-                                        <div class="card {% if session.status == 'S' %}border-info{% elif session.status == 'A' %}border-primary{% elif session.status == 'C' %}border-success{% elif session.status == 'CA' %}border-danger{% else %}border-primary{% endif %}">
-                                            <div class="card-header d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <h6 class="mb-0">{{ session.title }}</h6>
-                                                    <small class="text-muted">{{ session.skill.name }} - {{ session.skill.category.name }}</small>
-                                                </div>
-                                                <span class="badge {% if session.status == 'S' %}bg-info{% elif session.status == 'A' %}bg-primary{% elif session.status == 'C' %}bg-success{% elif session.status == 'CA' %}bg-danger{% else %}bg-primary{% endif %}">
-                                                    {{ session.status_display }}
-                                                </span>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="d-flex align-items-center mb-3">
-                                                    {% if session.teacher.profile_pic %}
-                                                        <img src="{{ session.teacher.profile_pic.url }}" alt="Profile" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
-                                                    {% else %}
-                                                        <img src="{% static 'assets/img/default-avatar.webp' %}" alt="Profile" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
-                                                    {% endif %}
-                                                    <div>
-                                                        <h6 class="mb-0">{{ session.teacher.first_name }} {{ session.teacher.last_name }}</h6>
-                                                        <small class="text-muted">Teacher - {{ session.teacher.department.name }}</small>
-                                                    </div>
-                                                </div>
-                                                
-                                                {% if session.description %}
-                                                <p class="text-muted mb-2">{{ session.description|truncatewords:20 }}</p>
-                                                {% endif %}
-                                                
-                                                <div class="row text-center mb-3">
-                                                    <div class="col-6">
-                                                        <small class="text-muted d-block">Date & Time</small>
-                                                        <strong>{{ session.scheduled_date|date:"M d, Y" }}</strong><br>
-                                                        <small>{{ session.scheduled_date|date:"H:i" }}</small>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <small class="text-muted d-block">Duration</small>
-                                                        <strong>{{ session.duration_minutes }} min</strong><br>
-                                                        <small>{{ session.session_type_display }}</small>
-                                                    </div>
-                                                </div>
-                                                
-                                                {% if session.location %}
-                                                <p class="mb-2"><i class="bi bi-geo-alt"></i> {{ session.location }}</p>
-                                                {% endif %}
-                                                
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <small class="text-muted">Created: {{ session.created_at|date:"M d, Y" }}</small>
-                                                    <div class="btn-group">
-                                                        {% if session.status == 'S' %}
-                                                            <button class="btn btn-warning btn-sm" onclick="openSessionCancellationModal({{ session.id }})">
-                                                                <i class="bi bi-x-circle"></i> Cancel
-                                                            </button>
-                                                        {% elif session.status == 'A' %}
-                                                            <button class="btn btn-success btn-sm" onclick="completeSession({{ session.id }})">
-                                                                <i class="bi bi-check"></i> End Session
-                                                            </button>
-                                                        {% endif %}
-                                                        <button class="btn btn-outline-danger btn-sm" onclick="deleteSession({{ session.id }})">
-                                                            <i class="bi bi-trash"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {% endfor %}
-                                </div>
-                            {% else %}
-                                <div class="text-center py-5">
-                                    <i class="bi bi-person-video3 display-1 text-muted"></i>
-                                    <h4 class="mt-3">No learning sessions yet</h4>
-                                    <p class="text-muted">Send requests to other students to create learning sessions.</p>
-                                    <a href="{% url 'category_skills:courses' %}" class="btn btn-primary">
-                                        <i class="bi bi-search"></i> Browse Skills
-                                    </a>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
+                <div id="learning-container">
+                    {% include "category_skills/learning_sessions_grid.html" %}
+                </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-{% include "include/pagination.html" %}
+
 
 <!-- Session Cancellation Modal -->
 <div class="modal fade" id="sessionCancellationModal" tabindex="-1" aria-labelledby="sessionCancellationModalLabel" aria-hidden="true">
@@ -359,6 +178,51 @@
     </div>
 </div>
 
+
+<!-- Feedback Modal -->
+<div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form id="feedbackForm" method="POST">
+      {% csrf_token %}
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="feedbackModalLabel">
+            Leave Feedback for <span id="feedbackRole"></span>
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="feedbackSessionId" name="session_id">
+          
+          <!-- Rating -->
+          <div class="mb-3">
+            <label class="form-label">Give Rating</label>
+            <select name="rating" class="form-select" required>
+              <option value="">Select rating</option>
+              <option value="1">⭐ 1</option>
+              <option value="2">⭐ 2</option>
+              <option value="3">⭐ 3</option>
+              <option value="4">⭐ 4</option>
+              <option value="5">⭐ 5</option>
+            </select>
+          </div>
+
+          <!-- Feedback -->
+          <div class="mb-3">
+            <label class="form-label">Feedback About the Session</label>
+            <textarea name="feedback" class="form-control" rows="4" maxlength="500"
+                      placeholder="Write your feedback..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Submit Feedback</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+>
 
 {% endblock %}
 

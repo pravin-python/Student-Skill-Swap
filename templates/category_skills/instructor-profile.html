@@ -46,7 +46,7 @@
               <h2>{{ instructor.first_name }} {{ instructor.last_name }}</h2>
               <p class="title">{{ instructor.department.name|default:"Student" }}</p>
               <div class="credentials">
-                <span class="credential">{{ skills_count }} Skills</span>
+                <span class="credential"> <i class="bi bi-award"></i> {{ skills_count }} Skills</span>
               </div>
               <div class="contact-actions">
                 <a href="mailto:{{ instructor.personal_email }}" class="btn-contact">

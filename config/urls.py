@@ -10,6 +10,8 @@ urlpatterns = [
     path('',include('apps.accounts.urls')),
     path('notifications/',include('apps.notifications.urls')),
     path('universities/',include('apps.university.urls')),
+    path('',include('apps.api.urls')),
+    path('',include('apps.blog.urls')),
 ]
 
 if settings.DEBUG:

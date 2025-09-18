@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404 , redirect
 from .models import SkillsCategory, Skills, UserSkills, Request, Session
 from apps.accounts.models import User
 from django.core.paginator import Paginator
@@ -11,44 +11,57 @@ from apps.university.models import Department
 
 def CourseView(request):
     categories = SkillsCategory.objects.all()
-    
-    # Get all skills that have been added by users
-    skills_qs = Skills.objects.select_related("category").filter(user_skills__isnull=False).distinct()
+    user_id = request.session.get("user_id")
+
+    # Get all users who have added skills
+    users_with_skills = User.objects.filter(
+        user_skills__isnull=False
+    ).distinct().prefetch_related("user_skills__skill__category")
+
+    if user_id:
+        users_with_skills = users_with_skills.exclude(id=user_id)
+
+    # Collect skills from other users
+    skills_qs = Skills.objects.filter(
+        user_skills__user__in=users_with_skills
+    ).distinct()
 
     # Search filter
-    search_query = request.GET.get("q") 
+    search_query = request.GET.get("q")
     if search_query:
         skills_qs = skills_qs.filter(name__icontains=search_query)
 
     # Category filter
-    category_ids = request.GET.getlist("categories[]")  # expects categories[]=1&categories[]=2
+    category_ids = request.GET.getlist("categories[]")
     if category_ids and "all" not in category_ids:
         skills_qs = skills_qs.filter(category_id__in=category_ids)
 
-    #Level Filter
-    level_filters = request.GET.getlist("levels[]") #expects for levels[]
+    # Level filter
+    level_filters = request.GET.getlist("levels[]")
     if level_filters and "all" not in level_filters:
         skills_qs = skills_qs.filter(level__in=level_filters)
 
-    # Exclude skills added by the current user if logged in
-    if 'user_id' in request.session:
-        user_id = request.session.get('user_id')
-        skills_qs = skills_qs.exclude(user_skills__user_id=user_id)
-
+    # Pagination
     paginator = Paginator(skills_qs, 4)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    if request.headers.get("x-requested-with") == "XMLHttpRequest":
-        html = render_to_string("category_skills/courses_grid.html", {"page_obj":page_obj})
+    context = {
+        "categories": categories,
+        "level_choices": Skills.LEVEL_CHOICES,
+        "page_obj": page_obj,
+        "page_param": "page",
+        "section": "courses",
+    }
+
+    # Only return JSON when AJAX flag is set
+    if request.GET.get("ajax") == "1":
+        html = render_to_string("category_skills/courses_grid.html", context, request=request)
         return JsonResponse({"html": html})
 
-    return render(
-        request,
-        "category_skills/courses.html",
-        {"categories": categories, "level_choices" : Skills.LEVEL_CHOICES , "page_obj":page_obj},
-    )
-
+    # Otherwise return full HTML page
+    return render(request, "category_skills/courses.html", context)
+    
 def CourseDetailView(request, skill_id):
     skill = get_object_or_404(Skills, id=skill_id)
     # Get the user who added this skill
@@ -63,6 +76,11 @@ def InstructorView(request):
     users_with_skills = User.objects.filter(user_skills__isnull=False).distinct().prefetch_related(
         'user_skills__skill__category', 'department'
     )
+
+    custom_user = request.session.get("user_id")
+    # Exclude the logged-in user
+    if custom_user:
+        users_with_skills = users_with_skills.exclude(id=custom_user)
 
     # --- Search filter ---
     q = request.GET.get("q")
@@ -91,21 +109,29 @@ def InstructorView(request):
         })
 
     # --- Pagination ---
-    paginator = Paginator(instructors_data, 1)  # show 6 instructors per page
+    paginator = Paginator(instructors_data, 6)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
     departments = Department.objects.all()
 
-    # --- AJAX response ---
-    if request.headers.get("x-requested-with") == "XMLHttpRequest":
-        html = render_to_string("category_skills/instructors_grid.html", {"page_obj": page_obj})
+    # Return JSON only for ajax=1 requests
+    if request.GET.get("ajax") == "1":
+        html = render_to_string("category_skills/instructors_grid.html", {
+            "page_obj": page_obj,
+            "section": "instructors",
+            "page_param": "page"
+        }, request=request)
         return JsonResponse({"html": html})
 
+    # Otherwise return full HTML page
     return render(request, "category_skills/instructors.html", {
         "departments": departments,
         "page_obj": page_obj,
+        "section": "instructors",
+        "page_param": "page",
     })
+
 
 def InstructorDetailView(request, user_id):
     user = get_object_or_404(
@@ -128,7 +154,11 @@ def InstructorDetailView(request, user_id):
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
         html = render_to_string(
             "category_skills/instructors_course_grid.html",
-            {"page_obj": page_obj},
+            {
+                "page_obj": page_obj,
+                "section": "courses",
+                "page_param":"page"
+            },
             request=request
         )
         return JsonResponse({"html": html})
@@ -139,6 +169,8 @@ def InstructorDetailView(request, user_id):
         "page_obj": page_obj,      
         "skills_count": skills_qs.count(),
         "sessions": sessions,
+        "section": "courses",
+        "page_param": "page",
     }
     return render(request, "category_skills/instructor-profile.html", context)
 
@@ -287,34 +319,39 @@ def request_management(request):
     """Request management page - view all requests"""
     user_id = request.session.get('user_id')
     user = get_object_or_404(User, id=user_id)
-    
+
     # Get sent requests
     sent_requests = Request.objects.filter(requester=user).select_related(
         'receiver', 'skill', 'skill__category'
     ).order_by('-created_at')
-    
+
     # Get received requests
     received_requests = Request.objects.filter(receiver=user).select_related(
         'requester', 'skill', 'skill__category'
     ).order_by('-created_at')
-    
-    # Get statistics
+
+    # Stats
     total_sent = sent_requests.count()
     total_received = received_requests.count()
     pending_sent = sent_requests.filter(status='P').count()
     pending_received = received_requests.filter(status='P').count()
     accepted_sent = sent_requests.filter(status='A').count()
     accepted_received = received_requests.filter(status='A').count()
-    
-    paginator = Paginator(sent_requests, 4)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
+
+    # Sent Requests Pagination
+    sent_paginator = Paginator(sent_requests, 4)
+    sent_page_number = request.GET.get("sent_page")
+    sent_page_obj = sent_paginator.get_page(sent_page_number)
+
+    # Received Requests Pagination
+    received_paginator = Paginator(received_requests, 4)
+    received_page_number = request.GET.get("received_page")
+    received_page_obj = received_paginator.get_page(received_page_number)
 
     context = {
         'custom_user': user,
-        'sent_requests': sent_requests,
-        'received_requests': received_requests,
-        'page_obj':page_obj,
+        'sent_page_obj': sent_page_obj,
+        'received_page_obj': received_page_obj,
         'stats': {
             'total_sent': total_sent,
             'total_received': total_received,
@@ -324,8 +361,19 @@ def request_management(request):
             'accepted_received': accepted_received,
         }
     }
-    
+
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        section = request.GET.get("section")
+        if section == "received":
+            html = render_to_string("category_skills/received_requests_grid.html", context, request=request)
+        elif section == "sent":
+            html = render_to_string("category_skills/sent_requests_grid.html", context, request=request)
+        else:
+            html = ""  # fallback
+        return JsonResponse({"html": html})
+
     return render(request, 'category_skills/requests.html', context)
+
 
 
 @login_required_custom
@@ -523,12 +571,22 @@ def session_management(request):
     completed_teaching = len([s for s in teaching_sessions if s.status == 'C'])
     completed_learning = learning_sessions.filter(status='S').count()
     
+    # Teaching Session Pagination
+    teaching_paginator = Paginator(teaching_sessions, 4)
+    teaching_page_number = request.GET.get("teaching_page")
+    teaching_page_obj = teaching_paginator.get_page(teaching_page_number)
+
+    # Learning Session Pagination
+    learning_paginator = Paginator(learning_sessions, 4)
+    learning_page_number = request.GET.get("learning_page")
+    learning_page_obj = learning_paginator.get_page(learning_page_number)
+
     context = {
         'custom_user': user,
         'user_skills': user_skills,
         'user_has_skills': user_has_skills,
-        'teaching_sessions': teaching_sessions,
-        'learning_sessions': learning_sessions,
+        'teaching_page_obj': teaching_page_obj,
+        'learning_page_obj': learning_page_obj,
         'stats': {
             'total_teaching': total_teaching,
             'total_learning': total_learning,
@@ -539,6 +597,16 @@ def session_management(request):
         }
     }
     
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        section = request.GET.get("section")
+        if section == "learning":
+            html = render_to_string("category_skills/learning_sessions_grid.html", context, request=request)
+        elif section == "teaching":
+            html = render_to_string("category_skills/teaching_sessions_grid.html", context, request=request)
+        else:
+            html = ""  # fallback
+        return JsonResponse({"html": html})
+
     return render(request, 'category_skills/sessions.html', context)
 
 
@@ -797,3 +865,33 @@ def delete_session(request, session_id):
             return JsonResponse({'success': False, 'message': f'An error occurred: {str(e)}'})
     
     return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+
+@login_required_custom
+def leave_feedback(request, session_id):
+    session = get_object_or_404(Session, id=session_id)
+
+    if request.method == "POST":
+        rating = request.POST.get("rating")
+        feedback = request.POST.get("feedback", "")
+
+        # Teacher giving feedback
+        if session.teacher == request.user:
+            session.teacher_rating = rating
+            session.teacher_feedback = feedback
+
+        # Learner giving feedback
+        elif session.learner == request.user:
+            session.learner_rating = rating
+            session.learner_feedback = feedback
+
+        else:
+            return JsonResponse({"error": "Unauthorized"}, status=403)
+
+        session.save()
+
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({"success": True, "message": "Feedback submitted!"})
+
+        return redirect("category_skills:sessions")  # fallback
+
+    return JsonResponse({"error": "Invalid request"}, status=400)

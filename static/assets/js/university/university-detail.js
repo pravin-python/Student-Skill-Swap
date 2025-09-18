@@ -1,21 +1,29 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const departmentsTab = document.querySelector("#curriculum");
+  function handlePagination(wrapperId, sectionName) {
+    const wrapper = document.querySelector(wrapperId);
+    if (!wrapper) return;
 
-  // Delegate click on pagination links
-  departmentsTab.addEventListener("click", function (e) {
-    if (e.target.closest(".pagination a")) {
-      e.preventDefault();
-      const url = e.target.closest("a").getAttribute("href");
+    wrapper.addEventListener("click", function (e) {
+      const link = e.target.closest(".pagination a");
+      if (link) {
+        e.preventDefault();
+        let url = new URL(link.href, window.location.origin);
+        url.searchParams.set("section", sectionName); // add section to query
 
-      fetch(url, {
-        headers: { "x-requested-with": "XMLHttpRequest" }
-      })
-      .then(res => res.json())
-      .then(data => {
-        departmentsTab.innerHTML = data.html; // replace grid + pagination
-        window.scrollTo({ top: departmentsTab.offsetTop - 100, behavior: "smooth" });
-      });
-    }
-  });
+        fetch(url, {
+          headers: { "x-requested-with": "XMLHttpRequest" }
+        })
+          .then(res => res.json())
+          .then(data => {
+            console.log()
+            wrapper.innerHTML = data.html; // replace only this section
+            window.scrollTo({ top: wrapper.offsetTop - 100, behavior: "smooth" });
+          });
+      }
+    });
+  }
+
+  // Attach handlers for both sections
+  handlePagination("#curriculum", "departments");
+  handlePagination("#instructorsWrapper", "instructors");
 });
-
