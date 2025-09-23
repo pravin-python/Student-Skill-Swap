@@ -8876,6 +8876,36 @@ textarea.form-control.is-valid {
   color: #ffc107; /* Gold color for stars */
 }
 
+.itinerary-day {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    padding: 2.5rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+.itinerary-day img {
+    border-radius: 0.75rem;
+    object-fit: cover;
+    width: 100%;
+    height: auto;
+}
+.itinerary-day h2 {
+    color: #343a40;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+.itinerary-day p {
+    line-height: 1.75;
+    color: #495057;
+}
+.itinerary-day figcaption {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-top: 0.75rem;
+    text-align: center;
+}
+
 /* ===========================
    Dark Theme Global Styles
    =========================== */
@@ -9136,6 +9166,36 @@ body.dark-theme .pagination-wrapper .pagination .page-item .page-link:hover {
   color: #fff !important;
 }
 
+body.dark-theme .blog-details .article-wrapper .table-of-contents{
+  background-color: #121212 !important;
+  color: #fff !important;
+  border: 1px solid #333 !important;
+}
+
+body.dark-theme .blog-details .article-wrapper .article-content .content-section{
+  background-color: #121212 !important;
+  color: #fff !important;
+  border: 1px solid #333 !important;
+}
+body.dark-theme .blog-details .article-footer .share-article .share-buttons .share-button{
+  background-color: #121212 !important;
+  color: #fff !important;
+  border: 1px solid #333 !important;
+}
+body.dark-theme .blog-comment-form form {
+  background-color: #121212 !important;
+  color: #fff !important;
+  border: 1px solid #333 !important;
+}
+body.dark-theme .courses-2 .course-filters .filter-checkbox {
+  color: #fff !important;
+}
+body.dark-theme .courses-2 .course-filters .filter-checkbox:hover{
+  color: var(--accent-color) !important;
+}
+body.dark-theme .course-filters {
+   border: 1px solid #333 !important;
+}
 /*--------------------------------------------------------------
 # Starter Section Section
 --------------------------------------------------------------*/
