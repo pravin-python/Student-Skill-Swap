@@ -29,6 +29,8 @@ def BlogDetailView(request, pk):
     # Fetch ordered sections (each has its own `images` field)
     sections = blog.sections.all().order_by("order")
 
+    categories = SkillsCategory.objects.all()
+
     # Pick blog's base image (from BlogImages model)
     base_image = blog.images.filter(base=True).first()
 
@@ -36,6 +38,7 @@ def BlogDetailView(request, pk):
         "blog": blog,
         "sections": sections,
         "base_image": base_image,   # available in template
+        "categories":categories,
     })
 
 

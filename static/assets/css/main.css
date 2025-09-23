@@ -9130,7 +9130,7 @@ body.dark-theme .instructor-profile .content-tabs .custom-tab-content .about-con
   background-color: #121212 !important;
   color: #e0e0e0 !important;
 }
-body.dark-theme .instructor-profile .sidebar-widgets .stats-widget, .instructor-profile .sidebar-widgets .achievements-widget, .instructor-profile .sidebar-widgets .contact-widget{
+body.dark-theme .instructor-profile .sidebar-widgets .stats-widget, .instructor-profile .sidebar-widgets .achievements-widget, body.dark-theme .instructor-profile .sidebar-widgets .contact-widget{
   background-color: #121212 !important;
   color: #e0e0e0 !important;
 }

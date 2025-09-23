@@ -127,11 +127,9 @@
         <div class="article-tags">
           <h4>Related Topics</h4>
           <div class="tags">
-            {% if blog.category %}
-              <a href="#" class="tag">{{ blog.category.name }}</a>
-            {% endif %}
-            <a href="#" class="tag">Technology</a>
-            <a href="#" class="tag">Innovation</a>
+            {% for category in categories %}
+              <a href="{% url 'category_skills:courses'%}?categories[]={{category.id}}" class="tag">{{ category.name }}</a>
+            {% endfor %} 
           </div>
         </div>
       </div>
