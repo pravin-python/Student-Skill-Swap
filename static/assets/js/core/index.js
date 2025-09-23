@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       skills.forEach(skill => {
         skillsHtml += `
-          <div class="col-lg-4 col-md-6 course-item"
+          <div class="col-lg-4 col-md-6 course-item pb-4"
                data-category="${skill.category.id}"
                data-skill-name="${skill.name.toLowerCase()}"
                data-category-name="${skill.category.name.toLowerCase()}">

@@ -58,8 +58,8 @@
                             {% for blog in user_blogs %}
                             <div class="col-md-6 mb-3">
                                 <div class="card border rounded shadow-sm h-100">
-                                    {% if blog.image %}
-                                        <img src="{{ blog.image.url }}" alt="{{ blog.title }}" class="card-img-top" style="height: 180px; object-fit: cover;">
+                                    {% if blog.thumbnail_image %}
+                                        <img src="{{ blog.thumbnail_image.image.url }}" alt="{{ blog.title }}" class="card-img-top" style="height: 180px; object-fit: cover;">
                                     {% else %}
                                         <img src="{% static 'assets/img/default-blog.jpg' %}" alt="Blog Image" class="card-img-top" style="height: 180px; object-fit: cover;">
                                     {% endif %}

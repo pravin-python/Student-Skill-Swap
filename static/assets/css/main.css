@@ -8907,7 +8907,7 @@ body.dark-theme a:hover {
 
 /* Header */
 body.dark-theme .header {
-  background-color: #1e1e1e !important;
+  background-color: #121212 !important;
   border-bottom: 1px solid #333 !important;
 }
 body.dark-theme .header .sitename {
@@ -9107,6 +9107,33 @@ body.dark-theme .instructor-profile .sidebar-widgets .stats-widget, .instructor-
 body.dark-theme .faculty-card{
   background-color: #121212 !important;
   color: #e0e0e0 !important;
+}
+body.dark-theme .contact .contact-card{
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
+}
+body.dark-theme .contact-form-container{
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
+}
+body.dark-theme .about .mission-card{
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
+}
+body.dark-theme div.page-title.light-background{
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
+  border-bottom: 1px solid #333 !important;
+}
+body.dark-theme .pagination-wrapper .pagination .page-item .page-link{
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
+}
+body.dark-theme .pagination-wrapper .pagination .page-item.active .page-link,
+body.dark-theme .pagination-wrapper .pagination .page-item .page-link:focus,
+body.dark-theme .pagination-wrapper .pagination .page-item .page-link:hover {
+  background-color: blue !important;
+  color: #fff !important;
 }
 
 /*--------------------------------------------------------------

@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function() {
     blogHero.innerHTML = "";
     const featured = blogsData.slice(0, 2);
     featured.forEach((blog) => {
-      const imgUrl = blog.image || "/static/assets/img/default-blog.jpg";
+      const imgUrl = blog.thumbnail_image || "/static/assets/img/default-blog.jpg";
       const blogHTML = `
         <article class="blog-item" data-aos="fade-up">
           <img src="${imgUrl}" alt="${blog.title}">
@@ -60,11 +60,11 @@ document.addEventListener("DOMContentLoaded", function() {
               <span class="category">${blog.category.name || "Uncategorized"}</span>
             </div>
             <h2 class="post-title mb-2">
-              <a href="/blog/${blog.id}/">${blog.title}</a>
+              <a href="/blog-details/${blog.id}">${blog.title}</a>
             </h2>
             <div class="mt-1">
               <i class="bi bi-person"></i>
-              <a href="courses/instructor/${blog.author.id}/">
+              <a href="/courses/instructor/${blog.author.id}/">
                 <span class="featured-author">${blog.author.username}</span>
               </a>
             </div>
@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     blogs.forEach((blog) => {
-      const imgUrl = blog.image || "/static/assets/img/default-blog.jpg";
+      const imgUrl = blog.thumbnail_image || "/static/assets/img/default-blog.jpg";
       const blogHTML = `
         <div class="col-lg-6 col-xl-4">
           <article class="blog-card h-100 border rounded shadow-sm">
@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <div class="post-meta d-flex align-items-center px-3 mt-3">
               <div class="d-flex align-items-center me-3">
                 <i class="bi bi-person"></i>
-                <a href="courses/instructor/${blog.author.id}/">
+                <a href="/courses/instructor/${blog.author.id}/">
                   <span class="ps-2 author-name">${blog.author.username}</span>
                 </a>
               </div>
@@ -114,9 +114,9 @@ document.addEventListener("DOMContentLoaded", function() {
             </div>
             <div class="post-content p-3">
               <h3 class="post-title">
-                <a href="/blog/${blog.id}/">${blog.title}</a>
+                <a href="/blog-details/${blog.id}">${blog.title}</a>
               </h3>
-              <a href="/blog/${blog.id}/" class="readmore">
+              <a href="blog-detais/${blog.id}/" class="readmore">
                 <span>Read More</span><i class="bi bi-arrow-right"></i>
               </a>
             </div>

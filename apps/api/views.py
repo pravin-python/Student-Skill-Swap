@@ -82,16 +82,14 @@ class InfiniteScrollPagination(PageNumberPagination):
     page_size_query_param = "page_size"  # allow client to override ?page_size=10
     max_page_size = 50
 
-# API for fetching the blogs via infinite scroll
+# API View to fetch the blogs
 class BlogAPIView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
-        blogs = Blog.objects.filter(is_published=True).select_related("author", "category")
-
         custom_user = request.session.get("user_id")
-
-        # Exclude blogs created by the logged-in user
+        blogs = Blog.objects.filter(is_published=True).select_related("author", "category").prefetch_related("images")
+        
         if custom_user:
             blogs = blogs.exclude(author=custom_user)
 
@@ -100,4 +98,5 @@ class BlogAPIView(APIView):
 
         serializer = BlogSerializer(result_page, many=True, context={"request": request})
         return paginator.get_paginated_response(serializer.data)
+
 

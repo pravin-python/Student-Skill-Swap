@@ -5,100 +5,118 @@
 
 {% block mainsection %}
 <div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <div class="card shadow-sm">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0"><i class="bi bi-pencil-square"></i> Edit Blog</h4>
-                    <a href="{% url 'blog:blog-profile-view' %}" class="btn btn-outline-secondary btn-sm">
-                        <i class="bi bi-arrow-left"></i> Back to My Blogs
-                    </a>
-                </div>
-                <div class="card-body">
-                    <form method="POST" enctype="multipart/form-data">
-                        {% csrf_token %}
-
-                        <!-- Blog Title -->
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Blog Title</label>
-                            <input type="text" name="title" class="form-control" 
-                                   value="{{ blog.title }}" required>
-                        </div>
-
-                        <!-- Blog Category -->
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Category</label>
-                            <select name="category" class="form-select" required>
-                                {% for category in categories %}
-                                    <option value="{{ category.id }}" 
-                                        {% if blog.category.id == category.id %}selected{% endif %}>
-                                        {{ category.name }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <!-- Blog Intro -->
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Introduction</label>
-                            <textarea name="intro" id="intro-editor">{{ blog.intro }}</textarea>
-                        </div>
-
-                        <!-- Blog Image -->
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Cover Image</label>
-                            <input type="file" name="image" class="form-control" accept="image/*">
-                            {% if blog.image %}
-                                <small class="text-muted d-block">Current: 
-                                    <img src="{{ blog.image.url }}" alt="Blog Image" 
-                                         class="img-thumbnail mt-2" style="max-width: 150px;">
-                                </small>
-                            {% endif %}
-                        </div>
-
-                        <hr>
-                        <h5 class="mb-3"><i class="bi bi-layers"></i> Blog Sections</h5>
-
-                        <!-- Blog Sections -->
-                        <div id="sections-container">
-                            {% for section in sections %}
-                            <div class="card border mb-3 section-item">
-                                <div class="card-body">
-                                    <div class="mb-2">
-                                        <label class="form-label">Section Title</label>
-                                        <input type="text" name="section_title[]" 
-                                               class="form-control" value="{{ section.title }}">
-                                    </div>
-                                    <div class="mb-2">
-                                        <label class="form-label">Content</label>
-                                        <textarea name="section_content[]" class="form-control rich-editor" rows="4">{{ section.content }}</textarea>
-                                    </div>
-                                    <div class="mb-2">
-                                        <label class="form-label">Order</label>
-                                        <input type="number" name="section_order[]" class="form-control" value="0" min="0">
-                                    </div>
-                                    <button type="button" class="btn btn-sm btn-outline-danger remove-section">
-                                        <i class="bi bi-trash"></i> Remove Section
-                                    </button>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-
-                        <button type="button" class="btn btn-outline-success btn-sm mb-3" id="add-section">
-                            <i class="bi bi-plus-circle"></i> Add Another Section
-                        </button>
-
-                        <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-save"></i> Update Blog
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h4 class="mb-0"><i class="bi bi-pencil-square"></i> Edit Blog</h4>
+          <a href="{% url 'blog:blog-profile-view' %}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left"></i> Back to My Blogs
+          </a>
         </div>
+        <div class="card-body">
+          <form method="POST" enctype="multipart/form-data" id="edit-blog-form">
+            {% csrf_token %}
+
+            <!-- Blog Title -->
+            <div class="mb-3">
+              <label class="form-label fw-bold">Blog Title</label>
+              <input type="text" name="title" class="form-control" value="{{ blog.title }}" required>
+            </div>
+
+            <!-- Blog Category -->
+            <div class="mb-3">
+              <label class="form-label fw-bold">Category</label>
+              <select name="category" class="form-select" required>
+                {% for category in categories %}
+                  <option value="{{ category.id }}" {% if blog.category and blog.category.id == category.id %}selected{% endif %}>
+                    {{ category.name }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- Blog Intro -->
+            <div class="mb-3">
+              <label class="form-label fw-bold">Introduction</label>
+              <textarea name="intro" id="intro-editor">{{ blog.intro }}</textarea>
+            </div>
+
+            <!-- Blog Images -->
+            <h5 class="mb-3">Blog Images</h5>
+            <div id="image-container">
+              {% for img in blog.images.all %}
+                <div class="image-block mb-2 card p-2" data-id="{{ img.id }}">
+                  <img src="{{ img.image.url }}" class="img-thumbnail me-2" style="max-width:120px;">
+                  <div class="d-inline-block align-middle">
+                    <p class="mb-1 fw-bold">{{ img.image.name|slice:"-30:" }}</p>
+                    <select class="form-select form-select-sm mb-1 image-role-select" name="role_{{ img.id }}">
+                      <option value="thumbnail" {% if img.thumbnail %}selected{% endif %}>Thumbnail</option>
+                      <option value="base" {% if img.base %}selected{% endif %}>Base</option>
+                      <option value="small" {% if img.small %}selected{% endif %}>Small</option>
+                    </select>
+                    <input type="file" class="form-control form-control-sm replace-image" name="replace_image_{{ img.id }}">
+                    <button type="button" class="btn btn-sm btn-outline-danger mt-1 remove-image">Remove</button>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+
+            <hr>
+            <h5 class="mb-3"><i class="bi bi-layers"></i> Blog Sections</h5>
+
+            <div id="sections-container">
+              {% for section in blog.sections.all %}
+                <div class="card border mb-3 section-item" data-id="{{ section.id }}">
+                  <div class="card-body">
+                    <!-- Hidden field for section ID -->
+                    <input type="hidden" name="section_id[]" value="{{ section.id }}">
+
+                    <div class="mb-2">
+                      <label class="form-label">Section Title</label>
+                      <input type="text" name="section_title[]" class="form-control" value="{{ section.title }}">
+                    </div>
+                    <div class="mb-2">
+                      <label class="form-label">Content</label>
+                      <textarea name="section_content[]" class="form-control rich-editor" rows="4">{{ section.content }}</textarea>
+                    </div>
+                    <div class="mb-2">
+                      <label class="form-label">Section Image</label>
+                      {% if section.images %}
+                        <div class="mb-2">
+                          <img src="{{ section.images.url }}" class="img-thumbnail mb-1" style="max-width:120px;">
+                        </div>
+                      {% endif %}
+                      <input type="file" class="form-control section-image-input" name="section_image_{{ section.id }}">
+                    </div>
+                    <div class="mb-2">
+                      <label class="form-label">Order</label>
+                      <input type="number" name="section_order[]" class="form-control" value="{{ section.order }}" min="0">
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-danger remove-section">
+                      <i class="bi bi-trash"></i> Remove Section
+                    </button>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            <button type="button" class="btn btn-outline-success btn-sm mb-3" id="add-section">
+              <i class="bi bi-plus-circle"></i> Add Another Section
+            </button>
+
+            <div class="d-flex justify-content-end gap-2 mt-3">
+                  <a href="{% url 'blog:blog-profile-view' %}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-arrow-left"></i> Back to My Blogs
+                  </a>
+                  <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save"></i> Update Blog
+                  </button>
+              </div>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 {% endblock %}
 

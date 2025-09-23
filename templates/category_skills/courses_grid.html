@@ -2,7 +2,7 @@
 <div class="courses-grid">
   <div class="row">
     {% for skill in page_obj %}
-      <div class="{{ column_classes|default:'col-lg-6 col-md-6' }} course-item"
+      <div class="{{ column_classes|default:'col-lg-6 col-md-6' }} course-item pb-4"
            data-category="{{ skill.category.id }}"
            data-skill-name="{{ skill.name|lower }}"
            data-category-name="{{ skill.category.name|lower }}">

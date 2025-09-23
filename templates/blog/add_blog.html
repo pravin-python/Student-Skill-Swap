@@ -15,7 +15,7 @@
                     </a>
                 </div>
                 <div class="card-body">
-                    <form method="POST" enctype="multipart/form-data">
+                    <form method="POST" enctype="multipart/form-data" id="add-blog-form">
                         {% csrf_token %}
 
                         <!-- Blog Title -->
@@ -41,11 +41,14 @@
                             <textarea name="intro" id="intro-editor"></textarea>
                         </div>
 
-                        <!-- Blog Image -->
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Cover Image</label>
-                            <input type="file" name="image" class="form-control" accept="image/*">
-                            <small class="text-muted">Optional — upload a featured image for your blog.</small>
+                        <!-- Intro unified upload (classification checkboxes shown for these) -->
+                        <div class="mb-3 card">
+                            <div class="card-body">
+                                <label class="form-label fw-bold">Upload Images for Intro (choose roles)</label>
+                                <input type="file" id="intro-images" name="intro_images_files[]" class="form-control intro-images" accept="image/*" multiple>
+                                <small class="text-muted d-block">Upload images and mark each image as Thumbnail / Base / Small (checkboxes).</small>
+                                <div class="image-preview-container mb-4 mt-3"></div>
+                            </div>
                         </div>
 
                         <hr>
@@ -63,10 +66,18 @@
                                         <label class="form-label">Content</label>
                                         <textarea name="section_content[]" class="form-control rich-editor" rows="4" placeholder="Write section content..."></textarea>
                                     </div>
+                                    <!-- Section image (no classification UI) -->
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Upload Section Image</label>
+                                        <input type="file" class="form-control section-image-input" name="section_images[]" accept="image/*">
+                                    </div>
+                                    <div class="image-preview-container mb-4"></div>
+                                    
                                     <div class="mb-2">
                                         <label class="form-label">Order</label>
                                         <input type="number" name="section_order[]" class="form-control" value="0" min="0">
                                     </div>
+
                                     <button type="button" class="btn btn-sm btn-outline-danger remove-section">
                                         <i class="bi bi-trash"></i> Remove Section
                                     </button>
@@ -78,7 +89,10 @@
                             <i class="bi bi-plus-circle"></i> Add Another Section
                         </button>
 
-                        <div class="d-flex justify-content-end">
+                        <div class="d-flex justify-content-end gap-2 mt-3">
+                             <a href="{% url 'blog:blog-profile-view' %}" class="btn btn-outline-secondary btn-sm">
+                                <i class="bi bi-arrow-left"></i> Back to My Blogs
+                            </a>
                             <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-save"></i> Publish Blog
                             </button>
