@@ -48,8 +48,8 @@ def UniversityView(request):
     })
 
 
-def UniversityDetailView(request, university_id):
-    university = get_object_or_404(University, id=university_id)
+def UniversityDetailView(request, name):
+    university = get_object_or_404(University, slug=name)
 
     # Departments pagination
     department_qs = university.departments.all()

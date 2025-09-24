@@ -234,9 +234,11 @@
     text-decoration: none;
   }
 
-  #blog-hero .blog-content .post-title a:hover {
-    color: #f1f1f1;
+  #blog-hero .blog-content .post-title a:hover{
+    color: greenyellow;
+    text-decoration: none;
   }
+
 
   #blog-hero .author-name {
     color: rgba(255, 255, 255, 0.85);

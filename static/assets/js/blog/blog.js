@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function() {
             </h2>
             <div class="mt-1">
               <i class="bi bi-person"></i>
-              <a href="/courses/instructor/${blog.author.id}/">
+              <a href="/courses/instructor/${blog.author.username}/">
                 <span class="featured-author">${blog.author.username}</span>
               </a>
             </div>
@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <div class="post-meta d-flex align-items-center px-3 mt-3">
               <div class="d-flex align-items-center me-3">
                 <i class="bi bi-person"></i>
-                <a href="/courses/instructor/${blog.author.id}/">
+                <a href="/courses/instructor/${blog.author.username}/">
                   <span class="ps-2 author-name">${blog.author.username}</span>
                 </a>
               </div>
@@ -114,9 +114,9 @@ document.addEventListener("DOMContentLoaded", function() {
             </div>
             <div class="post-content p-3">
               <h3 class="post-title">
-                <a href="/blog-details/${blog.id}">${blog.title}</a>
+                <a href="/blog-details/${blog.id}/">${blog.title}</a>
               </h3>
-              <a href="blog-detais/${blog.id}/" class="readmore">
+              <a href="/blog-details/${blog.id}/" class="readmore">
                 <span>Read More</span><i class="bi bi-arrow-right"></i>
               </a>
             </div>

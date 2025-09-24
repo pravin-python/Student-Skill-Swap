@@ -13,7 +13,7 @@ class SkillsAdmin(admin.ModelAdmin):
 
 @admin.register(UserSkills)
 class UserSkillsAdmin(admin.ModelAdmin):
-    list_display = ['user', 'skill', 'added_at']
+    list_display = ['user', 'skill', 'added_at' , 'is_favourite']
     list_filter = ['skill__category', 'added_at']
     search_fields = ['user__username', 'user__first_name', 'user__last_name', 'skill__name']
     date_hierarchy = 'added_at'

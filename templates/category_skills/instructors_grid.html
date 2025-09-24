@@ -33,7 +33,7 @@
                           <span class="category">{{ instructor.user.department.name|default:"Student" }}</span>
                           <span class="level">Year {{ instructor.user.year }}</span>
                         </div>
-                        <h3>{{ instructor.user.first_name }} {{ instructor.user.last_name }}</h3>
+                        <h3><a href="{% url 'category_skills:instructor_profile' instructor.user.username %}">{{ instructor.user.first_name }} {{ instructor.user.last_name }}</a></h3>
                         <p>{{ instructor.user.bio|default:"A passionate student sharing knowledge and skills."|truncatewords:15 }}</p>
                         
                         <!-- Skills -->
@@ -49,7 +49,7 @@
                           </div>
                         </div>
 
-                        <a href="{% url 'category_skills:instructor_profile' instructor.user.id %}" class="btn-course">View Profile -></a>
+                        <a href="{% url 'category_skills:instructor_profile' instructor.user.username %}" class="btn-course">View Profile -></a>
                       </div>
                     </div>
                   </div>

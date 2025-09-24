@@ -6,10 +6,11 @@ app_name = 'category_skills'
 urlpatterns = [
     # Course related URLs
     path('' , views.CourseView , name="courses"),
-    path('course_details/<int:skill_id>/' , views.CourseDetailView , name="course_details"),
+    path('course_details/<str:username>/<slug:name>/' , views.CourseDetailView , name="course_details"),
     path('instructors/', views.InstructorView , name="instructors"),
-    path("instructor/<int:user_id>/", views.InstructorDetailView, name="instructor_profile"),
+    path("instructor/<str:username>/", views.InstructorDetailView, name="instructor_profile"),
     path('add_skill/<int:skill_id>/', views.add_skill_to_profile, name="add_skill"),
+    path('toggle_favourite/<int:skill_id>/', views.toggle_favourite, name="toggle_favourite"),
     path('remove_skill/<int:skill_id>/', views.remove_skill_from_profile, name="remove_skill"),
     
     # Request management URLs

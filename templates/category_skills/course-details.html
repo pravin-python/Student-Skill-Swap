@@ -45,7 +45,7 @@
                     <img src="{% static 'assets/img/default-avatar.webp' %}" alt="Student" class="instructor-image">
                   {% endif %}
                   <div class="instructor-details">
-                    <h5>{{ user_skill.user.first_name }} {{ user_skill.user.last_name }}</h5>
+                    <h5 class="atag"><a href="{% url 'category_skills:instructor_profile' user_skill.user.username %}">{{ user_skill.user.first_name }} {{ user_skill.user.last_name }}</a></h5>
                     <span>{{ user_skill.user.department.name|default:"Student" }} - Year {{ user_skill.user.year }}</span>
                     <div class="instructor-rating">
                       <i class="bi bi-person"></i>
@@ -391,7 +391,15 @@
                   <button class="btn-secondary disabled" disabled>No Student Available</button>
                   {% endif %}
                   {% if request.session.user_id %}
-                  <button class="btn-secondary" onclick="addSkillToProfile({{ skill.id }})">Add to My Favourites</button>
+                 <button class="btn-primary {% if user_skill.is_favourite %}btn-danger{% else %}btn-outline-danger{% endif %}"
+                    onclick="toggleFavourite({{ user_skill.skill.id }})"
+                    id="favourite-btn-{{ user_skill.skill.id }}">
+                    {% if user_skill.is_favourite %}
+                      <i class="bi bi-heart-fill"></i> Added to My Favourites
+                    {% else %}
+                      <i class="bi bi-heart"></i> Add to My Favourites
+                    {% endif %}
+                  </button>
                   {% endif %}
                 </div>
 
@@ -675,40 +683,27 @@ function displayRequestValidationErrors(errors) {
     });
 }
 
-function addSkillToProfile(skillId) {
-    // Get CSRF token from the form
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-    
-    if (!csrfToken) {
-        alert('CSRF token not found. Please refresh the page and try again.');
-        return;
-    }
-    
-    fetch(`/courses/add_skill/${skillId}/`, {
-        method: 'POST',
+function toggleFavourite(skillId) {
+    fetch(`/courses/toggle_favourite/${skillId}/`, {
+        method: "POST",
         headers: {
-            'X-CSRFToken': csrfToken,
-            'Content-Type': 'application/json',
-        },
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
         }
-        return response.json();
     })
+    .then(res => res.json())
     .then(data => {
-        if (data.success) {
-            alert(data.message);
-            location.reload();
+        const btn = document.getElementById(`favourite-btn-${skillId}`);
+        if (data.status === "added") {
+            btn.innerHTML = '<i class="bi bi-heart-fill"></i> Added to My Favourites';
+            btn.classList.remove("btn-outline-danger");
+            btn.classList.add("btn-danger");
         } else {
-            alert(data.message);
+            btn.innerHTML = '<i class="bi bi-heart"></i> Add to My Favourites';
+            btn.classList.remove("btn-danger");
+            btn.classList.add("btn-outline-danger");
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while adding the skill. Please try again.');
     });
 }
+
 </script>
 {% endblock %}

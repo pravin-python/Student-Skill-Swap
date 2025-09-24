@@ -1,5 +1,6 @@
 from django.db import models
 import os
+from django.utils.text import slugify
 
 class Country(models.Model):
     class Meta:
@@ -88,7 +89,6 @@ class Level(models.Model):
     def __str__(self):
         return self.name
 
-
 class University(models.Model):
     class Meta:
         ordering = ['name']
@@ -97,6 +97,7 @@ class University(models.Model):
         db_table = 'universities'
 
     name = models.CharField(unique=True, max_length=100)
+    slug = models.SlugField(max_length=255,unique=True)
     image = models.ImageField(upload_to='universities_icon/')
     description = models.TextField(max_length=999, help_text="Enter description for your university")
     established_year = models.PositiveIntegerField()
@@ -111,6 +112,21 @@ class University(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        # Generate slug only if it doesn't exist
+        if not self.slug:
+            base_slug = slugify(self.name)
+            slug = base_slug
+            counter = 1
+
+            # Ensure slug is unique
+            while University.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            
+            self.slug = slug
+
+        super().save(*args, **kwargs)
 
 def university_upload_to(instance, filename):
     return os.path.join('universities_images', instance.university.name, filename)

@@ -40,7 +40,7 @@
               <img src="{% static 'assets/img/person/default.png' %}" alt="Author" class="author-img">
             {% endif %}
             <div class="author-info">
-              <h4>{{ blog.author.get_full_name|default:blog.author.username }}</h4>
+              <h4 class="atag"><a href="{% url 'category_skills:instructor_profile' blog.author.username %}">{{ blog.author.first_name}} {{blog.author.last_name}}</a></h4>
               <span>{{ blog.author.bio|default:"Blogger" }}</span>
             </div>
           </div>
@@ -83,18 +83,20 @@
 
           {% for section in sections %}
           <div class="content-section itinerary-day" id="section-{{ section.id }}" data-aos="fade-up">
-            <div class="row g-4 align-items-center">
+            <div class="row g-4 align-items-stretch">
               <!-- Text Column -->
               <div class="col-lg-7 {% if forloop.counter|divisibleby:2 %}order-lg-2{% endif %}">
-                <h2>{{ section.title }}</h2>
-                <p>{{ section.content|safe }}</p>
+                <div class="content-wrapper h-100 d-flex flex-column justify-content-start">
+                  <h2>{{ section.title }}</h2>
+                  <p>{{ section.content|safe }}</p>
+                </div>
               </div>
               <!-- Image Column -->
               {% if section.images %}
               <div class="col-lg-5 {% if forloop.counter|divisibleby:2 %}order-lg-1{% endif %}">
-                <figure class="m-0">
+                <figure class="m-0 h-100 d-flex flex-column">
                   <img src="{{ section.images.url }}" alt="{{ section.title }}" class="img-fluid" loading="lazy">
-                  <figcaption>{{ section.title }}</figcaption>
+                  <figcaption class="figurebio">{{ section.title }}</figcaption>
                 </figure>
               </div>
               {% endif %}

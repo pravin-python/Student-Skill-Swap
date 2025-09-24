@@ -21,25 +21,28 @@ def CourseView(request):
     if user_id:
         users_with_skills = users_with_skills.exclude(id=user_id)
 
-    # Collect skills from other users
-    skills_qs = Skills.objects.filter(
-        user_skills__user__in=users_with_skills
-    ).distinct()
+    skills_qs = UserSkills.objects.filter(
+        user__in=users_with_skills
+    ).select_related("skill", "user", "skill__category")
 
-    # Search filter
+    # --- Search filter ---
     search_query = request.GET.get("q")
     if search_query:
-        skills_qs = skills_qs.filter(name__icontains=search_query)
+        skills_qs = skills_qs.filter(
+            Q(skill__name__icontains=search_query) |  
+            Q(user__first_name__icontains=search_query) |  
+            Q(user__last_name__icontains=search_query)     
+        ).distinct()
 
-    # Category filter
+    # --- Category filter ---
     category_ids = request.GET.getlist("categories[]")
     if category_ids and "all" not in category_ids:
-        skills_qs = skills_qs.filter(category_id__in=category_ids)
+        skills_qs = skills_qs.filter(skill__category_id__in=category_ids)
 
-    # Level filter
+    # --- Level filter ---
     level_filters = request.GET.getlist("levels[]")
     if level_filters and "all" not in level_filters:
-        skills_qs = skills_qs.filter(level__in=level_filters)
+        skills_qs = skills_qs.filter(skill__level__in=level_filters)
 
     # Pagination
     paginator = Paginator(skills_qs, 4)
@@ -54,18 +57,22 @@ def CourseView(request):
         "section": "courses",
     }
 
-    # Only return JSON when AJAX flag is set
+    # AJAX partial rendering
     if request.GET.get("ajax") == "1":
         html = render_to_string("category_skills/courses_grid.html", context, request=request)
         return JsonResponse({"html": html})
 
-    # Otherwise return full HTML page
     return render(request, "category_skills/courses.html", context)
     
-def CourseDetailView(request, skill_id):
-    skill = get_object_or_404(Skills, id=skill_id)
+def CourseDetailView(request, username , name):
+
+    user = get_object_or_404(User , username=username)
+
+    skill = get_object_or_404(Skills, user_skills__user = user, slug=name)
+
     # Get the user who added this skill
-    user_skill = UserSkills.objects.filter(skill=skill).first()
+    user_skill = get_object_or_404(UserSkills , user=user , skill = skill)
+
     return render(request, "category_skills/course-details.html", {
         "skill": skill,
         "user_skill": user_skill
@@ -88,7 +95,6 @@ def InstructorView(request):
         users_with_skills = users_with_skills.filter(
             Q(first_name__icontains=q) |
             Q(last_name__icontains=q) |
-            Q(bio__icontains=q) |
             Q(user_skills__skill__name__icontains=q)
         ).distinct()
 
@@ -133,10 +139,10 @@ def InstructorView(request):
     })
 
 
-def InstructorDetailView(request, user_id):
+def InstructorDetailView(request, username):
     user = get_object_or_404(
         User.objects.prefetch_related("user_skills__skill__category"),
-        id=user_id
+        username=username
     )
 
     # Instructor’s skills
@@ -175,6 +181,51 @@ def InstructorDetailView(request, user_id):
     return render(request, "category_skills/instructor-profile.html", context)
 
 @login_required_custom
+def toggle_favourite(request, skill_id):
+    """
+    Toggle a skill as favourite for the logged-in user using the boolean field in UserSkills.
+    """
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Invalid request method!'})
+
+    try:
+        user_id = request.session.get('user_id')
+        if not user_id:
+            return JsonResponse({'success': False, 'message': 'Please Log in First!'})
+
+        user = get_object_or_404(User, id=user_id)
+        skill = get_object_or_404(Skills, id=skill_id)
+
+        # Check if the user has this skill
+        user_skill = UserSkills.objects.filter(user=user, skill=skill).first()
+        if not user_skill:
+            return JsonResponse({'success': False, 'message': 'You do not have this skill in your profile!'})
+
+        # Toggle the favourite field
+        user_skill.favourite = not user_skill.favourite
+        user_skill.save()
+
+        status = "added" if user_skill.favourite else "removed"
+        message = f'Skill "{skill.name}" has been {status} to your favourites.'
+
+        # Optional: create notification only when added
+        from apps.notifications.views import create_notification
+        if user_skill.favourite:
+            create_notification(
+                recipient=user,
+                notification_type='favourite_added',
+                title='Favourite Added',
+                message=message,
+                content_object=user_skill
+            )
+
+        return JsonResponse({'success': True, 'status': status, 'message': message})
+
+    except Exception as e:
+        print(f"Error in toggle_favourite: {str(e)}")
+        return JsonResponse({'success': False, 'message': f'An error occurred: {str(e)}'})
+
+@login_required_custom
 def add_skill_to_profile(request, skill_id):
     """Add a skill to user's profile"""
     try:
@@ -189,7 +240,7 @@ def add_skill_to_profile(request, skill_id):
             # Check if skill is already added
             existing_user_skill = UserSkills.objects.filter(user=user, skill=skill).first()
             if existing_user_skill:
-                return JsonResponse({'success': False, 'message': 'Skill already in your profile!'})
+                return JsonResponse({'success': False, 'message': 'Skill already in your Profile!'})
             
             # Create new user skill
             user_skill = UserSkills.objects.create(user=user, skill=skill)

@@ -65,6 +65,33 @@
                     </div>
                 </div>
             </div>
+
+            <!-- My Favourites -->
+            <div class="card shadow-sm mt-3">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="bi bi-heart-fill text-danger"></i> My Favourites</h6>
+                </div>
+                <div class="card-body">
+                    {% if favourites %}
+                        <div class="list-group">
+                            {% for fav in favourites %}
+                                <a href="{% url 'category_skills:course_details' fav.skill.id %}" 
+                                   class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>{{ fav.skill.name }}</strong>
+                                        <small class="text-muted d-block">
+                                            {{ fav.skill.category.name }} - {{ fav.skill.get_level_display }}
+                                        </small>
+                                    </div>
+                                    <i class="bi bi-chevron-right"></i>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted mb-0">You haven’t added any favourites yet. Go to <a href="{% url 'category_skills:courses' %}">courses</a> and add some!</p>
+                    {% endif %}
+                </div>
+            </div>
         </div>
         
         <!-- Profile Details -->
@@ -198,9 +225,6 @@
                                        value="{{ custom_user.updated_at|date:'F d, Y' }}" readonly>
                             </div>
                         </div>
-                        
-                        <!-- CSRF Token for Skills -->
-                        {% csrf_token %}
                         
                         <!-- Skills Section -->
                         <h6 class="text-primary mb-3 mt-4"><i class="bi bi-award"></i> My Skills</h6>

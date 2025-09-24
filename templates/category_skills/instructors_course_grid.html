@@ -14,7 +14,7 @@
           <div class="course-info">
             <h5>{{ skill.name }}</h5>
             <p class="price">Free</p>
-            <a href="{% url 'category_skills:course_details' skill.id %}" 
+            <a href="{% url 'category_skills:course_details' instructor.username skill.slug %}" 
                class="btn btn-primary w-100 mt-2">
               Course Details →
             </a>

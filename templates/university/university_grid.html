@@ -13,7 +13,7 @@
             {% endif %}
           </div>
           <div class="course-content">
-            <h3>{{ university.name }}</h3>
+            <h3><a href="{% url 'university:university_detail' university.slug %}">{{ university.name }}</a></h3>
             <p>{{ university.description|truncatewords:20 }}</p>
             <div class="course-stats">
               <div class="stat"><i class="bi bi-calendar"></i>
@@ -23,7 +23,7 @@
                 <span>Study in this university</span>
               </div>
             </div>
-            <a href="{% url 'university:university_detail' university.id %}" class="btn-course">University Details -> </a>
+            <a href="{% url 'university:university_detail' university.slug %}" class="btn-course">University Details -> </a>
           </div>
         </div>
       </div>

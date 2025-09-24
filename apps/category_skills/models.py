@@ -1,6 +1,7 @@
 from django.db import models
 from apps.accounts.models import User
 import os
+from django.utils.text import slugify
 
 class SkillsCategory(models.Model):
 
@@ -37,6 +38,7 @@ class Skills(models.Model):
          ('A' , 'Advanced'),
     )
     name = models.CharField(max_length=200,unique=True)
+    slug = models.SlugField(max_length=255,unique=True)
     category = models.ForeignKey(SkillsCategory,on_delete=models.CASCADE,related_name='skills')
     image = models.ImageField(upload_to=category_skills,blank=True,null=True)
     description = models.TextField(max_length=999,help_text="Enter Description for Specific Skill") 
@@ -47,6 +49,19 @@ class Skills(models.Model):
 
     def __str__(self):
         return self.name    
+
+    # To add unique slugs everytime the new skills added
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.name)
+            slug = base_slug
+            counter = 1
+            # Make slug unique
+            while Skills.objects.filter(slug=slug).exclude(id=self.id).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
 
 
 class UserSkills(models.Model):
@@ -59,6 +74,7 @@ class UserSkills(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_skills')
     skill = models.ForeignKey(Skills, on_delete=models.CASCADE, related_name='user_skills')
     added_at = models.DateTimeField(auto_now_add=True)
+    is_favourite = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.username} - {self.skill.name}"

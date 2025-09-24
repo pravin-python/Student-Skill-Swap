@@ -12,7 +12,7 @@ class UserBasicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["first_name", "last_name"]
+        fields = ["username", "first_name", "last_name"]
 
 class UserSkillSerializer(serializers.ModelSerializer):
     user = UserBasicSerializer()
@@ -28,7 +28,7 @@ class SkillSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Skills
-        fields = ["id", "name", "description",  "category" , "created_at" , "image" , "level_display" , "student"]
+        fields = ["id", "name", "slug", "description",  "category" , "created_at" , "image" , "level_display" , "student"]
     
     def get_student(self, obj):
         user = self.context.get("user")
@@ -50,7 +50,7 @@ class InstructorBasicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["id" , "first_name" , "last_name" , "profile_pic" , "bio" , "year" , "department"]
+        fields = ["username" , "first_name" , "last_name" , "profile_pic" , "bio" , "year" , "department"]
 
 class InstructorSerializer(serializers.Serializer):
     user = InstructorBasicSerializer()

@@ -1663,7 +1663,7 @@ section,
 }
 
 .featured-instructors .instructor-image .course-count {
-  background: var(--accent-color);
+  background: green;
   color: var(--contrast-color);
   padding: 8px 12px;
   border-radius: 20px;
@@ -2824,6 +2824,7 @@ section,
 
 .courses-2 .courses-grid .course-image .course-badge.badge-left{
   left: 15px;
+  background-color: green;
 }
 
 .courses-2 .courses-grid .course-image .course-badge.badge-right.rating-stars{
@@ -2889,14 +2890,16 @@ section,
   color: var(--heading-color);
 }
 
-.courses-2 .courses-grid .course-content h3, .universities .courses-grid .course-content h3{
+.courses-2 .courses-grid .course-content h3 a, .universities .courses-grid .course-content h3 a{
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 15px;
-  color: var(--heading-color);
+  color: black;
   line-height: 1.4;
 }
-
+.courses-2 .courses-grid .course-content h3 a:hover, .universities .courses-grid .course-content h3 a:hover{
+  color: var(--accent-color);
+}
 .courses-2 .courses-grid .course-content p, .universities .courses-grid .course-content p{
   color: color-mix(in srgb, var(--default-color), transparent 20%);
   font-size: 14px;
@@ -8884,28 +8887,73 @@ textarea.form-control.is-valid {
     overflow: hidden;
     margin-bottom: 2rem;
 }
-.itinerary-day img {
-    border-radius: 0.75rem;
-    object-fit: cover;
-    width: 100%;
-    height: auto;
+
+.itinerary-day .row {
+    display: flex;
+    align-items: stretch; /* keeps text + image aligned */
 }
+
 .itinerary-day h2 {
     color: #343a40;
     font-weight: 700;
     margin-bottom: 1rem;
 }
+
 .itinerary-day p {
     line-height: 1.75;
     color: #495057;
 }
-.itinerary-day figcaption {
-    font-size: 0.875rem;
-    color: #6c757d;
-    margin-top: 0.75rem;
-    text-align: center;
+
+/* MODIFIED: The figure remains a flex container */
+.itinerary-day figure {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
+.itinerary-day figure img {
+    border-radius: 0.75rem;
+    object-fit: cover;
+    width: 100%;
+    height: auto;
+    flex-shrink: 0; /* Prevents image from shrinking */
+}
+
+/* MODIFIED: Style the caption to sit directly below the image */
+.itinerary-day figure figcaption {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #6c757d;
+    text-align: center;
+    width: 100%;
+    padding-top: 0.75rem; /* Replaces margin-bottom on the image */
+}
+
+/* MODIFIED: The description now pushes itself to the bottom */
+.itinerary-day figure .figure-description {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #495057;
+    text-align: center;
+    width: 100%;
+    
+    /* This is the key property */
+    margin-top: auto; 
+    
+    padding-top: 1rem; /* Ensures space above if content is tall */
+}
+.featured-instructors .instructor-info .instructorname a{
+  color: black;
+}
+.featured-instructors .instructor-info .instructorname a:hover{
+  color: var(--accent-color)
+}
+.atag a{
+  color: black;
+}
+.atag a:hover{
+  color: var(--accent-color);
+}
 /* ===========================
    Dark Theme Global Styles
    =========================== */
