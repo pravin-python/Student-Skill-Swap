@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   <span class="category">${skill.category.name}</span>
                   <span class="level">${skill.level_display}</span>
                 </div>
-                <h3><a href ="courses/course_details/${skill.student.username}/${skill.slug}/">${skill.name}</a></h3>
+                <h3><a href ="courses/${skill.student.username}/${skill.slug}/">${skill.name}</a></h3>
                 <p>${skill.description ? skill.description.split(" ").slice(0,20).join(" ") + "..." : ""}</p>
                 <div class="course-stats">
                   <div class="stat"><i class="bi bi-calendar"></i>
@@ -51,9 +51,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 ${skill.student ? `
                 <p class="teacher-name mt-3 p-2 bg-light rounded d-inline-block shadow-sm">
                   <i class="bi bi-person text-primary"></i>
-                  <strong>Student: <a href = "/courses/instructor/${skill.student.username}/"> ${skill.student.first_name} ${skill.student.last_name} </a></strong>
+                  <strong>Student: <a href = "/instructor/${skill.student.username}/"> ${skill.student.first_name} ${skill.student.last_name} </a></strong>
                 </p>` : ""}
-                <a href="/courses/course_details/${skill.student.username}/${skill.slug}" class="btn-course">Course Details -> </a>
+                <a href="/courses/${skill.student.username}/${skill.slug}" class="btn-course">Course Details -> </a>
               </div>
             </div>
           </div>
@@ -131,7 +131,7 @@ function createInstructorCard(instructor) {
     const infoDiv = document.createElement("div");
     infoDiv.className = "instructor-info";
     infoDiv.innerHTML = `
-        <h5 class = "instructorname"><a href = "/courses/instructor/${instructor.user.username}/">${instructor.user.first_name} ${instructor.user.last_name}</a></h5>
+        <h5 class = "instructorname"><a href = "/instructor/${instructor.user.username}/">${instructor.user.first_name} ${instructor.user.last_name}</a></h5>
         <p class="specialty">${instructor.user.department?.name || "Student"}</p>
         <p class="description">${truncateWords(instructor.user.bio || "A passionate student sharing knowledge and skills.", 15)}</p>
     `;
@@ -179,7 +179,7 @@ function createInstructorCard(instructor) {
     const actionDiv = document.createElement("div");
     actionDiv.className = "action-buttons";
     actionDiv.innerHTML = `
-        <a href="/courses/instructor/${instructor.user.username}/" class="btn-view">View Profile</a>
+        <a href="/instructor/${instructor.user.username}/" class="btn-view">View Profile</a>
         <div class="social-links">
             <a href="#"><i class="bi bi-envelope"></i></a>
             <a href="#"><i class="bi bi-person"></i></a>

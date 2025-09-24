@@ -5,8 +5,8 @@ app_name = 'category_skills'
 
 urlpatterns = [
     # Course related URLs
-    path('' , views.CourseView , name="courses"),
-    path('course_details/<str:username>/<slug:name>/' , views.CourseDetailView , name="course_details"),
+    path('courses/' , views.CourseView , name="courses"),
+    path('courses/<str:username>/<slug:name>/' , views.CourseDetailView , name="course_details"),
     path('instructors/', views.InstructorView , name="instructors"),
     path("instructor/<str:username>/", views.InstructorDetailView, name="instructor_profile"),
     path('add_skill/<int:skill_id>/', views.add_skill_to_profile, name="add_skill"),

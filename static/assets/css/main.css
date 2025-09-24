@@ -9244,6 +9244,40 @@ body.dark-theme .courses-2 .course-filters .filter-checkbox:hover{
 body.dark-theme .course-filters {
    border: 1px solid #333 !important;
 }
+body.dark-theme .enrollment-card {
+  background-color: #121212 !important;
+  color: #fff !important;
+}
+body.dark-theme .skill-item {
+  background-color: #121212 !important;
+  color: #fff !important;
+}
+body.dark-theme .course-details .course-nav-tabs .nav-tabs{
+  background-color: #121212 !important;
+}
+body.dark-theme .course-details .course-nav-tabs .nav-tabs .nav-link {
+  color: #fff !important;
+}
+body.dark-theme .course-details .course-nav-tabs .tab-content .curriculum-overview .curriculum-stats{
+  background-color: #121212 !important;
+  color: #fff !important
+}
+body.dark-theme .course-details .course-nav-tabs .tab-content .accordion .curriculum-module{
+  background-color: #121212 !important;
+  color: #fff !important
+}
+body.dark-theme .course-details .course-nav-tabs .tab-content .accordion .curriculum-module .accordion-button{
+  background-color: #121212 !important;
+  color: #fff !important
+}
+body.dark-theme .course-details .course-nav-tabs .tab-content .reviews-summary{
+  background-color: #121212 !important;
+  color: #fff !important
+}
+body.dark-theme .course-details .course-nav-tabs .tab-content .reviews-list .review-item {
+  background-color: #121212 !important;
+  color: #fff !important
+}
 /*--------------------------------------------------------------
 # Starter Section Section
 --------------------------------------------------------------*/
