@@ -1,0 +1,22 @@
+Django>=4.2,<5.0
+djangorestframework>=3.14.0
+django-debug-toolbar>=4.1.0
+pillow>=10.0.0
+whitenoise
+python-dotenv
+
+# MySQL driver
+mysqlclient>=2.2.0
+pymysql
+
+# CKEDITOR for blogs page
+django-ckeditor>=6.7.3
+
+# PostgreSQL driver
+psycopg2-binary>=2.9.9
+
+# For CORS support (if building frontend separately)
+django-cors-headers>=4.3.0
+
+# For environment variable handling
+python-decouple>=3.8

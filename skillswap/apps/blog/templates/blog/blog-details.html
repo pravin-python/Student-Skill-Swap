@@ -1,0 +1,186 @@
+{% extends "layout/base.html" %}
+{% load static %}
+
+{% block title %} Skill_Swap | Blog Details {% endblock %}
+
+{% block mainsection %}
+<!-- Page Title -->
+<div class="page-title light-background">
+  <div class="container d-lg-flex justify-content-between align-items-center">
+    <h1 class="mb-2 mb-lg-0">{{ blog.title }}</h1>
+    <nav class="breadcrumbs">
+      <ol>
+        <li><a href="{% url 'core:home' %}">Home</a></li>
+        <li><a href="{% url 'blog:blogs' %}">Blogs</a></li>
+        <li class="current">{{ blog.title|truncatechars:40 }}</li>
+      </ol>
+    </nav>
+  </div>
+</div><!-- End Page Title -->
+
+<!-- Blog Details Section -->
+<section id="blog-details" class="blog-details section">
+  <div class="container" data-aos="fade-up">
+
+    <article class="article">
+      <div class="article-header">
+        <div class="meta-categories" data-aos="fade-up">
+          {% if blog.category %}
+            <a href="#" class="category">{{ blog.category.name }}</a>
+          {% endif %}
+        </div>
+
+        <h1 class="title" data-aos="fade-up" data-aos-delay="100">{{ blog.title }}</h1>
+
+        <div class="article-meta" data-aos="fade-up" data-aos-delay="200">
+          <div class="author">
+            {% if blog.author.profile_pic %}
+              <img src="{{ blog.author.profile_pic.url }}" alt="Author" class="author-img">
+            {% else %}
+              <img src="{% static 'assets/img/person/default.png' %}" alt="Author" class="author-img">
+            {% endif %}
+            <div class="author-info">
+              <h4 class="atag"><a href="{% url 'category_skills:instructor_profile' blog.author.username %}">{{ blog.author.first_name}} {{blog.author.last_name}}</a></h4>
+              <span>{{ blog.author.bio|default:"Blogger" }}</span>
+            </div>
+          </div>
+          <div class="post-info">
+            <span><i class="bi bi-calendar4-week"></i> {{ blog.created_at|date:"F d, Y" }}</span>
+            <span><i class="bi bi-clock"></i> {{ blog.updated_at|timesince }} ago</span>
+            <span><i class="bi bi-chat-square-text"></i> {{ blog.sections.count }} Sections</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="article-featured-image" data-aos="zoom-in">
+        {% if base_image %}
+          <img src="{{ base_image.image.url }}" alt="{{ blog.title }}" class="img-fluid">
+        {% endif %}
+      </div>
+
+      <div class="article-wrapper">
+        <!-- Table of Contents -->
+        {% if sections %}
+        <aside class="table-of-contents" data-aos="fade-left">
+          <h3>Table of Contents</h3>
+          <nav>
+            <ul>
+              {% for section in sections %}
+                <li><a href="#section-{{ section.id }}" {% if forloop.first %}class="active"{% endif %}>{{ section.title }}</a></li>
+              {% endfor %}
+            </ul>
+          </nav>
+        </aside>
+        {% endif %}
+
+        <!-- Blog Content Sections -->
+        <div class="article-content">
+          {% if blog.intro %}
+          <div class="content-section" id="introduction" data-aos="fade-up">
+            <p class="lead">{{ blog.intro|safe }}</p>
+          </div>
+          {% endif %}
+
+          {% for section in sections %}
+          <div class="content-section itinerary-day" id="section-{{ section.id }}" data-aos="fade-up">
+            <div class="row g-4 align-items-stretch">
+              <!-- Text Column -->
+              <div class="col-lg-7 {% if forloop.counter|divisibleby:2 %}order-lg-2{% endif %}">
+                <div class="content-wrapper h-100 d-flex flex-column justify-content-start">
+                  <h2>{{ section.title }}</h2>
+                  <p>{{ section.content|safe }}</p>
+                </div>
+              </div>
+              <!-- Image Column -->
+              {% if section.images %}
+              <div class="col-lg-5 {% if forloop.counter|divisibleby:2 %}order-lg-1{% endif %}">
+                <figure class="m-0 h-100 d-flex flex-column">
+                  <img src="{{ section.images.url }}" alt="{{ section.title }}" class="img-fluid" loading="lazy">
+                  <figcaption class="figurebio">{{ section.title }}</figcaption>
+                </figure>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="article-footer" data-aos="fade-up">
+        <div class="share-article">
+          <h4>Share this article</h4>
+          <div class="share-buttons">
+            <a href="https://twitter.com/intent/tweet?text={{ blog.title }}&url={{ request.build_absolute_uri }}" class="share-button twitter" target="_blank">
+              <i class="bi bi-twitter-x"></i>
+              <span>Share on X</span>
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" class="share-button facebook" target="_blank">
+              <i class="bi bi-facebook"></i>
+              <span>Share on Facebook</span>
+            </a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ request.build_absolute_uri }}" class="share-button linkedin" target="_blank">
+              <i class="bi bi-linkedin"></i>
+              <span>Share on LinkedIn</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="article-tags">
+          <h4>Related Topics</h4>
+          <div class="tags">
+            {% for category in categories %}
+              <a href="{% url 'category_skills:courses'%}?categories[]={{category.id}}" class="tag">{{ category.name }}</a>
+            {% endfor %} 
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section><!-- /Blog Details Section -->
+
+<!-- Blog Comments Section -->
+<section id="blog-comments" class="blog-comments section">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="blog-comments-4">
+      <div class="comments-header">
+        <h3 class="title">Community Feedback</h3>
+        <div class="comments-stats">
+          <span class="count">0</span>
+          <span class="label">Comments</span>
+        </div>
+      </div>
+      <div class="comments-container">
+        <p>No comments yet. Be the first to share your thoughts!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Blog Comment Form Section -->
+<section id="blog-comment-form" class="blog-comment-form section">
+  <div class="container">
+    <form method="post">
+      {% csrf_token %}
+      <h4>Post Comment</h4>
+      <p>Your email address will not be published. Required fields are marked * </p>
+      <div class="row">
+        <div class="col-md-6 form-group">
+          <input name="name" type="text" class="form-control" placeholder="Your Name*" required>
+        </div>
+        <div class="col-md-6 form-group">
+          <input name="email" type="email" class="form-control" placeholder="Your Email*" required>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col form-group">
+          <textarea name="comment" class="form-control" placeholder="Your Comment*" required></textarea>
+        </div>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Post Comment</button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

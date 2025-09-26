@@ -1,0 +1,510 @@
+{% extends 'layout/base.html' %}
+
+{% load static %}
+
+{% block title %} Home Page {% endblock %}
+
+{% block mainsection %}
+    <!-- Courses Hero Section -->
+    <section id="courses-hero" class="courses-hero section light-background">
+
+      <div class="hero-content">
+        <div class="container">
+          <div class="row align-items-center">
+
+            <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+              <div class="hero-text">
+                <h1>Transform Your Future with Expert-Led Online Courses</h1>
+                <p>Discover thousands of high-quality courses designed by industry professionals. Learn at your own pace, gain in-demand skills, and advance your career from anywhere in the world.</p>
+
+                <div class="hero-stats">
+                  <div class="stat-item">
+                    <span class="number purecounter" data-purecounter-start="0" data-purecounter-end="50000" data-purecounter-duration="2"></span>
+                    <span class="label">Students Enrolled</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="number purecounter" data-purecounter-start="0" data-purecounter-end="1200" data-purecounter-duration="2"></span>
+                    <span class="label">Expert Courses</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="number purecounter" data-purecounter-start="0" data-purecounter-end="98" data-purecounter-duration="2"></span>
+                    <span class="label">Success Rate %</span>
+                  </div>
+                </div>
+
+                <div class="hero-buttons">
+                  {% if custom_user %}
+                  <a href="{% url 'category_skills:courses' %}" class="btn btn-primary">Browse Courses</a>
+                  <a href="{% url 'core:about' %}" class="btn btn-outline">Learn More</a>
+                  {% else %}
+                  <a href="" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#openregisterModal">Register</a>
+                  <a href="{% url 'core:about' %}" class="btn btn-outline">Learn More</a>
+                  {% endif %}
+                </div>
+
+                <div class="hero-features">
+                  <div class="feature">
+                    <i class="bi bi-shield-check"></i>
+                    <span>Certified Programs</span>
+                  </div>
+                  <div class="feature">
+                    <i class="bi bi-clock"></i>
+                    <span>Lifetime Access</span>
+                  </div>
+                  <div class="feature">
+                    <i class="bi bi-people"></i>
+                    <span>Expert Instructors</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+              <div class="hero-image">
+                <div class="main-image">
+                  <img src="{% static 'assets/img/education/courses-13.webp' %}" alt="Online Learning" class="img-fluid">
+                </div>
+
+                <div class="floating-cards">
+                  <div class="course-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card-icon">
+                      <i class="bi bi-code-slash"></i>
+                    </div>
+                    <div class="card-content">
+                      <h6>Web Development</h6>
+                      <span>2,450 Students</span>
+                    </div>
+                  </div>
+
+                  <div class="course-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="card-icon">
+                      <i class="bi bi-palette"></i>
+                    </div>
+                    <div class="card-content">
+                      <h6>UI/UX Design</h6>
+                      <span>1,890 Students</span>
+                    </div>
+                  </div>
+
+                  <div class="course-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="card-icon">
+                      <i class="bi bi-graph-up"></i>
+                    </div>
+                    <div class="card-content">
+                      <h6>Digital Marketing</h6>
+                      <span>3,200 Students</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-background">
+        <div class="bg-shapes">
+          <div class="shape shape-1"></div>
+          <div class="shape shape-2"></div>
+          <div class="shape shape-3"></div>
+        </div>
+      </div>
+
+    </section><!-- /Courses Hero Section -->
+
+    <!-- Featured Courses Section -->
+    <section id="featured-courses" class="featured-courses section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Featured Courses</h2>
+        <p>Discover our handpicked selection of Featured Courses designed to equip learners with the most in-demand skills 
+           across business, technology, design, and more. Each course blends expert instruction with practical insights, 
+           ensuring you gain real-world knowledge to advance your career, boost creativity, and achieve professional growth 
+           effectively.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div id="coursesWrapper">
+          <div class="courses-grid">
+            <div class="row" id="skillsContainer">
+              <!-- Courses List will be here displayed by Javascript -->
+            </div>
+          </div>
+        </div>
+
+        <div class="more-courses text-center" data-aos="fade-up" data-aos-delay="500">
+          <a href="{% url 'category_skills:courses' %}" class="btn-more">View All Courses</a>
+        </div>
+
+      </div>
+
+    </section><!-- /Featured Courses Section -->
+
+    <!-- Course Categories Section -->
+    <section id="course-categories" class="course-categories section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Course Categories</h2>
+        <p>Explore our diverse Course Categories covering business, technology, design, science, and the arts. 
+          Each category is carefully structured to meet different learning goals, from building professional skills to 
+          unlocking creativity. With specialized courses, you can choose the right path, gain expertise, and accelerate your 
+          personal or career growth.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+          <div class="row g-4">
+
+            {% for category in categories %}
+              <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6" data-aos="zoom-in" data-aos-delay="{{ forloop.counter0|add:100 }}">
+                <a href="{% url 'category_skills:courses'%}?categories[]={{category.id}}" class="category-card">
+                
+                    <i class="{{ category.icon_class }}"></i>
+               
+                  <h5>{{ category.name }}</h5>
+                  <span class="course-count">{{ category.course_count }} Courses</span>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+
+    </section><!-- /Course Categories Section -->
+
+    <!-- Featured Instructors Section -->
+    <section id="featured-instructors" class="featured-instructors section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Featured Instructors</h2>
+        <p>Meet our Featured Students who showcase dedication, creativity, and excellence in learning. They represent the diverse talent 
+          within our community, excelling across business, technology, design, and more. Their achievements highlight the power of 
+          skill development and inspire others to pursue growth, collaboration, and success through continuous learning.</p>
+      </div><!-- End Section Title -->
+
+        <div class="container" data-aos="fade-up" data-aos-delay="100">
+          <!-- Instructors cards will be displayed here  -->
+            <div id="instructorsContainer" class="row gy-4"></div>
+          <div class="more-courses text-center" data-aos="fade-up" data-aos-delay="500">
+            <a href="{% url 'category_skills:instructors' %}" class="btn-more">View All Instructors</a>
+          </div>
+
+        </div>
+
+
+    </section><!-- /Featured Instructors Section -->
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials section">
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Testimonials</h2>
+        <p>Hear from our learners through authentic Testimonials that reflect their experiences, growth, and success. Students share 
+          how our courses enhanced their skills, boosted confidence, and opened new opportunities. These inspiring stories highlight the real 
+          impact of learning and the value of being part of our supportive educational community.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row">
+          <div class="col-12">
+            <div class="critic-reviews" data-aos="fade-up" data-aos-delay="300">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="critic-review">
+                    <div class="review-quote">"</div>
+                    <div class="stars">
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
+                    </div>
+                    <p>Pellentesque in ipsum id orci porta dapibus. Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus.</p>
+                    <div class="critic-info">
+                      <div class="critic-name">The New York Times</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="critic-review">
+                    <div class="review-quote">"</div>
+                    <div class="stars">
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-half"></i>
+                    </div>
+                    <p>Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Nulla quis lorem ut libero malesuada feugiat.</p>
+                    <div class="critic-info">
+                      <div class="critic-name">Washington Post</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="critic-review">
+                    <div class="review-quote">"</div>
+                    <div class="stars">
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
+                      <i class="bi bi-star-fill"></i>
+                    </div>
+                    <p>Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Vivamus suscipit tortor eget felis porttitor volutpat.</p>
+                    <div class="critic-info">
+                      <div class="critic-name">The Guardian</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="testimonials-container">
+              <div class="swiper testimonials-slider init-swiper" data-aos="fade-up" data-aos-delay="400">
+                <script type="application/json" class="swiper-config">
+                  {
+                    "loop": true,
+                    "speed": 600,
+                    "autoplay": {
+                      "delay": 5000
+                    },
+                    "slidesPerView": 1,
+                    "spaceBetween": 30,
+                    "pagination": {
+                      "el": ".swiper-pagination",
+                      "type": "bullets",
+                      "clickable": true
+                    },
+                    "breakpoints": {
+                      "768": {
+                        "slidesPerView": 2
+                      },
+                      "992": {
+                        "slidesPerView": 3
+                      }
+                    }
+                  }
+                </script>
+
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide">
+                    <div class="testimonial-item">
+                      <div class="stars">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                      </div>
+                      <p>
+                        Proin eget tortor risus. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Nulla quis lorem ut libero malesuada feugiat.
+                      </p>
+                      <div class="testimonial-profile">
+                        <img src="{% static 'assets/img/person/person-f-1.webp' %}" alt="Reviewer" class="img-fluid rounded-circle">
+                        <div>
+                          <h3>Jane Smith</h3>
+                          <h4>Book Enthusiast</h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div><!-- End testimonial item -->
+
+                  <div class="swiper-slide">
+                    <div class="testimonial-item">
+                      <div class="stars">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                      </div>
+                      <p>
+                        Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Cras ultricies ligula sed magna dictum porta. Vestibulum ante ipsum primis in faucibus orci luctus.
+                      </p>
+                      <div class="testimonial-profile">
+                        <img src="{% static 'assets/img/person/person-m-2.webp' %}" alt="Reviewer" class="img-fluid rounded-circle">
+                        <div>
+                          <h3>Michael Johnson</h3>
+                          <h4>Sci-Fi Blogger</h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div><!-- End testimonial item -->
+
+                  <div class="swiper-slide">
+                    <div class="testimonial-item">
+                      <div class="stars">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-half"></i>
+                      </div>
+                      <p>
+                        Quisque velit nisi, pretium ut lacinia in, elementum id enim. Cras ultricies ligula sed magna dictum porta. Donec sollicitudin molestie malesuada.
+                      </p>
+                      <div class="testimonial-profile">
+                        <img src="{% static 'assets/img/person/person-f-3.webp' %}" alt="Reviewer" class="img-fluid rounded-circle">
+                        <div>
+                          <h3>Emily Davis</h3>
+                          <h4>Book Club President</h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div><!-- End testimonial item -->
+
+                  <div class="swiper-slide">
+                    <div class="testimonial-item">
+                      <div class="stars">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                      </div>
+                      <p>
+                        Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Curabitur aliquet quam id dui posuere blandit. Lorem ipsum dolor sit amet, consectetur.
+                      </p>
+                      <div class="testimonial-profile">
+                        <img src="{% static 'assets/img/person/person-m-4.webp' %}" alt="Reviewer" class="img-fluid rounded-circle">
+                        <div>
+                          <h3>Robert Wilson</h3>
+                          <h4>Literary Reviewer</h4>
+                        </div>
+                      </div>
+                    </div>
+                  </div><!-- End testimonial item -->
+
+                </div>
+                <div class="swiper-pagination"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 text-center" data-aos="fade-up">
+            <div class="overall-rating">
+              <div class="rating-number">4.8</div>
+              <div class="rating-stars">
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-half"></i>
+              </div>
+              <p>Based on 230+ reviews</p>
+              <div class="rating-platforms">
+                <span>Goodreads</span>
+                <span>Amazon</span>
+                <span>Barnes &amp; Noble</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section><!-- /Testimonials Section -->
+
+    <!-- Cta Section -->
+    <section id="cta" class="cta section light-background">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row align-items-center">
+
+          <div class="col-lg-6" data-aos="fade-right" data-aos-delay="200">
+            <div class="cta-content">
+              <h2>Transform Your Future with Expert-Led Online Courses</h2>
+              <p>Join thousands of successful learners who have advanced their careers through our comprehensive online education platform.</p>
+
+              <div class="features-list">
+                <div class="feature-item" data-aos="fade-up" data-aos-delay="300">
+                  <i class="bi bi-check-circle-fill"></i>
+                  <span>20+ Expert instructors with industry experience</span>
+                </div>
+                <div class="feature-item" data-aos="fade-up" data-aos-delay="350">
+                  <i class="bi bi-check-circle-fill"></i>
+                  <span>Certificate of completion for every course</span>
+                </div>
+                <div class="feature-item" data-aos="fade-up" data-aos-delay="400">
+                  <i class="bi bi-check-circle-fill"></i>
+                  <span>24/7 access to course materials and resources</span>
+                </div>
+                <div class="feature-item" data-aos="fade-up" data-aos-delay="450">
+                  <i class="bi bi-check-circle-fill"></i>
+                  <span>Interactive assignments and real-world projects</span>
+                </div>
+              </div>
+
+              <div class="cta-actions" data-aos="fade-up" data-aos-delay="500">
+                <a href="category_skills/courses.html" class="btn btn-primary">Browse Courses</a>
+                <a href="enroll.html" class="btn btn-outline">Enroll Now</a>
+              </div>
+
+              <div class="stats-row" data-aos="fade-up" data-aos-delay="400">
+                <div class="stat-item">
+                  <h3><span data-purecounter-start="0" data-purecounter-end="15000" data-purecounter-duration="2" class="purecounter"></span>+</h3>
+                  <p>Students Enrolled</p>
+                </div>
+                <div class="stat-item">
+                  <h3><span data-purecounter-start="0" data-purecounter-end="150" data-purecounter-duration="2" class="purecounter"></span>+</h3>
+                  <p>Courses Available</p>
+                </div>
+                <div class="stat-item">
+                  <h3><span data-purecounter-start="0" data-purecounter-end="98" data-purecounter-duration="2" class="purecounter"></span>%</h3>
+                  <p>Success Rate</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6" data-aos="fade-left" data-aos-delay="300">
+            <div class="cta-image">
+              <img src="{% static 'assets/img/education/courses-4.webp' %}" alt="Online Learning Platform" class="img-fluid">
+              <div class="floating-element student-card" data-aos="zoom-in" data-aos-delay="600">
+                <div class="card-content">
+                  <i class="bi bi-person-check-fill"></i>
+                  <div class="text">
+                    <span class="number">2,450</span>
+                    <span class="label">New Students This Month</span>
+                  </div>
+                </div>
+              </div>
+              <div class="floating-element course-card" data-aos="zoom-in" data-aos-delay="700">
+                <div class="card-content">
+                  <i class="bi bi-play-circle-fill"></i>
+                  <div class="text">
+                    <span class="number">50+</span>
+                    <span class="label">Hours of Content</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section><!-- /Cta Section -->
+
+    <div class="modal fade" id="openregisterModal" tabindex="-1" aria-labelledby="openregisterModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-body">
+            {% include "accounts/register.html" %}
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'assets/js/core/index.js' %}"></script>
+{% endblock %}

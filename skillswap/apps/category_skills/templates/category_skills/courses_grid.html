@@ -1,0 +1,55 @@
+{% load static %}
+<div class="courses-grid">
+  <div class="row">
+      {% for user_skill in page_obj %}
+        <div class="{{ column_classes|default:'col-lg-6 col-md-6' }} course-item pb-4"
+            data-category="{{ user_skill.skill.category.id }}"
+            data-skill-name="{{ user_skill.skill.name|lower }}"
+            data-category-name="{{ user_skill.skill.category.name|lower }}">
+          <div class="course-card">
+            <div class="course-image">
+              {% if user_skill.skill.image %}
+                <img src="{{ user_skill.skill.image.url }}" alt="{{ user_skill.skill.name }}" class="img-fluid">
+              {% else %}
+                <img src="{% static 'assets/img/education/courses-3.webp' %}" alt="{{ user_skill.skill.name }}" class="img-fluid">
+              {% endif %}
+              <div class="course-badge">{{ user_skill.skill.category.name }}</div>
+            </div>
+            <div class="course-content">
+              <div class="course-meta">
+                <span class="category">{{ user_skill.skill.category.name }}</span>
+                <span class="level">{{ user_skill.skill.get_level_display }}</span>
+              </div>
+              <h3><a href="{% url 'category_skills:course_details' user_skill.user.username user_skill.skill.slug %}">{{ user_skill.skill.name }}</a></h3>
+              <p>{{ user_skill.skill.description|truncatewords:20 }}</p>
+              <div class="course-stats">
+                <div class="stat"><i class="bi bi-calendar"></i>
+                  <span>Added {{ user_skill.skill.created_at|date:"M d, Y" }}</span>
+              </div>
+            <div class="stat"><i class="bi bi-people"></i>
+              <span>Learn this skill</span>
+            </div>
+          </div>
+          <p class="teacher-name mt-3 p-2 bg-light rounded d-inline-block shadow-sm">
+            <i class="bi bi-person text-primary"></i>
+            <strong>Student:<a href="{% url 'category_skills:instructor_profile' user_skill.user.username %}">{{ user_skill.user.first_name }} {{ user_skill.user.last_name }}</a></strong>
+          </p>
+          <a href="{% url 'category_skills:course_details' user_skill.user.username  user_skill.skill.slug %}" class="btn-course">Course Details -> </a>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <div class="col-12">
+      <div class="text-center py-5">
+        <h4>No skills available at the moment</h4>
+        <p>Please check back later for new courses and skills.</p>
+      </div>
+    </div>
+  {% endfor %}
+
+  </div>
+</div>
+
+
+{% include "include/pagination.html" %}
+

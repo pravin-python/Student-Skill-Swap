@@ -1,0 +1,107 @@
+<div class="container">
+          <div class="row justify-content-center">
+            <div class="col-12 col-lg-10">
+              <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-center align-items-center mb-4 position-relative">
+                      <h3 class="mb-0 flex-grow-1 text-center">Register</h3>
+                      <button type="button" class="btn-close position-absolute end-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                  <form id="registerForm" method="POST" enctype="multipart/form-data" data-url="{% url 'accounts:register' %}">
+                    {% csrf_token %}
+
+                    <!-- Username -->
+                    <div class="mb-3">
+                      <label class="form-label">Username</label>
+                      <input type="text" name="username" class="form-control">
+                      
+                    </div>
+
+                    <!-- First & Last Name -->
+                    <div class="row">
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">First Name</label>
+                        <input type="text" name="first_name" class="form-control">
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" name="last_name" class="form-control">
+                      </div>
+                    </div>
+
+                    <!-- Gender -->
+                    <div class="mb-3" id="gender">
+                      <label class="form-label d-block">Gender</label>
+                      
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                      <label class="form-label">Personal Email</label>
+                      <input type="email" name="personal_email" class="form-control">
+                    </div>
+
+                    <!-- Profile Picture -->
+                    <div class="mb-3">
+                      <label class="form-label">Profile Picture</label>
+                      <input type="file" name="profile_pic" class="form-control">
+                    </div>
+
+                    <!-- University -->
+                    <div class="mb-3">
+                      <label class="form-label">University</label>
+                      <select name="university_name" id="university_name" class="form-select">
+                        <option value="" disabled selected>Select University</option>
+                      </select>
+                    </div>
+
+                    <!-- Department -->
+                    <div class="mb-3">
+                      <label class="form-label">Department</label>
+                      <select name="department" id="department" class="form-select">
+                        <option value="" disabled selected>Select Department</option>
+                      </select>
+                    </div>
+
+                    <!-- Branch -->
+                    <div class="mb-3">
+                      <label class="form-label">Branch</label>
+                      <select name="branch" id="branch" class="form-select">
+                        <option value="" disabled selected>Select Branch</option>
+                      </select>
+                    </div>
+
+                    <!-- Year -->
+                    <div class="mb-3">
+                      <label class="form-label">Year</label>
+                      <select name="year" id="year" class="form-select">
+                        <option value="" disabled selected>Select Year</option>
+                      </select>
+                    </div>
+
+                    <!-- Bio -->
+                    <div class="mb-3">
+                      <label class="form-label">Bio</label>
+                      <textarea name="bio" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="mb-3">
+                      <label class="form-label">Password</label>
+                      <input type="password" name="current_password" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">Confirm Password</label>
+                      <input type="password" name="confirm_password" class="form-control">
+                    </div>
+
+                    <div class="text-center mt-4">
+                      <button type="submit" class="btn btn-primary btn-lg">Register</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>  

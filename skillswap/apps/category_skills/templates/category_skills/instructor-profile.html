@@ -1,0 +1,200 @@
+{% extends "layout/base.html" %}
+{% load static %}
+
+{% block title %} {{ instructor.first_name }} {{ instructor.last_name }} | Skill Swap {% endblock %}
+
+{% block mainsection %}
+<!-- Page Title -->
+<div class="page-title light-background">
+  <div class="container d-lg-flex justify-content-between align-items-center">
+    <h1 class="mb-2 mb-lg-0">Instructor Profile</h1>
+    <nav class="breadcrumbs">
+      <ol>
+        <li><a href="{% url 'core:home' %}">Home</a></li>
+        <li><a href="{% url 'category_skills:instructors' %}">Instructors</a></li>
+        <li class="current">{{ instructor.first_name }} {{ instructor.last_name }}</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+<!-- End Page Title -->
+
+<!-- Instructor Profile Section -->
+<section id="instructor-profile" class="instructor-profile section">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="instructor-hero-banner" data-aos="zoom-out" data-aos-delay="200">
+          <div class="hero-background">
+            <img src="{% static 'assets/img/education/showcase-4.webp' %}" alt="Background" class="img-fluid">
+            <div class="hero-overlay"></div>
+          </div>
+          <div class="hero-content">
+            <div class="instructor-avatar">
+              {% if instructor.profile_pic %}
+                <img src="{{ instructor.profile_pic.url }}" alt="{{ instructor.first_name }}" class="img-fluid">
+              {% else %}
+                <img src="{% static 'assets/img/default-avatar.webp' %}" alt="{{ instructor.first_name }}" class="img-fluid">
+              {% endif %}
+              <div class="status-badge">
+                <i class="bi bi-patch-check-fill"></i>
+                <span>Verified</span>
+              </div>
+            </div>
+            <div class="instructor-info">
+              <h2>{{ instructor.first_name }} {{ instructor.last_name }}</h2>
+              <p class="title">{{ instructor.department.name|default:"Student" }}</p>
+              <div class="credentials">
+                <span class="credential"> <i class="bi bi-award"></i> {{ skills_count }} Skills</span>
+              </div>
+              <div class="contact-actions">
+                <a href="mailto:{{ instructor.personal_email }}" class="btn-contact">
+                  <i class="bi bi-envelope"></i>
+                  Contact Instructor
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="row gy-5 mt-4">
+      <div class="col-lg-8">
+        <div class="content-tabs" data-aos="fade-right" data-aos-delay="300">
+
+          <ul class="nav nav-tabs custom-tabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#about" type="button" role="tab">
+                <i class="bi bi-person"></i> About
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" data-bs-toggle="tab" data-bs-target="#courses" type="button" role="tab">
+                <i class="bi bi-book"></i> Courses
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">
+                <i class="bi bi-star"></i> Reviews
+              </button>
+            </li>
+          </ul>
+
+          <div class="tab-content custom-tab-content">
+            <!-- About -->
+            <div class="tab-pane fade show active" id="about" role="tabpanel">
+              <div class="about-content">
+                <div class="bio-section">
+                  <h4>Professional Biography</h4>
+                  <p>{{ instructor.bio|default:"This instructor has not added a biography yet." }}</p>
+                </div>
+
+                <div class="expertise-grid">
+                  <h4>Core Skills</h4>
+                  <div class="skills-grid">
+                    {% for skill in skills %}
+                      <div class="skill-item">
+                        <i class="bi bi-star"></i>
+                        <span>{{ skill.name }}</span>
+                      </div>
+                    {% empty %}
+                      <p>No skills added yet.</p>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          <!-- Courses -->
+           <div class="tab-pane fade" id="courses" role="tabpanel">
+             {% include "category_skills/instructors_course_grid.html" %}
+           </div>
+           
+            <!-- Reviews -->
+            <div class="tab-pane fade" id="reviews" role="tabpanel">
+              <div class="reviews-container">
+                {% for review in reviews %}
+                  <div class="review-card">
+                    <div class="review-header">
+                      {% if review.learner.profile_pic %}
+                        <img src="{{ review.learner.profile_pic.url }}" alt="{{ review.learner.first_name }}" class="reviewer-avatar">
+                      {% else %}
+                        <img src="{% static 'assets/img/default-avatar.webp' %}" alt="{{ review.learner.first_name }}" class="reviewer-avatar">
+                      {% endif %}
+                      <div class="reviewer-info">
+                        <h6>{{ review.learner.first_name }} {{ review.learner.last_name }}</h6>
+                        <p>{{ review.learner.department.name|default:"Student" }}</p>
+                        <div class="review-rating">
+                          {% for i in "12345"|make_list %}
+                            {% if forloop.counter <= review.learner_rating %}
+                              <i class="bi bi-star-fill"></i>
+                            {% else %}
+                              <i class="bi bi-star"></i>
+                            {% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                    <p>"{{ review.learner_feedback }}"</p>
+                  </div>
+                {% empty %}
+                  <p>No reviews available yet.</p>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-lg-4">
+        <div class="sidebar-widgets" data-aos="fade-left" data-aos-delay="300">
+
+          <div class="stats-widget">
+            <h4>Teaching Impact</h4>
+            <div class="stats-grid">
+              <div class="stat-box">
+                <div class="stat-icon"><i class="bi bi-people"></i></div>
+                <div class="stat-content">
+                  <h5>{{ skills_count }}</h5>
+                  <p>Total Courses</p>
+                </div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-icon"><i class="bi bi-award"></i></div>
+                <div class="stat-content">
+                  <h5>{{ reviews.count }}</h5>
+                  <p>Reviews</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-widget">
+            <h4>Get in Touch</h4>
+            <div class="contact-info">
+              <div class="contact-item">
+                <i class="bi bi-envelope"></i>
+                <span>{{ instructor.personal_email }}</span>
+              </div>
+              <div class="contact-item">
+                <i class="bi bi-geo-alt"></i>
+                <span>{{ instructor.university_name.name|default:"Not Provided" }}</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'assets/js/category_skills/instructor-detail.js' %}"></script>
+{% endblock %}

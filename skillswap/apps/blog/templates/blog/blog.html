@@ -1,0 +1,104 @@
+{% extends "layout/base.html" %}
+{% load static %}
+
+{% block title %} Skill Swap | Blog Page {% endblock %}
+
+{% block custom_css %}
+<link href="{% static 'assets/css/blog.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block mainsection %}
+
+<!-- Page Title -->
+<div class="page-title light-background">
+  <div class="container d-lg-flex justify-content-between align-items-center">
+    <h1 class="mb-2 mb-lg-0">Blogs</h1>
+    <nav class="breadcrumbs">
+      <ol>
+        <li><a href="{% url 'core:home' %}">Home</a></li>
+        <li class="current">Blog</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+<!-- End Page Title -->
+
+<!-- Blog Hero Section (Featured Blogs) -->
+<section id="blog-hero" class="blog-hero section">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="fw-bold mb-0">Featured Blog</h2>
+      <h3 class="fw-bold mb-0">Last Featured Blog</h3>
+    </div>
+
+    <div class="blog-grid d-flex gap-3" id="featuredBlogs"></div>
+  </div>
+</section>
+<!-- End Blog Hero Section -->
+
+<!-- Search & Blog Grid -->
+<section id="courses-2" class="courses-2 section">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="course-filters" data-aos="fade-right" data-aos-delay="100">
+          <h4 class="filter-title">Filter Courses</h4>
+          <div class="filter-group">
+            <h5>Category</h5>
+            <div class="filter-options">
+              <label class="filter-checkbox">
+                <input type="checkbox" checked data-category="all" value="all" name="category">
+                <span class="checkmark"></span>
+                All Categories
+              </label>
+              {% for category in categories %}
+              <label class="filter-checkbox">
+                <input type="checkbox" data-category="{{ category.id }}" value="{{ category.id }}" name="category">
+                <span class="checkmark"></span>
+                {{ category.name }}
+              </label>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-9">
+        <div class="courses-header" data-aos="fade-left" data-aos-delay="100">
+          <div class="search-box">
+            <i class="bi bi-search"></i>
+            <input type="text" id="searchInput" placeholder="Search Blogs...">
+          </div>
+          <div class="sort-dropdown">
+            <select>
+              <option>Sort by: Newest First</option>
+              <option>Oldest First</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="blogsWrapper">
+          <section id="blog-posts" class="blog-posts section pt-0">
+            <div class="section-header mb-3">
+              <h2 class="fw-bold">Recent Blogs</h2>
+            </div>
+            <div class="row gy-4" id="recentBlogsGrid"></div>
+            <!-- Spinner always stays at bottom -->
+            <div id="infiniteSpinner">
+              <div class="spinner-border text-success" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'assets/js/blog/blog.js' %}"></script>
+{% endblock %}

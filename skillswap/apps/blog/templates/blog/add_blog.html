@@ -1,0 +1,110 @@
+{% extends "layout/base.html" %}
+{% load static %}
+
+{% block title %}Add New Blog{% endblock %}
+
+{% block mainsection %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0"><i class="bi bi-journal-plus"></i> Create a New Blog</h4>
+                    <a href="{% url 'blog:blog-profile-view' %}" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-arrow-left"></i> Back to My Blogs
+                    </a>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data" id="add-blog-form">
+                        {% csrf_token %}
+
+                        <!-- Blog Title -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Blog Title</label>
+                            <input type="text" name="title" class="form-control" placeholder="Enter blog title" required>
+                        </div>
+
+                        <!-- Blog Category -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Category</label>
+                            <select name="category" class="form-select" required>
+                                <option value="" disabled selected>-- Select Category --</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Blog Intro -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Introduction</label>
+                            <textarea name="intro" id="intro-editor"></textarea>
+                        </div>
+
+                        <!-- Intro unified upload (classification checkboxes shown for these) -->
+                        <div class="mb-3 card">
+                            <div class="card-body">
+                                <label class="form-label fw-bold">Upload Images for Intro (choose roles)</label>
+                                <input type="file" id="intro-images" name="intro_images_files[]" class="form-control intro-images" accept="image/*" multiple>
+                                <small class="text-muted d-block">Upload images and mark each image as Thumbnail / Base / Small (checkboxes).</small>
+                                <div class="image-preview-container mb-4 mt-3"></div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <h5 class="mb-3"><i class="bi bi-layers"></i> Blog Sections</h5>
+
+                        <!-- Blog Sections -->
+                        <div id="sections-container">
+                            <div class="card border mb-3 section-item">
+                                <div class="card-body">
+                                    <div class="mb-2">
+                                        <label class="form-label">Section Title</label>
+                                        <input type="text" name="section_title[]" class="form-control" placeholder="Enter section title">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label">Content</label>
+                                        <textarea name="section_content[]" class="form-control rich-editor" rows="4" placeholder="Write section content..."></textarea>
+                                    </div>
+                                    <!-- Section image (no classification UI) -->
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Upload Section Image</label>
+                                        <input type="file" class="form-control section-image-input" name="section_images[]" accept="image/*">
+                                    </div>
+                                    <div class="image-preview-container mb-4"></div>
+                                    
+                                    <div class="mb-2">
+                                        <label class="form-label">Order</label>
+                                        <input type="number" name="section_order[]" class="form-control" value="0" min="0">
+                                    </div>
+
+                                    <button type="button" class="btn btn-sm btn-outline-danger remove-section">
+                                        <i class="bi bi-trash"></i> Remove Section
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-outline-success btn-sm mb-3" id="add-section">
+                            <i class="bi bi-plus-circle"></i> Add Another Section
+                        </button>
+
+                        <div class="d-flex justify-content-end gap-2 mt-3">
+                             <a href="{% url 'blog:blog-profile-view' %}" class="btn btn-outline-secondary btn-sm">
+                                <i class="bi bi-arrow-left"></i> Back to My Blogs
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Publish Blog
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'assets/js/blog/blog-profile.js' %}"></script>
+{% endblock %}
