@@ -9093,7 +9093,7 @@ body.dark-theme .filter-courses,
 body.dark-theme .filters,
 body.dark-theme .form-check,
 body.dark-theme .form-control {
-  background-color: #1e1e1e !important;
+  background-color: #121212 !important;
   color: #e0e0e0 !important;
   border: 1px solid #333 !important;
 }
@@ -9102,7 +9102,7 @@ body.dark-theme .form-control {
 body.dark-theme .blog-card,
 body.dark-theme .course-card,
 body.dark-theme .card {
-  background-color: #1e1e1e !important;
+  background-color: #121212 !important;
   color: #e0e0e0 !important;
   border: 1px solid #333 !important;
 }
@@ -9118,7 +9118,7 @@ body.dark-theme .blog-card .meta {
 /* Search bar */
 body.dark-theme input[type="text"],
 body.dark-theme input[type="search"] {
-  background-color: #1e1e1e !important;
+  background-color: #121212 !important;
   color: #fff !important;
   border: 1px solid #444 !important;
 }
@@ -9126,7 +9126,7 @@ body.dark-theme input[type="search"] {
 /* Dropdown & sort */
 body.dark-theme .dropdown-menu,
 body.dark-theme .btn {
-  background-color: #1f1f1f !important;
+  background-color: #121212  !important;
   color: #fff !important;
   border: 1px solid #333 !important;
 }
@@ -9162,6 +9162,11 @@ body.dark-theme .instructor-card{
   background-color: #121212 !important;
   color: #e0e0e0 !important;
 }
+body.dark-theme .custom-tabs .nav-link {
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
+}
+
 body.dark-theme .custom-tab-content{
   background-color: #121212 !important;
   color: #e0e0e0 !important;
@@ -9235,10 +9240,12 @@ body.dark-theme .blog-comment-form form {
   color: #fff !important;
   border: 1px solid #333 !important;
 }
-body.dark-theme .courses-2 .course-filters .filter-checkbox {
+body.dark-theme .courses-2 .course-filters .filter-checkbox , body.dark-theme .universities .course-filters .filter-checkbox
+{
   color: #fff !important;
 }
-body.dark-theme .courses-2 .course-filters .filter-checkbox:hover{
+body.dark-theme .courses-2 .course-filters .filter-checkbox:hover , body.dark-theme .universities .course-filters .filter-checkbox:hover
+{
   color: var(--accent-color) !important;
 }
 body.dark-theme .course-filters {
@@ -9277,6 +9284,16 @@ body.dark-theme .course-details .course-nav-tabs .tab-content .reviews-summary{
 body.dark-theme .course-details .course-nav-tabs .tab-content .reviews-list .review-item {
   background-color: #121212 !important;
   color: #fff !important
+}
+body.dark-theme .contact .contact-form-container .php-email-form .social-links a{
+  background-color: #121212 !important;
+  border: 1px solid #333 !important;
+}
+body.dark-theme .contact .contact-form-container .php-email-form .social-links a:hover{
+  background-color: var(--accent-color) !important;
+}
+body.dark-theme .courses-2 .courses-grid .course-content .btn-course, body.dark-theme .universities .courses-grid .course-content .btn-course{
+  color: #e0e0e0 !important;
 }
 /*--------------------------------------------------------------
 # Starter Section Section
