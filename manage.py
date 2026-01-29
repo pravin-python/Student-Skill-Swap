@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 
 def main():
     """Run administrative tasks."""
-    # .environment file load karo
-    load_dotenv(".environment")
+    # .env file load karo
+    load_dotenv(".env")
     
     # Correct environment set
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', os.getenv('DJANGO_SETTINGS_MODULE'))
