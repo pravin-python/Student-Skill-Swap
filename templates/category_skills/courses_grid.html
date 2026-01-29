@@ -1,79 +1,55 @@
 {% load static %}
-
 <div class="courses-grid">
   <div class="row">
-    {% for skill in skills %}
-      <div class="col-lg-6 col-md-6 course-item"
-           data-category="{{ skill.category.id }}"
-           data-skill-name="{{ skill.name|lower }}"
-           data-category-name="{{ skill.category.name|lower }}">
-        <div class="course-card">
-          <div class="course-image">
-            {% if skill.image %}
-              <img src="{{ skill.image.url }}" alt="{{ skill.name }}" class="img-fluid">
-            {% else %}
-              <img src="{% static 'assets/img/education/courses-3.webp' %}" alt="{{ skill.name }}" class="img-fluid">
-            {% endif %}
-            <div class="course-badge">{{ skill.category.name }}</div>
-          </div>
-          <div class="course-content">
-            <div class="course-meta">
-              <span class="category">{{ skill.category.name }}</span>
-              <span class="level">All Levels</span>
+      {% for user_skill in page_obj %}
+        <div class="{{ column_classes|default:'col-lg-6 col-md-6' }} course-item pb-4"
+            data-category="{{ user_skill.skill.category.id }}"
+            data-skill-name="{{ user_skill.skill.name|lower }}"
+            data-category-name="{{ user_skill.skill.category.name|lower }}">
+          <div class="course-card">
+            <div class="course-image">
+              {% if user_skill.skill.image %}
+                <img src="{{ user_skill.skill.image.url }}" alt="{{ user_skill.skill.name }}" class="img-fluid">
+              {% else %}
+                <img src="{% static 'assets/img/education/courses-3.webp' %}" alt="{{ user_skill.skill.name }}" class="img-fluid">
+              {% endif %}
+              <div class="course-badge">{{ user_skill.skill.category.name }}</div>
             </div>
-            <h3>{{ skill.name }}</h3>
-            <p>{{ skill.description|truncatewords:20 }}</p>
-            <div class="course-stats">
-              <div class="stat"><i class="bi bi-calendar"></i>
-                <span>Added {{ skill.created_at|date:"M d, Y" }}</span>
+            <div class="course-content">
+              <div class="course-meta">
+                <span class="category">{{ user_skill.skill.category.name }}</span>
+                <span class="level">{{ user_skill.skill.get_level_display }}</span>
               </div>
-              <div class="stat"><i class="bi bi-people"></i>
-                <span>Learn this skill</span>
+              <h3><a href="{% url 'category_skills:course_details' user_skill.user.username user_skill.skill.slug %}">{{ user_skill.skill.name }}</a></h3>
+              <p>{{ user_skill.skill.description|truncatewords:20 }}</p>
+              <div class="course-stats">
+                <div class="stat"><i class="bi bi-calendar"></i>
+                  <span>Added {{ user_skill.skill.created_at|date:"M d, Y" }}</span>
               </div>
+            <div class="stat"><i class="bi bi-people"></i>
+              <span>Learn this skill</span>
             </div>
-            <p class="teacher-name mt-3 p-2 bg-light rounded d-inline-block shadow-sm">
-              <i class="bi bi-person text-primary"></i>
-              <strong>Student:</strong> {{ skill.teacher.first_name }} {{ skill.teacher.last_name }}
-            </p>
-            <a href="{% url 'core:enroll' %}" class="btn-course">Start Learning</a>
           </div>
+          <p class="teacher-name mt-3 p-2 bg-light rounded d-inline-block shadow-sm">
+            <i class="bi bi-person text-primary"></i>
+            <strong>Student:<a href="{% url 'category_skills:instructor_profile' user_skill.user.username %}">{{ user_skill.user.first_name }} {{ user_skill.user.last_name }}</a></strong>
+          </p>
+          <a href="{% url 'category_skills:course_details' user_skill.user.username  user_skill.skill.slug %}" class="btn-course">Course Details -> </a>
         </div>
       </div>
-    {% empty %}
-      <div class="col-12">
-        <div class="text-center py-5">
-          <h4>No skills available at the moment</h4>
-          <p>Please check back later for new courses and skills.</p>
-        </div>
+    </div>
+  {% empty %}
+    <div class="col-12">
+      <div class="text-center py-5">
+        <h4>No skills available at the moment</h4>
+        <p>Please check back later for new courses and skills.</p>
       </div>
-    {% endfor %}
+    </div>
+  {% endfor %}
+
   </div>
 </div>
 
-{% if skills and skills.paginator.num_pages > 1 %}
-<div class="pagination-wrapper" data-aos="fade-up" data-aos-delay="300">
-  <nav aria-label="Courses pagination">
-    <ul class="pagination justify-content-center">
-      {% if skills.has_previous %}
-        <li class="page-item"><a class="page-link" href="?page={{ skills.previous_page_number }}"><i class="bi bi-chevron-left"></i></a></li>
-      {% else %}
-        <li class="page-item disabled"><a class="page-link"><i class="bi bi-chevron-left"></i></a></li>
-      {% endif %}
 
-      {% for num in skills.paginator.page_range %}
-        {% if skills.number == num %}
-          <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
-        {% else %}
-          <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
-        {% endif %}
-      {% endfor %}
+{% include "include/pagination.html" %}
 
-      {% if skills.has_next %}
-        <li class="page-item"><a class="page-link" href="?page={{ skills.next_page_number }}"><i class="bi bi-chevron-right"></i></a></li>
-      {% else %}
-        <li class="page-item disabled"><a class="page-link"><i class="bi bi-chevron-right"></i></a></li>
-      {% endif %}
-    </ul>
-  </nav>
-</div>
-{% endif %}

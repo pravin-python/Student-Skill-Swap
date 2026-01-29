@@ -15,20 +15,15 @@ from pathlib import Path
 from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
-load_dotenv(BASE_DIR / ".environment")
+load_dotenv(BASE_DIR / ".env")
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-46x25i^-wi8@1ygju3aktrc0yh+s2hzxiuie0rxi28%y@c-*@8'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
-
+# Generate a new key with: python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # Application definition
 
@@ -43,6 +38,10 @@ INSTALLED_APPS = [
     'apps.core',
     'apps.category_skills',
     'apps.university',
+    'apps.notifications',
+    'rest_framework',
+    'ckeditor',
+    'apps.blog',
 ]
 
 MIDDLEWARE = [
@@ -117,6 +116,9 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

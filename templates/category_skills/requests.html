@@ -1,0 +1,230 @@
+{% extends "layout/base.html" %}
+{% load static %}
+
+{% block title %}My Requests - {{ custom_user.username }}{% endblock %}
+
+{% block mainsection %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- Page Header -->
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="bi bi-send"></i> Request Management</h2>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Requests</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="col-12 mb-4">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-1">{{ stats.total_sent }}</h4>
+                                    <p class="mb-0">Requests Sent</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="bi bi-send-fill fs-2"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-1">{{ stats.total_received }}</h4>
+                                    <p class="mb-0">Requests Received</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="bi bi-inbox-fill fs-2"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-1">{{ stats.pending_received }}</h4>
+                                    <p class="mb-0">Pending Response</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="bi bi-clock-fill fs-2"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4 class="mb-1">{{ stats.accepted_sent|add:stats.accepted_received }}</h4>
+                                    <p class="mb-0">Total Accepted</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="bi bi-check-circle-fill fs-2"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="col-12">
+            <ul class="nav nav-tabs" id="requestTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="received-tab" data-bs-toggle="tab" data-bs-target="#received" type="button" role="tab">
+                        <i class="bi bi-inbox"></i> Received Requests ({{ stats.total_received }})
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="sent-tab" data-bs-toggle="tab" data-bs-target="#sent" type="button" role="tab">
+                        <i class="bi bi-send"></i> Sent Requests ({{ stats.total_sent }})
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="col-12">
+            <div class="tab-content" id="requestTabContent">
+                
+                <!-- Received Requests Tab -->
+                <div class="tab-pane fade show active" id="received" role="tabpanel">
+                   <div id="received-container">
+                    {% include "category_skills/received_requests_grid.html" %}
+                    </div>
+                </div>
+
+                <!-- Sent Requests Tab -->
+                <div class="tab-pane fade" id="sent" role="tabpanel">
+                    <div id="sent-container">
+                        {% include "category_skills/sent_requests_grid.html" %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Session Creation Modal -->
+<div class="modal fade" id="sessionModal" tabindex="-1" aria-labelledby="sessionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sessionModalLabel">
+                    <i class="bi bi-calendar-plus"></i> Create Learning Session
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="sessionForm">
+                    {% csrf_token %}
+                    <input type="hidden" id="sessionRequestId" name="request_id">
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="sessionTitle" class="form-label">Session Title <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="sessionTitle" name="title" required maxlength="200" placeholder="e.g., JavaScript Basics - Session 1">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="sessionType" class="form-label">Session Type</label>
+                            <select class="form-select" id="sessionType" name="session_type">
+                                <option value="O">Online</option>
+                                <option value="I">In-Person</option>
+                                <option value="H">Hybrid</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label for="sessionLocation" class="form-label">Location/Platform</label>
+                            <input type="text" class="form-control" id="sessionLocation" name="location" maxlength="300" placeholder="e.g., Zoom, Google Meet, Library Room 101">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="sessionDuration" class="form-label">Duration (minutes)</label>
+                            <input type="number" class="form-control" id="sessionDuration" name="duration_minutes" value="60" min="15" max="480">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="sessionDate" class="form-label">Scheduled Date & Time <span class="text-danger">*</span></label>
+                        <input type="datetime-local" class="form-control" id="sessionDate" name="scheduled_date" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="sessionDescription" class="form-label">Session Description</label>
+                        <textarea class="form-control" id="sessionDescription" name="description" rows="3" maxlength="1000" placeholder="Describe what will be covered in this session..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="createSession()">
+                    <i class="bi bi-calendar-plus"></i> Create Session
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Rejection/Cancellation Reason Modal -->
+<div class="modal fade" id="rejectionModal" tabindex="-1" aria-labelledby="rejectionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rejectionModalTitle">
+                    <i class="bi bi-exclamation-triangle"></i> Action Required
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="rejectionForm">
+                    {% csrf_token %}
+                    <input type="hidden" id="rejectionRequestId" name="request_id">
+                    <input type="hidden" id="rejectionType" name="action_type">
+                    
+                    <div class="mb-3">
+                        <label for="rejectionReason" class="form-label">Reason <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="rejectionReason" name="reason" rows="4" required 
+                                  placeholder="Please provide a reason for this action..." maxlength="500"></textarea>
+                        <div class="form-text">This will be shared with the other party.</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" onclick="submitRejection()">
+                    <i class="bi bi-check-lg"></i> Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'assets/js/category_skills/requests.js' %}"></script>
+{% endblock %}

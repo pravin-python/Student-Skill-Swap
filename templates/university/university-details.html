@@ -1,0 +1,176 @@
+{% extends "layout/base.html" %}
+{% load static %}
+
+{% block title %} {{ university.name }} - Details {% endblock %}
+
+{% block mainsection %}
+<!-- Page Title -->
+<div class="page-title light-background">
+  <div class="container d-lg-flex justify-content-between align-items-center">
+    <h1 class="mb-2 mb-lg-0">{{ university.name }} Details</h1>
+    <nav class="breadcrumbs">
+      <ol>
+        <li><a href="{% url 'core:home' %}">Home</a></li>
+        <li><a href="{% url 'university:university' %}">University</a></li>
+        <li class="current">{{ university.name }}</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+<!-- End Page Title -->
+
+<!-- Program Profile Section -->
+<section id="program-profile" class="program-profile section">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+    <!-- Hero Banner (Image 1) -->
+    <div class="row mb-4">
+      <div class="col-lg-12">
+        <div class="program-hero-banner" data-aos="zoom-out" data-aos-delay="200">
+          <div class="hero-background">
+            {% if hero_image %}
+              <img src="{{ hero_image.image.url }}" alt="{{ university.name }} - Hero" class="img-fluid w-100">
+            {% else %}
+              <img src="{% static 'assets/img/education/default_university.jpg' %}" alt="Default" class="img-fluid w-100">
+            {% endif %}
+          </div>
+
+          <div class="hero-content">
+            <div class="program-info">
+              <h2>{{ university.name }}</h2>
+              <p class="title">{{ university.description|truncatewords:25 }}</p>
+              <div class="credentials">
+                <span class="credential">{{ levels.count }} Levels Offered</span>
+                <span class="credential">{{ departments.count }} Departments</span>
+              </div>
+              <div class="contact-actions">
+                <a href="#overview" class="btn-contact">
+                  <i class="fa-solid fa-user-graduate"></i>
+                  Explore More
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs + Side Image -->
+    <div class="row gy-5">
+      <div class="col-lg-8">
+        <div class="content-tabs" data-aos="fade-right" data-aos-delay="300">
+
+          <ul class="nav nav-tabs custom-tabs" role="tablist">
+            <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#overview">Overview</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#curriculum">Departments</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#faculty">Levels</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#students">Students</button></li>
+          </ul>
+
+          <div class="tab-content custom-tab-content">
+            <!-- Overview -->
+            <div class="tab-pane fade show active" id="overview">
+              <h4>About {{ university.name }}</h4>
+              <p>{{ university.description }}</p>
+
+              <h4>At a Glance</h4>
+              <ul>
+                <li><strong>Established:</strong> {{ university.established_year }}</li>
+                <li><strong>Country:</strong> {{ country.name }}</li>
+                <li><strong>State:</strong> {{ state.name }}</li>
+                <li><strong>City:</strong> {{ city.name }}</li>
+              </ul>
+            </div>
+
+            <!-- Departments -->
+            <div class="tab-pane fade" id="curriculum" role="tabpanel">
+              {% include "university/university_department.html" %}
+            </div>
+            
+            <!-- Levels -->
+            <div class="tab-pane fade" id="faculty">
+              <h4>Levels Offered</h4>
+              <ul class="levels-list">
+                {% for level in levels %}
+                  <li>{{ level.name }}</li>
+                {% empty %}
+                  <p>No levels available.</p>
+                {% endfor %}
+              </ul>
+            </div>
+
+            <!-- Students Tab Section -->
+            
+            <div class="tab-pane fade" id="students" role="tabpanel">
+              <div id="instructorsWrapper">
+                {% include "university/university_instructors_grid.html" %}
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+      <!-- 2nd Image beside Tabs -->
+      <div class="col-lg-4 d-flex align-items-center" data-aos="fade-left" data-aos-delay="300">
+        {% if tab_side_image %}
+          <img src="{{ tab_side_image.image.url }}" alt="{{ university.name }} - Side Image" class="img-fluid rounded shadow">
+        {% else %}
+        <img src="{% static 'assets/img/education/showcase-4.webp' %}" alt="Default" class="img-fluid w-100">
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Below Tabs (3rd Image + Sidebar) -->
+    <div class="row gy-5 mt-4">
+      <div class="col-lg-8" data-aos="fade-right" data-aos-delay="300">
+        {% if below_tab_image %}
+          <img src="{{ below_tab_image.image.url }}" alt="{{ university.name }} - Below Tab Image" class="img-fluid rounded shadow w-100">
+        {% else %}
+        <img src="{% static 'assets/img/education/default_canteen.jpg' %}" alt="Default" class="img-fluid w-100">
+        {% endif %}
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-lg-4">
+        <div class="sidebar-widgets" data-aos="fade-left" data-aos-delay="300">
+          <div class="stats-widget">
+            <h4>Quick Stats</h4>
+            <ul>
+              <li><strong>Departments:</strong> {{ departments.count }}</li>
+              <li><strong>Levels:</strong> {{ levels.count }}</li>
+              <li><strong>Established:</strong> {{ university.established_year }}</li>
+              <li><strong>Location:</strong> {{ city.name }}, {{ state.name }}, {{ country.name }}</li>
+            </ul>
+          </div>
+
+          <div class="contact-widget" id="apply">
+            <h4>Ready to Apply?</h4>
+            <p>Take the next step toward your future at {{ university.name }}.</p>
+            <a href="https://www.uchicago.edu/en" class="btn btn-primary w-100">Want to Explore -> </a>
+          </div>
+        </div>
+      </div>
+
+       <!-- Playground Section (4th Image) -->
+
+    <div class="row gy-5 mt-5">
+      <div class="col-lg-12 text-center" data-aos="fade-up" data-aos-delay="300">
+        <h4 class="mb-3">Campus Playground</h4>
+          {% if playground_image %}
+        <img src="{{ playground_image.image.url }}" alt="{{ university.name }} - Playground" class="img-fluid rounded shadow-lg w-100">
+        {% else %}
+        <img src="{% static 'assets/img/education/default_playground.jpg' %}" alt="Default" class="img-fluid w-100">
+        {% endif %}
+      </div>
+    </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'assets/js/university/university-detail.js' %}"></script>
+{% endblock %}
+

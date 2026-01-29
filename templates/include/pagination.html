@@ -1,0 +1,84 @@
+{% if page_obj and page_obj.paginator.num_pages > 1 %}
+<div class="pagination-wrapper" data-aos="fade-up" data-aos-delay="300">
+  <nav aria-label="Pagination">
+    <ul class="pagination justify-content-center">
+
+      <!-- First Page -->
+      {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?section={{ section }}&{{ page_param }}=1">
+            <i class="bi bi-chevron-double-left"></i>
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link"><i class="bi bi-chevron-double-left"></i></span>
+        </li>
+      {% endif %}
+
+      <!-- Previous Page -->
+      {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?section={{ section }}&{{ page_param }}={{ page_obj.previous_page_number }}">
+            <i class="bi bi-chevron-left"></i>
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link"><i class="bi bi-chevron-left"></i></span>
+        </li>
+      {% endif %}
+
+      <!-- Page Numbers -->
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number <= 3 %}
+          {% if num <= 5 %}
+            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+              <a class="page-link" href="?section={{ section }}&{{ page_param }}={{ num }}">{{ num }}</a>
+            </li>
+          {% endif %}
+        {% elif page_obj.number >= page_obj.paginator.num_pages|add:"-2" %}
+          {% if num >= page_obj.paginator.num_pages|add:"-4" %}
+            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+              <a class="page-link" href="?section={{ section }}&{{ page_param }}={{ num }}">{{ num }}</a>
+            </li>
+          {% endif %}
+        {% else %}
+          {% if num >= page_obj.number|add:"-2" and num <= page_obj.number|add:"2" %}
+            <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+              <a class="page-link" href="?section={{ section }}&{{ page_param }}={{ num }}">{{ num }}</a>
+            </li>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+
+      <!-- Next Page -->
+      {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?section={{ section }}&{{ page_param }}={{ page_obj.next_page_number }}">
+            <i class="bi bi-chevron-right"></i>
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link"><i class="bi bi-chevron-right"></i></span>
+        </li>
+      {% endif %}
+
+      <!-- Last Page -->
+      {% if page_obj.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?section={{ section }}&{{ page_param }}={{ page_obj.paginator.num_pages }}">
+            <i class="bi bi-chevron-double-right"></i>
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <span class="page-link"><i class="bi bi-chevron-double-right"></i></span>
+        </li>
+      {% endif %}
+
+    </ul>
+  </nav>
+</div>
+{% endif %}

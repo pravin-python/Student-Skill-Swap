@@ -1,0 +1,113 @@
+{% load static %}
+<div class="card mt-3">
+    <div class="card-header">
+        <h5 class="mb-0">
+            <i class="bi bi-person-video2"></i> Sessions You're Teaching
+            {% if stats.scheduled_teaching > 0 %}
+            <span class="badge bg-warning ms-2">{{ stats.scheduled_teaching }} scheduled</span>
+            {% endif %}
+        </h5>
+    </div>
+    <div class="card-body">
+        {% if teaching_page_obj %}
+            <div class="row">
+                {% for session in teaching_page_obj %}
+                <div class="col-lg-6 mb-3">
+                    <div class="card {% if session.status == 'S' %}border-warning{% elif session.status == 'A' %}border-primary{% elif session.status == 'C' %}border-success{% elif session.status == 'CA' %}border-danger{% else %}border-info{% endif %}">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-0">{{ session.title }}</h6>
+                                <small class="text-muted">{{ session.skill.name }} - {{ session.skill.category.name }}</small>
+                            </div>
+                            <span class="badge {% if session.status == 'S' %}bg-warning{% elif session.status == 'A' %}bg-primary{% elif session.status == 'C' %}bg-success{% elif session.status == 'CA' %}bg-danger{% else %}bg-info{% endif %}">
+                                {{ session.status_display }}
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                {% if session.learner.profile_pic %}
+                                    <img src="{{ session.learner.profile_pic.url }}" alt="Profile" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                {% else %}
+                                    <img src="{% static 'assets/img/default-avatar.webp' %}" alt="Profile" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                {% endif %}
+                                <div>
+                                    <h6 class="mb-0">{{ session.learner.first_name }} {{ session.learner.last_name }}</h6>
+                                    <small class="text-muted">Learner - {{ session.learner.department.name }}</small>
+                                </div>
+                            </div>
+                            
+                            {% if session.description %}
+                            <p class="text-muted mb-2">{{ session.description|truncatewords:20 }}</p>
+                            {% endif %}
+                            
+                            <div class="row text-center mb-3">
+                                <div class="col-6">
+                                    <small class="text-muted d-block">Date & Time</small>
+                                    <strong>{{ session.scheduled_date|date:"M d, Y" }}</strong><br>
+                                    <small>{{ session.scheduled_date|date:"H:i" }}</small>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted d-block">Duration</small>
+                                    <strong>{{ session.duration_minutes }} min</strong><br>
+                                    <small>{{ session.session_type_display }}</small>
+                                </div>
+                            </div>
+                            
+                            {% if session.location %}
+                            <p class="mb-2"><i class="bi bi-geo-alt"></i> {{ session.location }}</p>
+                            {% endif %}
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">Created: {{ session.created_at|date:"M d, Y" }}</small>
+                                <div class="btn-group">
+                                    {% if session.status == 'S' %}
+                                        <button class="btn btn-primary btn-sm" onclick="startSession({{ session.id }})">
+                                            <i class="bi bi-play-circle"></i> Start Session
+                                        </button>
+                                        <button class="btn btn-warning btn-sm" onclick="openSessionCancellationModal({{ session.id }})">
+                                            <i class="bi bi-x-circle"></i> Cancel
+                                        </button>
+                                    {% elif session.status == 'A' %}
+                                        <button class="btn btn-success btn-sm" onclick="completeSession({{ session.id }})">
+                                            <i class="bi bi-check"></i> End Session
+                                        </button>
+                                    {% elif session.status == 'C' %}
+                                        {% if not session.teacher_feedback_given %}
+                                            <button class="btn btn-outline-primary btn-sm" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#feedbackModal" 
+                                                    data-session-id="{{ session.id }}">
+                                                <i class="bi bi-star"></i> Leave Feedback
+                                            </button>
+                                        {% else %}
+                                            <button class="btn btn-outline-secondary btn-sm" disabled>
+                                                <i class="bi bi-check-lg"></i> Feedback Given
+                                            </button>
+                                        {% endif %}
+                                    {% endif %}
+                                    <button class="btn btn-outline-danger btn-sm" onclick="deleteSession({{ session.id }})">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-person-video2 display-1 text-muted"></i>
+                <h4 class="mt-3">No teaching sessions yet</h4>
+                <p class="text-muted">Accept learning requests to start teaching sessions.</p>
+                <a href="{% url 'category_skills:requests' %}" class="btn btn-primary">
+                    <i class="bi bi-inbox"></i> Check Requests
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+            {% include "include/pagination.html" with page_obj=teaching_page_obj section="teaching" page_param="teaching_page" %}
+
+
+

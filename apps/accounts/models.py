@@ -32,6 +32,7 @@ class User(models.Model):
     personal_email = models.EmailField(unique=True,help_text="Use Your Personal Email Address")
     department = models.ForeignKey(Department,on_delete=models.SET_NULL,null=True,related_name='students')
     branch = models.ForeignKey(Branch,on_delete=models.SET_NULL,null=True,related_name='students')
+    skills = models.ManyToManyField("category_skills.Skills" , blank=True , related_name="users")
     year = models.CharField(max_length=20,choices=YEAR_CHOICES)
     bio = models.TextField(max_length=250,blank=True,help_text="Tell Others About Yourself")
     current_password = models.CharField(max_length = 128)
@@ -45,3 +46,6 @@ class User(models.Model):
     def check_password(self,raw_password):
         from django.contrib.auth.handlers import check_password
         return check_password(raw_password,self.current_password)
+    
+    def __str__(self):
+        return f"{self.username} ({self.first_name} {self.last_name})"
