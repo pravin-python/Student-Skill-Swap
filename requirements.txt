@@ -17,3 +17,4 @@ django-cors-headers>=4.3.0
 
 # For environment variable handling
 python-decouple>=3.8
+django-ckeditor

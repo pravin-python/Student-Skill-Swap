@@ -25,6 +25,12 @@ load_dotenv(BASE_DIR / ".env")
 # Generate a new key with: python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
+LOG_DIR = BASE_DIR / "logs"
+
+# Check if the folder exists, if not, create it
+if not LOG_DIR.exists():
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
+
 # Application definition
 
 INSTALLED_APPS = [
